@@ -1,0 +1,861 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+  
+  
+    
+    
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+  <link href="/lib/pace/pace-theme-minimal.min.css?v=1.0.2" rel="stylesheet">
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="工具," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="引用于官网(仅作于推广,如有侵权,请联系本人以删除)  aria2是一个轻量级的多协议和多源命令行 下载实用程序。它支持HTTP &#x2F; HTTPS，FTP，SFTP， BitTorrent和Metalink。aria2可以通过内置的 JSON-RPC和XML-RPC接口进行操作。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Aria2使用(实现百度网盘满速下载)">
+<meta property="og:url" content="http://example.com/2020/03/03/%E5%B7%A5%E5%85%B7/Aria2%20%E4%BD%BF%E7%94%A8/index.html">
+<meta property="og:site_name" content="极风键客">
+<meta property="og:description" content="引用于官网(仅作于推广,如有侵权,请联系本人以删除)  aria2是一个轻量级的多协议和多源命令行 下载实用程序。它支持HTTP &#x2F; HTTPS，FTP，SFTP， BitTorrent和Metalink。aria2可以通过内置的 JSON-RPC和XML-RPC接口进行操作。">
+<meta property="og:locale">
+<meta property="article:published_time" content="2020-03-03T12:46:25.000Z">
+<meta property="article:modified_time" content="2021-07-15T09:57:16.090Z">
+<meta property="article:author" content="王增明">
+<meta property="article:tag" content="工具">
+<meta name="twitter:card" content="summary">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":true,"scrollpercent":true,"onmobile":true},
+    fancybox: true,
+    tabs: false,
+    motion: {"enable":true,"async":true,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://example.com/2020/03/03/工具/Aria2 使用/"/>
+
+
+
+
+
+  <title>Aria2使用(实现百度网盘满速下载) | 极风键客</title>
+  
+
+
+
+
+
+
+
+
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">极风键客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-schedule">
+          <a href="/schedule/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-calendar"></i> <br />
+            
+            日程表
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2020/03/03/%E5%B7%A5%E5%85%B7/Aria2%20%E4%BD%BF%E7%94%A8/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/i.jpeg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="极风键客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Aria2使用(实现百度网盘满速下载)</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-03-03T20:46:25+08:00">
+                2020-03-03
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/%E5%B7%A5%E5%85%B7/" itemprop="url" rel="index">
+                    <span itemprop="name">工具</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <blockquote>
+<p>引用于官网(仅作于推广,如有侵权,请联系本人以删除)</p>
+</blockquote>
+<p>aria2是一个<strong>轻量级的</strong>多协议和多源命令行 <strong>下载实用程序</strong>。它支持<strong>HTTP / HTTPS</strong>，<strong>FTP</strong>，<strong>SFTP</strong>， <strong>BitTorrent</strong>和<strong>Metalink</strong>。aria2可以通过内置的 <strong>JSON-RPC</strong>和<strong>XML-RPC</strong>接口进行操作。</p>
+<span id="more"></span>
+
+<h1 id="使用方法"><a href="#使用方法" class="headerlink" title="使用方法"></a>使用方法</h1><ol>
+<li>首先使用在线解析获取直链下载链接</li>
+<li>然后下载Aria2 ,使用Aria2下载直链链接内容</li>
+</ol>
+<h1 id="使用教程"><a href="#使用教程" class="headerlink" title="使用教程"></a>使用教程</h1><h2 id="1-KinhDown"><a href="#1-KinhDown" class="headerlink" title="1. KinhDown"></a>1. KinhDown</h2><h3 id="KinhDown（加速！永无止境）"><a href="#KinhDown（加速！永无止境）" class="headerlink" title="KinhDown（加速！永无止境）"></a>KinhDown（加速！永无止境）</h3><p>官网地址:<a target="_blank" rel="noopener" href="https://kinhdown.kinh.cc/">https://kinhdown.kinh.cc/</a></p>
+<h3 id="在线解析"><a href="#在线解析" class="headerlink" title="在线解析"></a>在线解析</h3><p>KD官方：<a target="_blank" rel="noopener" href="https://pan.kdbaidu.com/">https://pan.kdbaidu.com</a></p>
+<p>KD官方：<a target="_blank" rel="noopener" href="https://yun.kdbaidu.com/">https://yun.kdbaidu.com</a></p>
+<p>KD官方：<a target="_blank" rel="noopener" href="https://www.kdbaidu.com/">https://www.kdbaidu.com</a></p>
+<h2 id="2-Aria2"><a href="#2-Aria2" class="headerlink" title="2. Aria2"></a>2. Aria2</h2><p>下载<a target="_blank" rel="noopener" href="https://github.com/aria2/aria2/releases/tag/release-1.35.0">版本1.35.0</a>。您可以在此处下载OS X，Windows和Android的源代码发行版和二进制文件。</p>
+<p><a target="_blank" rel="noopener" href="http://sourceforge.net/projects/aria2/files/stable/">此处</a>提供低于1.19.1的旧版本 。</p>
+<h3 id="特征"><a href="#特征" class="headerlink" title="特征"></a>特征</h3><ul>
+<li><strong>多连接下载</strong>。aria2可以从多个来源/协议下载文件，并尝试利用最大下载带宽。真正加快了您的下载体验。</li>
+<li><strong>轻巧</strong>。aria2不需要太多的内存和CPU时间。关闭磁盘缓存后，物理内存使用量通常为4MiB（正常HTTP / FTP下载）到9MiB（BitTorrent下载）。下载速度为2.8MiB / sec的BitTorrent中的CPU使用率约为6％。</li>
+<li><strong>功能齐全的BitTorrent客户端</strong>。您需要在BitTorrent客户端中使用的所有功能均可用：DHT，PEX，加密，磁铁URI，播种，选择性下载，本地对等发现和UDP跟踪器。</li>
+<li><strong>Metalink已启用</strong>。aria2支持<a target="_blank" rel="noopener" href="http://tools.ietf.org/html/rfc5854">Metalink下载描述格式</a> （又名Metalink v4），Metalink版本3和 <a target="_blank" rel="noopener" href="http://tools.ietf.org/html/rfc6249">Metalink / HTTP</a>。Metalink提供文件验证，HTTP / FTP / SFTP / BitTorrent集成以及语言，位置，操作系统等的各种配置。</li>
+<li><strong>远程控制</strong>。aria2支持RPC接口来控制aria2进程。支持的接口是JSON-RPC（通过HTTP和WebSocket）和XML-RPC。</li>
+</ul>
+<h3 id="使用范例"><a href="#使用范例" class="headerlink" title="使用范例"></a>使用范例</h3><p>命令行会吓到你吗？不，aria2真的很容易使用！</p>
+<p>从WEB下载：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">`$ aria2c http://example.org/mylinux.iso`</span><br></pre></td></tr></table></figure>
+
+<p>从2个来源下载：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">`$ aria2c http://a/f.iso ftp://b/f.iso`</span><br></pre></td></tr></table></figure>
+
+<p>每个主机使用2个连接下载：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">`$ aria2c -x2 http://a/f.iso`</span><br></pre></td></tr></table></figure>
+
+<p>BitTorrent：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">`$ aria2c http://example.org/mylinux.torrent`</span><br></pre></td></tr></table></figure>
+
+<p>BitTorrent磁铁URI：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">`$ aria2c &#x27;magnet:?xt=urn:btih:248D0A1CD08284299DE78D5C1ED359BB46717D8C&#x27;`</span><br></pre></td></tr></table></figure>
+
+<p>Metalink：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">`$ aria2c http://example.org/mylinux.metalink`</span><br></pre></td></tr></table></figure>
+
+<p>下载在文本文件中找到的URI：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">`$ aria2c -i uris.txt`</span><br></pre></td></tr></table></figure>
+
+<h3 id="相关项目"><a href="#相关项目" class="headerlink" title="相关项目"></a>相关项目</h3><ul>
+<li><a target="_blank" rel="noopener" href="https://github.com/tatsuhiro-t/apt-metalink"><strong>apt-metalink</strong></a>：Debian / Ubuntu的更快软件包下载</li>
+<li><a target="_blank" rel="noopener" href="http://xyne.archlinux.ca/projects/powerpill/"><strong>powerpill</strong></a>：Pacman包装器，用于并行和分段下载。</li>
+<li><a target="_blank" rel="noopener" href="http://xyne.archlinux.ca/projects/python3-aria2jsonrpc/"><strong>python3-aria2jsonrpc</strong></a>：围绕Aria2的JSON RPC接口的包装器类。</li>
+<li><a target="_blank" rel="noopener" href="https://github.com/sonnyp/aria2.js"><strong>aria2.js</strong></a>：用于aria2 RPC的JavaScript库（浏览器和Node.js）和cli</li>
+</ul>
+<h3 id="UI前端"><a href="#UI前端" class="headerlink" title="UI前端"></a>UI前端</h3><ul>
+<li><a target="_blank" rel="noopener" href="https://github.com/ziahamza/webui-aria2"><strong>webui-aria2</strong></a>：用于aria2的Web浏览器界面（2012 GSOC项目）</li>
+<li><a target="_blank" rel="noopener" href="http://uget.visuex.com/"><strong>uGet</strong></a>：Linux下载管理器</li>
+</ul>
+<h3 id="执照"><a href="#执照" class="headerlink" title="执照"></a>执照</h3><p>该程序是免费软件；您可以根据自由软件基金会发布的GNU通用公共许可证的条款重新分发和/或修改它；许可的版本2，或（由您选择）任何更高的版本。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/%E5%B7%A5%E5%85%B7/" rel="tag"># 工具</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/03/03/docker/%E7%A6%BB%E7%BA%BF%E5%AE%89%E8%A3%85docker/" rel="next" title="离线安装docker">
+                <i class="fa fa-chevron-left"></i> 离线安装docker
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2020/04/05/linux/%E6%96%B0linux%E9%85%8D%E7%BD%AE/" rel="prev" title="新linux配置">
+                新linux配置 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+      <div id="sidebar-dimmer"></div>
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/i.jpeg"
+                alt="" />
+            
+              <p class="site-author-name" itemprop="name"></p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/%7C%7C%20archive">
+              
+                  <span class="site-state-item-count">61</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">9</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">23</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/wangzengming" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:wangzengming@aliyun.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8%E6%96%B9%E6%B3%95"><span class="nav-number">1.</span> <span class="nav-text">使用方法</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8%E6%95%99%E7%A8%8B"><span class="nav-number">2.</span> <span class="nav-text">使用教程</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-KinhDown"><span class="nav-number">2.1.</span> <span class="nav-text">1. KinhDown</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#KinhDown%EF%BC%88%E5%8A%A0%E9%80%9F%EF%BC%81%E6%B0%B8%E6%97%A0%E6%AD%A2%E5%A2%83%EF%BC%89"><span class="nav-number">2.1.1.</span> <span class="nav-text">KinhDown（加速！永无止境）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9C%A8%E7%BA%BF%E8%A7%A3%E6%9E%90"><span class="nav-number">2.1.2.</span> <span class="nav-text">在线解析</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-Aria2"><span class="nav-number">2.2.</span> <span class="nav-text">2. Aria2</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%89%B9%E5%BE%81"><span class="nav-number">2.2.1.</span> <span class="nav-text">特征</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8%E8%8C%83%E4%BE%8B"><span class="nav-number">2.2.2.</span> <span class="nav-text">使用范例</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%9B%B8%E5%85%B3%E9%A1%B9%E7%9B%AE"><span class="nav-number">2.2.3.</span> <span class="nav-text">相关项目</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#UI%E5%89%8D%E7%AB%AF"><span class="nav-number">2.2.4.</span> <span class="nav-text">UI前端</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%89%A7%E7%85%A7"><span class="nav-number">2.2.5.</span> <span class="nav-text">执照</span></a></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+        <div class="back-to-top">
+          <i class="fa fa-arrow-up"></i>
+          
+            <span id="scrollpercent"><span>0</span>%</span>
+          
+        </div>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">王增明</span>
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+  
+  
+
+
+
+
+
+  
+  
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/three/three.min.js"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/three/three-waves.min.js"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/three/canvas_sphere.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

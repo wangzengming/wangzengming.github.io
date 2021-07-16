@@ -1,0 +1,980 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+  
+  
+    
+    
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+  <link href="/lib/pace/pace-theme-minimal.min.css?v=1.0.2" rel="stylesheet">
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="微服务," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="go-Micro 框架创建 micro 服务命令：micro new –type srv test66 框架默认自带服务发现：mdns。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="微服务学习--03go-Micro 框架">
+<meta property="og:url" content="http://example.com/2020/01/04/golang/%E5%BE%AE%E6%9C%8D%E5%8A%A1/03go-Micro%20%E6%A1%86%E6%9E%B6/index.html">
+<meta property="og:site_name" content="极风键客">
+<meta property="og:description" content="go-Micro 框架创建 micro 服务命令：micro new –type srv test66 框架默认自带服务发现：mdns。">
+<meta property="og:locale">
+<meta property="og:image" content="http://example.com/2020/01/04/golang/%E5%BE%AE%E6%9C%8D%E5%8A%A1/03go-Micro%20%E6%A1%86%E6%9E%B6/%E8%AF%BE%E5%A0%82%E7%AC%94%E8%AE%B0-03.assets/1581907970023.png">
+<meta property="og:image" content="http://example.com/2020/01/04/golang/%E5%BE%AE%E6%9C%8D%E5%8A%A1/03go-Micro%20%E6%A1%86%E6%9E%B6/%E8%AF%BE%E5%A0%82%E7%AC%94%E8%AE%B0-03.assets/1581911529452.png">
+<meta property="og:image" content="http://example.com/2020/01/04/golang/%E5%BE%AE%E6%9C%8D%E5%8A%A1/03go-Micro%20%E6%A1%86%E6%9E%B6/%E8%AF%BE%E5%A0%82%E7%AC%94%E8%AE%B0-03.assets/1581922279521.png">
+<meta property="og:image" content="http://example.com/2020/01/04/golang/%E5%BE%AE%E6%9C%8D%E5%8A%A1/03go-Micro%20%E6%A1%86%E6%9E%B6/%E8%AF%BE%E5%A0%82%E7%AC%94%E8%AE%B0-03.assets/1581924280038.png">
+<meta property="article:published_time" content="2020-01-04T12:46:25.000Z">
+<meta property="article:modified_time" content="2021-07-15T09:58:16.092Z">
+<meta property="article:author" content="王增明">
+<meta property="article:tag" content="微服务">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/2020/01/04/golang/%E5%BE%AE%E6%9C%8D%E5%8A%A1/03go-Micro%20%E6%A1%86%E6%9E%B6/%E8%AF%BE%E5%A0%82%E7%AC%94%E8%AE%B0-03.assets/1581907970023.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":true,"scrollpercent":true,"onmobile":true},
+    fancybox: true,
+    tabs: false,
+    motion: {"enable":true,"async":true,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://example.com/2020/01/04/golang/微服务/03go-Micro 框架/"/>
+
+
+
+
+
+  <title>微服务学习--03go-Micro 框架 | 极风键客</title>
+  
+
+
+
+
+
+
+
+
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">极风键客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-schedule">
+          <a href="/schedule/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-calendar"></i> <br />
+            
+            日程表
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2020/01/04/golang/%E5%BE%AE%E6%9C%8D%E5%8A%A1/03go-Micro%20%E6%A1%86%E6%9E%B6/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/i.jpeg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="极风键客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">微服务学习--03go-Micro 框架</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-01-04T20:46:25+08:00">
+                2020-01-04
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/golang/" itemprop="url" rel="index">
+                    <span itemprop="name">golang</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="go-Micro-框架"><a href="#go-Micro-框架" class="headerlink" title="go-Micro 框架"></a>go-Micro 框架</h1><h2 id="创建-micro-服务"><a href="#创建-micro-服务" class="headerlink" title="创建 micro 服务"></a>创建 micro 服务</h2><p>命令：micro new –type srv test66</p>
+<p>框架默认自带服务发现：mdns。</p>
+<span id="more"></span>
+
+<p>使用consul服务发现：</p>
+<pre><code>1. 初始consul服务发现： consulReg := consul.NewRegistry()
+2. 在 NewService 中 添加 服务。 micro.Registry(consulReg )，
+</code></pre>
+<h2 id="使用-go-micro框架-创建-客户端"><a href="#使用-go-micro框架-创建-客户端" class="headerlink" title="使用 go-micro框架 创建 客户端"></a>使用 go-micro框架 创建 客户端</h2><p>命令：micro new –type web test77</p>
+<h3 id="补充-http-相关知识："><a href="#补充-http-相关知识：" class="headerlink" title="补充 http 相关知识："></a>补充 http 相关知识：</h3><ul>
+<li>路由器：资源分发</li>
+<li>路由：请求分发。<ul>
+<li>service.HandleFunc(“/test77/call”, handler.Test77Call)<ul>
+<li>将 /test77/call 这个请求，通过 回到函数 Test77Call() 处理。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>URL：<ul>
+<li>组成：<a target="_blank" rel="noopener" href="https://ip+port/%E8%B5%84%E6%BA%90%E8%B7%AF%E5%BE%84">https://ip+port/资源路径</a><ul>
+<li><a target="_blank" rel="noopener" href="https://ip+port/">https://ip+port/</a>   找到 pc机，找到 对应进程</li>
+<li>资源路径：在代码中，称之为路由。</li>
+</ul>
+</li>
+<li>“/ ” : 代表 主机上进程 对应的默认资源。<ul>
+<li>http协议，自动找当前目录下的 index.html 文件，做默认页面。</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="go-micro-框架-测试使用-分析图"><a href="#go-micro-框架-测试使用-分析图" class="headerlink" title="go-micro 框架 测试使用 分析图"></a>go-micro 框架 测试使用 分析图</h3><p><img src="%E8%AF%BE%E5%A0%82%E7%AC%94%E8%AE%B0-03.assets/1581907970023.png" alt="1581907970023"></p>
+<h1 id="gin-框架"><a href="#gin-框架" class="headerlink" title="gin 框架"></a>gin 框架</h1><p>go常见的web框架：gin、beego、echo、Iris 。。。</p>
+<h3 id="实现简单的-web"><a href="#实现简单的-web" class="headerlink" title="实现简单的 web"></a>实现简单的 web</h3><p>http 常用方法与 数据库访问 一一对应。</p>
+<ul>
+<li>GET —— 查 —— 获取数据</li>
+<li>Post —— 增 —— 增加数据</li>
+<li>Put —— 改 —— 更新数据</li>
+<li>Delete —— 删 —— 删除数据</li>
+</ul>
+<p>​    </p>
+<h3 id="使用-gin-框架创建最简单的web"><a href="#使用-gin-框架创建最简单的web" class="headerlink" title="使用 gin 框架创建最简单的web"></a>使用 gin 框架创建最简单的web</h3><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span>  &#123;</span><br><span class="line">    <span class="comment">// 1. 初始化路由 -- 官网:初始化 web 引擎</span></span><br><span class="line">    router := gin.Default()</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 2. 做路由匹配</span></span><br><span class="line">    router.GET(<span class="string">&quot;/&quot;</span>, <span class="function"><span class="keyword">func</span><span class="params">(context *gin.Context)</span></span> &#123;</span><br><span class="line">        context.Writer.WriteString(<span class="string">&quot;hello world!&quot;</span>)</span><br><span class="line">    &#125;)</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 3. 启动运行</span></span><br><span class="line">    router.Run(<span class="string">&quot;:8080&quot;</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h3 id="gin-框架的客户端-与-微服务-对接"><a href="#gin-框架的客户端-与-微服务-对接" class="headerlink" title="gin 框架的客户端 与 微服务 对接"></a>gin 框架的客户端 与 微服务 对接</h3><ol>
+<li><p>封装回调函数， 给 router.Get() 设置</p>
+</li>
+<li><p>拷贝 微服务的 “ 密码本” protobuf 到  web 中</p>
+</li>
+<li><p>修改 protobuf文件的 包名。  test66别名  “test66web/proto/test66”</p>
+</li>
+<li><p>实现 回调函数：</p>
+<ol>
+<li><p>初始化客户端。    microClient := NewTeset66Sevice(服务名，client.DefaultClient)</p>
+</li>
+<li><p>调用远程服务。    resp, err := microClient.Call(context.TODO, &amp;test66.Request{</p>
+<p> ​                               })</p>
+</li>
+<li><p>将 返回的 数据， 显示到 浏览器。 context.Writer.WriteString(resp.Msg);</p>
+</li>
+</ol>
+</li>
+</ol>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">    <span class="string">&quot;github.com/gin-gonic/gin&quot;</span></span><br><span class="line">    <span class="string">&quot;fmt&quot;</span></span><br><span class="line">    test66 <span class="string">&quot;test66web/proto/test66&quot;</span>     <span class="comment">// test66 为包的别名.</span></span><br><span class="line">    <span class="string">&quot;github.com/micro/go-micro/client&quot;</span></span><br><span class="line">    <span class="string">&quot;context&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">CallRemote</span><span class="params">(ctx *gin.Context)</span></span>  &#123;</span><br><span class="line">    <span class="comment">// 1. 初始化客户端</span></span><br><span class="line">    microClient := test66.NewTest66Service(<span class="string">&quot;go.micro.srv.test66&quot;</span>, client.DefaultClient)</span><br><span class="line">    fmt.Println()</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 2. 调用远程服务</span></span><br><span class="line">    resp, err := microClient.Call(context.TODO(), &amp;test66.Request&#123;</span><br><span class="line">        Name:<span class="string">&quot;xiaowang&quot;</span>,</span><br><span class="line">    &#125;)</span><br><span class="line">    <span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">        fmt.Println(<span class="string">&quot;call err:&quot;</span>, err)</span><br><span class="line">        <span class="keyword">return</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// 为了方便查看, 在打印之前将结果返回给浏览器</span></span><br><span class="line">    ctx.Writer.WriteString(resp.Msg)</span><br><span class="line"></span><br><span class="line">    fmt.Println(resp, err)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span>  &#123;</span><br><span class="line">    <span class="comment">// 1. 初始化路由 -- 官网:初始化 web 引擎</span></span><br><span class="line">    router := gin.Default()</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 2. 做路由匹配</span></span><br><span class="line">    router.GET(<span class="string">&quot;/&quot;</span>, CallRemote)</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 3. 启动运行</span></span><br><span class="line">    router.Run(<span class="string">&quot;:8080&quot;</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><img src="%E8%AF%BE%E5%A0%82%E7%AC%94%E8%AE%B0-03.assets/1581911529452.png" alt="1581911529452"></p>
+<h3 id="指定-consul-服务发现到-go-micro-服务和-gin-框架客户端中"><a href="#指定-consul-服务发现到-go-micro-服务和-gin-框架客户端中" class="headerlink" title="指定 consul 服务发现到 go-micro 服务和 gin 框架客户端中"></a>指定 consul 服务发现到 go-micro 服务和 gin 框架客户端中</h3><ul>
+<li>mdns服务发现: （组播）支持的服务，必须是本地服务， 局域网内的服务。</li>
+</ul>
+<h4 id="修改-go-micro-微服务"><a href="#修改-go-micro-微服务" class="headerlink" title="修改 go-micro 微服务"></a>修改 go-micro 微服务</h4><ol>
+<li><p>consulReg := consul.NewRegistry()   初始化 consul服务发现</p>
+</li>
+<li><p>添加 服务 service := micro.NewService(</p>
+<pre><code>     micro.Name(&quot;go.micro.srv.test66&quot;),
+         micro.Registry(consulReg),
+         micro.Version(&quot;latest&quot;),
+     )
+</code></pre>
+</li>
+<li><p>在命令行，执行 consul agent -dev</p>
+</li>
+</ol>
+<h4 id="修改-gin-框架-web服务-客户端"><a href="#修改-gin-框架-web服务-客户端" class="headerlink" title="修改 gin 框架 web服务 (客户端)"></a>修改 gin 框架 web服务 (客户端)</h4><ol>
+<li>consulReg := consul.NewRegistry()   初始化 consul服务发现</li>
+<li>microClinet := micro.NewService( micro.Registry(consulReg ) )</li>
+<li>test66.NewTest66Service(“服务名”，microClinet.Client() )</li>
+</ol>
+<p>测试：浏览器键入： 192.168.6.108:8080  ——&gt; hello xiaowang </p>
+<p><img src="%E8%AF%BE%E5%A0%82%E7%AC%94%E8%AE%B0-03.assets/1581922279521.png" alt="1581922279521"></p>
+<h1 id="REST"><a href="#REST" class="headerlink" title="REST"></a>REST</h1><p>REST全称是Representational State Transfer：  表述性 状态 转义</p>
+<p>本质：一种代码设计风格。  web开发中常用。——遵循风格！</p>
+<p>使用：一般以 http 4 种请求方法， 来确定对某一资源（URI：标识符。名词）的 固定操作。</p>
+<ul>
+<li>获取数据：GET</li>
+<li>添加数据：POST</li>
+<li>修改数据：PUT</li>
+<li>删除数据：Delete</li>
+</ul>
+<p>​        满足 REST 设计风格的， 称之为 “RESTful”</p>
+<p>​    </p>
+<h1 id="MVC"><a href="#MVC" class="headerlink" title="MVC"></a>MVC</h1><ul>
+<li>是一种常见的 “代码组织架构”， 可以在开发中，对数据进行处理并解耦。<ul>
+<li>model：模型。 处理数据库相关的文件。</li>
+<li>veiw：视图。处理显示相关的文件。 网站：html</li>
+<li>controller：控制器。处理具体业务！  联动 m 和 v</li>
+</ul>
+</li>
+<li>MVC 与语言无关！是常见的 代码组织架构。</li>
+</ul>
+<p><img src="%E8%AF%BE%E5%A0%82%E7%AC%94%E8%AE%B0-03.assets/1581924280038.png" alt="1581924280038"></p>
+<h1 id="项目准备"><a href="#项目准备" class="headerlink" title="项目准备"></a>项目准备</h1><ol>
+<li><p>准备项目环境。</p>
+<ol>
+<li>创建项目目录  web、service</li>
+<li>在 web 端 使用 MVC</li>
+<li>创建项目常用目录： conf 配置文件、utils 工具类、bin可执行文件、test测试目录</li>
+<li>导入 异常处理error.go</li>
+<li>导入前端资源 html/ 到 view/ 中</li>
+</ol>
+</li>
+<li><p>开发项目</p>
+<ol>
+<li>开发 微服务端</li>
+<li>开发 web 服务（客户端）</li>
+</ol>
+</li>
+</ol>
+<h3 id="http协议错误"><a href="#http协议错误" class="headerlink" title="http协议错误"></a>http协议错误</h3><p>5 类：</p>
+<ol>
+<li>1xx       100        请求成功，需要继续发送请求</li>
+<li>2xx       200   201  202    请求被成功接收。</li>
+<li>3xx       300 301               请求的资源，指定到对应的 URI上</li>
+<li>4xx       404  403              请求端错误</li>
+<li>5xx       500 501  502      服务端错误</li>
+</ol>
+<h3 id="网站开发形式："><a href="#网站开发形式：" class="headerlink" title="网站开发形式："></a>网站开发形式：</h3><ol>
+<li>前后端不分离<ul>
+<li>前端只负责页面创建，不负责加载数据。</li>
+<li>后台负责主要业务书写，数据操作、加载。—— 需要后端会 web。 css 、js、h5 </li>
+</ul>
+</li>
+<li>前后端分离<ul>
+<li>前端负责页面创建 和 数据的加载。</li>
+<li>后端只负责数据处理。  —— 节省时间：服务器优化     1）健壮性 2）并发性。</li>
+</ul>
+</li>
+</ol>
+<h1 id="获取-session"><a href="#获取-session" class="headerlink" title="获取 session"></a>获取 session</h1><ol>
+<li><p>在 web/main.go 中 ， 跟据 gin 框架 使用static() , 设置访问路径</p>
+</li>
+<li><p>F12 浏览器中，查看 NetWork 中 Headers 和  Respose。 得到 url</p>
+</li>
+<li><p>查看 《接口文档.doc》, 获取 url 、错误码、错误处理函数。</p>
+</li>
+<li><p>在 web/ 下 遵循 MVC 设计模式创建  controller 目录。添加 user.go</p>
+</li>
+<li><p>根据 《接口文档.doc》实现错误函数。</p>
+<ol>
+<li>resp[“errno”]</li>
+<li>resp[“errmsg”]</li>
+<li>ctx.Json(200, resp)  // 将 错误消息，进行序列化。返回给浏览器。</li>
+</ol>
+</li>
+<li><p>url寻址时，都是从 “/‘’ 开始， 产生歧义</p>
+<ul>
+<li>router.Static(“/”)    — 修改为： router.Static(“/home”)</li>
+</ul>
+</li>
+<li><p>浏览器测试： IP:8080/home </p>
+</li>
+</ol>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/%E5%BE%AE%E6%9C%8D%E5%8A%A1/" rel="tag"># 微服务</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/01/04/golang/%E5%BE%AE%E6%9C%8D%E5%8A%A1/05%E9%AA%8C%E8%AF%81%E7%A0%81/" rel="next" title="微服务学习--05验证码">
+                <i class="fa fa-chevron-left"></i> 微服务学习--05验证码
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2020/01/04/golang/%E5%BE%AE%E6%9C%8D%E5%8A%A1/04%E5%BC%80%E5%8F%91%E8%80%85%E5%B9%B3%E5%8F%B0%E4%B8%8Eredis/" rel="prev" title="微服务学习--04开发者平台与redis">
+                微服务学习--04开发者平台与redis <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+      <div id="sidebar-dimmer"></div>
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/i.jpeg"
+                alt="" />
+            
+              <p class="site-author-name" itemprop="name"></p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/%7C%7C%20archive">
+              
+                  <span class="site-state-item-count">61</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">9</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">23</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/wangzengming" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:wangzengming@aliyun.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#go-Micro-%E6%A1%86%E6%9E%B6"><span class="nav-number">1.</span> <span class="nav-text">go-Micro 框架</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%88%9B%E5%BB%BA-micro-%E6%9C%8D%E5%8A%A1"><span class="nav-number">1.1.</span> <span class="nav-text">创建 micro 服务</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8-go-micro%E6%A1%86%E6%9E%B6-%E5%88%9B%E5%BB%BA-%E5%AE%A2%E6%88%B7%E7%AB%AF"><span class="nav-number">1.2.</span> <span class="nav-text">使用 go-micro框架 创建 客户端</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%A1%A5%E5%85%85-http-%E7%9B%B8%E5%85%B3%E7%9F%A5%E8%AF%86%EF%BC%9A"><span class="nav-number">1.2.1.</span> <span class="nav-text">补充 http 相关知识：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#go-micro-%E6%A1%86%E6%9E%B6-%E6%B5%8B%E8%AF%95%E4%BD%BF%E7%94%A8-%E5%88%86%E6%9E%90%E5%9B%BE"><span class="nav-number">1.2.2.</span> <span class="nav-text">go-micro 框架 测试使用 分析图</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#gin-%E6%A1%86%E6%9E%B6"><span class="nav-number">2.</span> <span class="nav-text">gin 框架</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%9E%E7%8E%B0%E7%AE%80%E5%8D%95%E7%9A%84-web"><span class="nav-number">2.0.1.</span> <span class="nav-text">实现简单的 web</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8-gin-%E6%A1%86%E6%9E%B6%E5%88%9B%E5%BB%BA%E6%9C%80%E7%AE%80%E5%8D%95%E7%9A%84web"><span class="nav-number">2.0.2.</span> <span class="nav-text">使用 gin 框架创建最简单的web</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#gin-%E6%A1%86%E6%9E%B6%E7%9A%84%E5%AE%A2%E6%88%B7%E7%AB%AF-%E4%B8%8E-%E5%BE%AE%E6%9C%8D%E5%8A%A1-%E5%AF%B9%E6%8E%A5"><span class="nav-number">2.0.3.</span> <span class="nav-text">gin 框架的客户端 与 微服务 对接</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%8C%87%E5%AE%9A-consul-%E6%9C%8D%E5%8A%A1%E5%8F%91%E7%8E%B0%E5%88%B0-go-micro-%E6%9C%8D%E5%8A%A1%E5%92%8C-gin-%E6%A1%86%E6%9E%B6%E5%AE%A2%E6%88%B7%E7%AB%AF%E4%B8%AD"><span class="nav-number">2.0.4.</span> <span class="nav-text">指定 consul 服务发现到 go-micro 服务和 gin 框架客户端中</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BF%AE%E6%94%B9-go-micro-%E5%BE%AE%E6%9C%8D%E5%8A%A1"><span class="nav-number">2.0.4.1.</span> <span class="nav-text">修改 go-micro 微服务</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BF%AE%E6%94%B9-gin-%E6%A1%86%E6%9E%B6-web%E6%9C%8D%E5%8A%A1-%E5%AE%A2%E6%88%B7%E7%AB%AF"><span class="nav-number">2.0.4.2.</span> <span class="nav-text">修改 gin 框架 web服务 (客户端)</span></a></li></ol></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#REST"><span class="nav-number">3.</span> <span class="nav-text">REST</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#MVC"><span class="nav-number">4.</span> <span class="nav-text">MVC</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E9%A1%B9%E7%9B%AE%E5%87%86%E5%A4%87"><span class="nav-number">5.</span> <span class="nav-text">项目准备</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#http%E5%8D%8F%E8%AE%AE%E9%94%99%E8%AF%AF"><span class="nav-number">5.0.1.</span> <span class="nav-text">http协议错误</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BD%91%E7%AB%99%E5%BC%80%E5%8F%91%E5%BD%A2%E5%BC%8F%EF%BC%9A"><span class="nav-number">5.0.2.</span> <span class="nav-text">网站开发形式：</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%8E%B7%E5%8F%96-session"><span class="nav-number">6.</span> <span class="nav-text">获取 session</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+        <div class="back-to-top">
+          <i class="fa fa-arrow-up"></i>
+          
+            <span id="scrollpercent"><span>0</span>%</span>
+          
+        </div>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">王增明</span>
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+  
+  
+
+
+
+
+
+  
+  
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/three/three.min.js"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/three/three-waves.min.js"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/three/canvas_sphere.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

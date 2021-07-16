@@ -1,0 +1,834 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+  
+  
+    
+    
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+  <link href="/lib/pace/pace-theme-minimal.min.css?v=1.0.2" rel="stylesheet">
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="以太坊," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="我们已经通过编译从 solidity 源码得到了字节码，接下来我们会试图 完成一个自动化脚本，将合约部署到区块链网络中。  部署的必要条件 与以太坊节点的通信连接  我们需要启动一个以太坊节点，连接到想要的网络，然后开放 HTTP-RPC 的 API（默认 8545 端口）给外部调用；或者也可以用第三方提供的可用节点入 口，以太坊社区有人专门为开发者提供了节点服务。目前我们直接用 ganache，">
+<meta property="og:type" content="article">
+<meta property="og:title" content="7.2 编写合约的部署脚本">
+<meta property="og:url" content="http://example.com/2020/03/03/golang/%E4%BB%A5%E5%A4%AA%E5%9D%8A/7.2%E7%BC%96%E5%86%99%E5%90%88%E7%BA%A6%E7%9A%84%E9%83%A8%E7%BD%B2%E8%84%9A%E6%9C%AC/index.html">
+<meta property="og:site_name" content="极风键客">
+<meta property="og:description" content="我们已经通过编译从 solidity 源码得到了字节码，接下来我们会试图 完成一个自动化脚本，将合约部署到区块链网络中。  部署的必要条件 与以太坊节点的通信连接  我们需要启动一个以太坊节点，连接到想要的网络，然后开放 HTTP-RPC 的 API（默认 8545 端口）给外部调用；或者也可以用第三方提供的可用节点入 口，以太坊社区有人专门为开发者提供了节点服务。目前我们直接用 ganache，">
+<meta property="og:locale">
+<meta property="article:published_time" content="2020-03-03T12:46:25.000Z">
+<meta property="article:modified_time" content="2021-07-15T09:59:16.093Z">
+<meta property="article:author" content="王增明">
+<meta property="article:tag" content="以太坊">
+<meta name="twitter:card" content="summary">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":true,"scrollpercent":true,"onmobile":true},
+    fancybox: true,
+    tabs: false,
+    motion: {"enable":true,"async":true,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://example.com/2020/03/03/golang/以太坊/7.2编写合约的部署脚本/"/>
+
+
+
+
+
+  <title>7.2 编写合约的部署脚本 | 极风键客</title>
+  
+
+
+
+
+
+
+
+
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">极风键客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-schedule">
+          <a href="/schedule/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-calendar"></i> <br />
+            
+            日程表
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2020/03/03/golang/%E4%BB%A5%E5%A4%AA%E5%9D%8A/7.2%E7%BC%96%E5%86%99%E5%90%88%E7%BA%A6%E7%9A%84%E9%83%A8%E7%BD%B2%E8%84%9A%E6%9C%AC/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/i.jpeg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="极风键客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">7.2 编写合约的部署脚本</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-03-03T20:46:25+08:00">
+                2020-03-03
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/golang/" itemprop="url" rel="index">
+                    <span itemprop="name">golang</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>我们已经通过编译从 solidity 源码得到了字节码，接下来我们会试图 完成一个自动化脚本，将合约部署到区块链网络中。 </p>
+<h2 id="部署的必要条件"><a href="#部署的必要条件" class="headerlink" title="部署的必要条件"></a>部署的必要条件</h2><ul>
+<li><p>与以太坊节点的通信连接 </p>
+<p>我们需要启动一个以太坊节点，连接到想要的网络，然后开放 HTTP-RPC 的 API（默认 8545 端口）给外部调用；或者也可以用第三方提供的可用节点入 口，以太坊社区有人专门为开发者提供了节点服务。目前我们直接用 ganache， 不需要考虑这些问题，但如果配置其它网络，这个配置就是必要的。</p>
+</li>
+<li><p>余额大于 0 的账户 </p>
+<p>因为以太坊上的任何交易都需要账户发起，账户中必须有足够的余额来支付 手续费（Transaction Fee），如果余额为 0 部署会失败。当然，我们目前用的 是 ganache，里面默认有 10 个账户，每个账户 100ETH，不存在这个问题，但 如果要部署到其它网络（私链、测试网络、主网）就必须考虑这个问题。 </p>
+</li>
+</ul>
+<h2 id="安装依赖"><a href="#安装依赖" class="headerlink" title="安装依赖"></a>安装依赖</h2><p>搞清楚部署的必要条件之后，我们需要安装必要的依赖包。首先是 web3.js， web3.js 的 1.0.0 版本尚未发布，但是相比 0.2x.x 版本变化非常大，1.x 中大 量使用了 Promise，可以结合 async/await 使用，而 0.x 版本只支持回调，因 为使用 async/await 能让代码可读性更好，我们这次选择使用 1.0.0 版本。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install web3	</span><br></pre></td></tr></table></figure>
+
+<h2 id="编写部署脚本"><a href="#编写部署脚本" class="headerlink" title="编写部署脚本"></a>编写部署脚本</h2><p>做好准备工作之后，我们开始编写合约部署脚本，在 scripts 目录下新建脚 本文件 deploy.js：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> path = <span class="built_in">require</span>(<span class="string">&#x27;path&#x27;</span>);</span><br><span class="line"><span class="keyword">const</span> Web3 = <span class="built_in">require</span>(<span class="string">&#x27;web3&#x27;</span>);</span><br><span class="line"><span class="keyword">const</span> web3 = <span class="keyword">new</span> Web3(<span class="keyword">new</span> Web3.providers.HttpProvider(<span class="string">&#x27;http://localhost:8545&#x27;</span>));</span><br><span class="line"><span class="comment">// 1. 拿到 abi 和 bytecode</span></span><br><span class="line"><span class="keyword">const</span> contractPath = path.resolve(__dirname,<span class="string">&#x27;../compiled/Car.json&#x27;</span>);</span><br><span class="line"><span class="keyword">const</span> &#123; interface, bytecode &#125; = <span class="built_in">require</span>(contractPath);</span><br><span class="line">(<span class="keyword">async</span> () =&gt; &#123;</span><br><span class="line">	<span class="comment">// 2. 获取钱包里面的账户</span></span><br><span class="line">	<span class="keyword">const</span> accounts = <span class="keyword">await</span> web3.eth.getAccounts();</span><br><span class="line">	<span class="built_in">console</span>.log(<span class="string">&#x27;部署合约的账户：&#x27;</span>, accounts[<span class="number">0</span>]);</span><br><span class="line">	<span class="comment">// 3. 创建合约实例并且部署</span></span><br><span class="line">	<span class="keyword">var</span> result = <span class="keyword">await</span> <span class="keyword">new</span> web3.eth.Contract(<span class="built_in">JSON</span>.parse(interface)).deploy(&#123; <span class="attr">data</span>: bytecode, <span class="attr">arguments</span>: [<span class="string">&#x27;AUDI&#x27;</span>] &#125;).send(&#123; <span class="attr">from</span>: accounts[<span class="number">0</span>], <span class="attr">gas</span>: <span class="string">&#x27;1000000&#x27;</span> &#125;);</span><br><span class="line">		<span class="built_in">console</span>.log(<span class="string">&#x27;合约部署成功：&#x27;</span>, result);</span><br><span class="line">&#125;)();</span><br></pre></td></tr></table></figure>
+
+<p>我们来熟悉一下 v1.0.0 版本中的部署操作。由于 1.0.0 版本中调用返回全部 是 promise，所以我们这里用到了 ES7 中的 async/await 来处理所有异步调用。 </p>
+<p>第二步获取钱包账户，存为本地变量，然后选取 accounts[0] 作为部署合约 的账户；我们应该确保这个账户中以太余额充足。</p>
+<p>第三步中，我们用 promise 的链式调用完成了创建抽象合约对象、创建部署 交易对象（deploy）和发送部署交易三个步骤，其中只有 send 一步是真正的异 步请求调用。分开写就是这样：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> contract = <span class="keyword">new</span> web3.eth.Contract(<span class="built_in">JSON</span>.parse(interface));</span><br><span class="line"><span class="keyword">const</span> transaction = contract.deploy(&#123; <span class="attr">data</span>: bytecode, <span class="attr">arguments</span>:[<span class="string">&#x27;AUDI&#x27;</span>] &#125;);</span><br><span class="line"><span class="keyword">const</span> result = <span class="keyword">await</span> transaction.send(&#123; <span class="attr">from</span>: accounts[<span class="number">0</span>], <span class="attr">gas</span>:<span class="number">1000000</span> &#125;);</span><br></pre></td></tr></table></figure>
+
+<h2 id="运行脚本"><a href="#运行脚本" class="headerlink" title="运行脚本"></a>运行脚本</h2><p>在根目录下运行写好的部署脚本： node scripts/deploy.js 查看结果，可以看到合约已经成功部署。我们发现返回结果有些复杂，所以 可以对代码稍作改进，截取 address 返回，并计算一下部署花了多少时间：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> path = <span class="built_in">require</span>(<span class="string">&#x27;path&#x27;</span>);</span><br><span class="line"><span class="keyword">const</span> Web3 = <span class="built_in">require</span>(<span class="string">&#x27;web3&#x27;</span>);</span><br><span class="line"><span class="keyword">const</span> web3 = <span class="keyword">new</span> Web3(<span class="keyword">new</span> Web3.providers.HttpProvider(<span class="string">&#x27;http://localhost:8545&#x27;</span>));</span><br><span class="line"><span class="comment">// 1. 拿到 bytecode</span></span><br><span class="line"><span class="keyword">const</span> contractPath = path.resolve(__dirname,<span class="string">&#x27;../compiled/Car.json&#x27;</span>);</span><br><span class="line"><span class="keyword">const</span> &#123; interface, bytecode &#125; = <span class="built_in">require</span>(contractPath);</span><br><span class="line">(<span class="keyword">async</span> () =&gt; &#123;</span><br><span class="line">  <span class="comment">// 2. 获取钱包里面的账户</span></span><br><span class="line">  <span class="keyword">const</span> accounts = <span class="keyword">await</span> web3.eth.getAccounts();</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">&#x27;部署合约账户:&#x27;</span>, accounts[<span class="number">0</span>]);</span><br><span class="line">  <span class="comment">// 3. 创建合约实例并且部署</span></span><br><span class="line">  <span class="built_in">console</span>.time(<span class="string">&#x27;合约部署耗时&#x27;</span>);</span><br><span class="line">  <span class="keyword">var</span> result = <span class="keyword">await</span> <span class="keyword">new</span> web3.eth.Contract(<span class="built_in">JSON</span>.parse(interface)).deploy(&#123; <span class="attr">data</span>: bytecode, <span class="attr">arguments</span>: [<span class="string">&#x27;AUDI&#x27;</span>] &#125;).send(&#123; <span class="attr">from</span>: accounts[<span class="number">0</span>], <span class="attr">gas</span>: <span class="string">&#x27;1000000&#x27;</span> &#125;);</span><br><span class="line">  <span class="built_in">console</span>.timeEnd(<span class="string">&#x27;合约部署耗时&#x27;</span>);</span><br><span class="line">  <span class="built_in">console</span>.log(<span class="string">&#x27;合约部署成功:&#x27;</span>, result.options.address);</span><br><span class="line">&#125;)();</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+
+
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/%E4%BB%A5%E5%A4%AA%E5%9D%8A/" rel="tag"># 以太坊</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/03/03/golang/%E4%BB%A5%E5%A4%AA%E5%9D%8A/7.3%E7%BC%96%E5%86%99%E5%90%88%E7%BA%A6%E6%B5%8B%E8%AF%95%E8%84%9A%E6%9C%AC/" rel="next" title="7.3 编写合约的测试脚本">
+                <i class="fa fa-chevron-left"></i> 7.3 编写合约的测试脚本
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2020/03/03/golang/%E4%BB%A5%E5%A4%AA%E5%9D%8A/6.1%20web3js%E7%AE%80%E4%BB%8B/" rel="prev" title="6.1 web3.js简介">
+                6.1 web3.js简介 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+      <div id="sidebar-dimmer"></div>
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/i.jpeg"
+                alt="" />
+            
+              <p class="site-author-name" itemprop="name"></p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/%7C%7C%20archive">
+              
+                  <span class="site-state-item-count">61</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">9</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">23</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/wangzengming" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:wangzengming@aliyun.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%83%A8%E7%BD%B2%E7%9A%84%E5%BF%85%E8%A6%81%E6%9D%A1%E4%BB%B6"><span class="nav-number">1.</span> <span class="nav-text">部署的必要条件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%89%E8%A3%85%E4%BE%9D%E8%B5%96"><span class="nav-number">2.</span> <span class="nav-text">安装依赖</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BC%96%E5%86%99%E9%83%A8%E7%BD%B2%E8%84%9A%E6%9C%AC"><span class="nav-number">3.</span> <span class="nav-text">编写部署脚本</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%BF%90%E8%A1%8C%E8%84%9A%E6%9C%AC"><span class="nav-number">4.</span> <span class="nav-text">运行脚本</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+        <div class="back-to-top">
+          <i class="fa fa-arrow-up"></i>
+          
+            <span id="scrollpercent"><span>0</span>%</span>
+          
+        </div>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">王增明</span>
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+  
+  
+
+
+
+
+
+  
+  
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/three/three.min.js"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/three/three-waves.min.js"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/three/canvas_sphere.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

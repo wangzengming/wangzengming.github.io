@@ -1,0 +1,916 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+  
+  
+    
+    
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+  <link href="/lib/pace/pace-theme-minimal.min.css?v=1.0.2" rel="stylesheet">
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="以太坊," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="在 Remix 上构建简单的水龙头合约我们已经创建了一个钱包，而且接收并发送了以太币。到目前为止，我们看到以太坊和比特币一样，也可以看作一种加密货币。但以太坊还有更多功能。事实上，加密货币功能服从于以太坊作为世界计算机的功能; 去中心化的智能合约平台。Ether用于支付运行智能合约的费用，智能合约是在称为以太坊虚拟机（EVM）的模拟计算机上运行的计算机程序。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="2.3在 Remix 上构建简单的水龙头合约 ">
+<meta property="og:url" content="http://example.com/2020/01/04/golang/%E4%BB%A5%E5%A4%AA%E5%9D%8A/2.3%E5%9C%A8Remix%E4%B8%8A%E6%9E%84%E5%BB%BA%E7%AE%80%E5%8D%95%E7%9A%84%E6%B0%B4%E9%BE%99%E5%A4%B4%E5%90%88%E7%BA%A6/index.html">
+<meta property="og:site_name" content="极风键客">
+<meta property="og:description" content="在 Remix 上构建简单的水龙头合约我们已经创建了一个钱包，而且接收并发送了以太币。到目前为止，我们看到以太坊和比特币一样，也可以看作一种加密货币。但以太坊还有更多功能。事实上，加密货币功能服从于以太坊作为世界计算机的功能; 去中心化的智能合约平台。Ether用于支付运行智能合约的费用，智能合约是在称为以太坊虚拟机（EVM）的模拟计算机上运行的计算机程序。">
+<meta property="og:locale">
+<meta property="article:published_time" content="2020-01-04T12:46:25.000Z">
+<meta property="article:modified_time" content="2021-07-15T09:58:16.092Z">
+<meta property="article:author" content="王增明">
+<meta property="article:tag" content="以太坊">
+<meta name="twitter:card" content="summary">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":true,"scrollpercent":true,"onmobile":true},
+    fancybox: true,
+    tabs: false,
+    motion: {"enable":true,"async":true,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://example.com/2020/01/04/golang/以太坊/2.3在Remix上构建简单的水龙头合约/"/>
+
+
+
+
+
+  <title>2.3在 Remix 上构建简单的水龙头合约  | 极风键客</title>
+  
+
+
+
+
+
+
+
+
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">极风键客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-schedule">
+          <a href="/schedule/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-calendar"></i> <br />
+            
+            日程表
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2020/01/04/golang/%E4%BB%A5%E5%A4%AA%E5%9D%8A/2.3%E5%9C%A8Remix%E4%B8%8A%E6%9E%84%E5%BB%BA%E7%AE%80%E5%8D%95%E7%9A%84%E6%B0%B4%E9%BE%99%E5%A4%B4%E5%90%88%E7%BA%A6/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/i.jpeg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="极风键客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">2.3在 Remix 上构建简单的水龙头合约 </h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-01-04T20:46:25+08:00">
+                2020-01-04
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/golang/" itemprop="url" rel="index">
+                    <span itemprop="name">golang</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="在-Remix-上构建简单的水龙头合约"><a href="#在-Remix-上构建简单的水龙头合约" class="headerlink" title="在 Remix 上构建简单的水龙头合约"></a>在 Remix 上构建简单的水龙头合约</h1><p>我们已经创建了一个钱包，而且接收并发送了以太币。到目前为止，我们看到以太坊和比特币一样，也可以看作一种加密货币。但以太坊还有更多功能。事实上，加密货币功能服从于以太坊作为世界计算机的功能; 去中心化的智能合约平台。Ether用于支付运行智能合约的费用，智能合约是在称为以太坊虚拟机（EVM）的模拟计算机上运行的计算机程序。</p>
+<span id="more"></span>
+
+<p>EVM是一个全局单例，意味着它就像是一个全局的单实例计算机一样运行，无处不在。以太坊网络上的每个节点都运行EVM的本地副本以验证合约执行，而以太坊区块链在处理交易和智能合约时记录此世界计算机的变化状态。</p>
+<p>以太坊有许多不同的高级语言，所有这些语言都可用于编写合约并生成EVM字节码。到目前为止，一种高级语言是智能合约编程的主要语言：Solidity。Solidity由Gavin Wood创建，并已成为以太坊及其他地区使用最广泛的语言。我们将使用Solidity编写我们的第一份合约。</p>
+<p>编写水龙头合约</p>
+<p>对于我们的第一个例子，我们将编写一个控制水龙头的合约。我们已经在Ropsten测试网络上使用了一个水龙头来测试ether。水龙头是一件相对简单的事情：它会向任何要求的地址发出以太，并且可以定期重新填充。当然，我们可以将水龙头实施为由人（或Web服务器）控制的钱包，不过现在我们的目标是学习智能合约，所以我们将编写实施水龙头的Solidity合同：</p>
+<p>Faucet.sol：实施水龙头的Solidity合同</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Version of Solidity compiler this program was written for </span></span><br><span class="line">pragma solidity ^<span class="number">0.4</span><span class="number">.19</span>; </span><br><span class="line"><span class="comment">// Our first contract is a faucet! </span></span><br><span class="line">contract Faucet &#123; </span><br><span class="line">	<span class="comment">// Give out ether to anyone who asks </span></span><br><span class="line">	function withdraw(<span class="keyword">uint</span> withdraw_amount) public &#123; </span><br><span class="line">	<span class="comment">// Limit withdrawal amount </span></span><br><span class="line">	require(withdraw_amount &lt;= <span class="number">100000000000000000</span>); </span><br><span class="line">	<span class="comment">// Send the amount to the address that requested it </span></span><br><span class="line">	msg.sender.transfer(withdraw_amount); </span><br><span class="line">&#125; </span><br><span class="line"><span class="comment">// Accept any incoming amount </span></span><br><span class="line">function () public payable &#123;&#125; </span><br><span class="line">&#125; </span><br></pre></td></tr></table></figure>
+
+
+
+<p>这是一个非常简单的合约，尽可能简单。它也是一个有缺陷的合同，表明了一些不良做法和安全漏洞。我们将通过检查后面部分中的所有缺陷来学习。但就目前而言，让我们一行一步地看看这份合约的作用及其运作方式。</p>
+<p>第一行是注释：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Version of Solidity compiler this program was written for </span></span><br></pre></td></tr></table></figure>
+
+<p>注释供人阅读，不包含在可执行EVM字节码中。我们通常在我们试图解释的代码之前将它们放在行上，或者有时在同一行上。注释以两个正斜杠//开头。从斜线到超出的所有内容，直到该行的结尾，都被视为空行并被忽略。</p>
+<p>好的，下一行是我们实际合同开始的地方：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">contract Faucet &#123; </span><br></pre></td></tr></table></figure>
+
+<p>该行声明了一个合约对象，类似于其他面向对象语言（如JavaScript，Java或C ++）中的类声明。合约定义包括定义范围的花括号{}之间的所有行，就像在许多其他编程语言中使用花括号一样。</p>
+<p>接下来，我们声明水龙头合约的第一个功能：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">function withdraw(<span class="keyword">uint</span> withdraw_amount) public &#123; </span><br></pre></td></tr></table></figure>
+
+<p>该函数名为withdraw，它接受一个名为withdraw_amount的无符号整数（uint）参数。它被声明为公共函数，这意味着它可以被其他合约调用。函数定义遵循花括号：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">require(withdraw_amount &lt;= <span class="number">100000000000000000</span>); </span><br></pre></td></tr></table></figure>
+
+<p>提现功能的第一部分设定了提款限额。它使用内置的Solidity函数require来测试一个前提条件，即withdraw_amount小于或等于100000000000000000 wei，这是ether的基本单位，相当于0.1 ether。如果使用大于该数量的withdraw_amount调用withdraw函数，则此处的require函数将导致合约执行停止并因异常而失败。</p>
+<p>这部分合约是我们水龙头的主要逻辑。它通过限制提款来控制合约之外的资金流动。这是一个非常简单的控制，但可以让你一瞥可编程区块链的力量：控制资金的去中心化软件。</p>
+<p>接下来是实际提现：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">msg.sender.transfer（withdraw_amount）; </span><br></pre></td></tr></table></figure>
+
+<p>这里有一些神奇的东西：msg对象，这是所有合约都可以访问的输入之一。它表示触发此合约执行的交易。属性sender是交易的发件人地址。函数传递是一个内置函数，它将以太从合约传递到调用它的地址。向后读，这意味着转移到触发此合约执行的msg的发送者。传递函数将金额作为其唯一参数。我们将withdraw_amount值作为参数传递给上面几行声明的withdraw函数。</p>
+<p>下一行是结束大括号，表示我们的withdraw函数定义的结束。</p>
+<p>下面我们再声明一个功能：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">function () public payable &#123;&#125; </span><br></pre></td></tr></table></figure>
+
+<p>此函数是所谓的“回退”或默认函数，如果触发合约的交易未命名合约中的任何已声明函数或任何函数或未包含数据，则调用此函数。合约可以有一个这样的默认函数（没有名称），它通常是接收以太的函数。这就是为什么它被定义为公共和默认函数，这意味着它可以接受以太合约。除了接受以太之外，它没有做任何事情，如花括号{}中的空定义所示。如果我们创建一个将ether发送到合约地址的交易，就好像它是钱包一样，这个函数将处理它。</p>
+<p>在我们的默认函数下面是最后的结束花括号，它表示了合约Faucet的定义结束。</p>
+<p>编译水龙头合约</p>
+<p>现在我们有了第一个示例合约，我们需要使用Solidity编译器将Solidity代码转换为EVM字节码，因此它可以由EVM执行。</p>
+<p>Solidity编译器作为独立的可执行文件，作为不同框架的一部分，也捆绑在集成开发环境（IDE）中。为了简单起见，我们将使用一种比较流行的IDE，称为Remix。</p>
+<p>Remix是以太坊社区开发并开源的、一款非常好用的在线Solidity 集成开发环境，我们可以方便的在其中编写、部署、测试智能合约，Remix 提供了强大的自动完成，语法高亮，实时编译检查错误等。</p>
+<p>使用Chrome浏览器导航到Remix IDE：</p>
+<p><a target="_blank" rel="noopener" href="https://remix.ethereum.org/">https://remix.ethereum.org/</a></p>
+<p>接下来，我们使用Remix 开发和调试第一个智能合约，</p>
+<p>默认的界面可以划分为4 个区域：</p>
+<ul>
+<li><p>文件目录：这里有新建文件、从本地打开文件等按钮，可以直观的看到当前编辑过哪些合约文件，以及删除、重命名这些文件；</p>
+</li>
+<li><p>代码编辑：是使用频繁的区域，提供了语法高亮、自动完成等功能，左上角的加号和减号可以调整编辑器字体，即使刷新浏览器这些代码也不会丢失，因为Remix 把配置和源代码都保存在了浏览器的LocalStorage 里面；</p>
+</li>
+<li><p>调试工具：是使用频繁的区域，提供了智能合约的编译、运行、单步调试、编译器选项配置等功能；</p>
+</li>
+<li><p>调试输出：会打印出所有测试活动产生的日志，比如部署智能合约，调用智能合约函数过程中的各种交易；除了代码区域之外的3个区域都是可以折叠起来的，点击要折叠的区域和代码区域相邻边上的双尖括号即可实现折叠。</p>
+</li>
+</ul>
+<p>第一次加载Remix时，它将以一个名为ballot.sol的示例合约开始。我们不需要它，所以让我们关闭它，点击选项卡一角的x：</p>
+<p>现在，通过单击左侧工具栏中的圆形加号，添加一个新选项卡，命名新文件Faucet.sol：</p>
+<p>打开新选项卡后，复制并粘贴我们的示例Faucet.sol中的代码：</p>
+<p>现在我们已经将Faucet.sol合约加载到Remix IDE中，IDE将自动编译代码。如果一切顺利，你会在右侧的Compile选项卡下看到一个带有“Faucet”的绿色框，确认编译成功：</p>
+<p>如果出现问题，最可能的问题是Remix IDE使用的是与0.4.19不同的Solidity编译器版本。在这种情况下，我们的pragma指令将阻止Faucet.sol编译。要更改编译器版本，点击“设置”选项卡，将编译器版本设置为0.4.19，然后重试。</p>
+<p>Solidity编译器现在已将Faucet.sol编译为EVM字节码。如果你很好奇，字节码看起来像这样：</p>
+<p>看到这么反人类的字节码，是不是很高兴我们可以使用Solidity等高级语言而不是直接在EVM字节码中编程？</p>
+<p>在区块链上创建合同</p>
+<p>所以我们写了合约。我们把它编译成字节码。现在，我们需要在以太坊区块链上“注册”合约。我们将使用Ropsten测试网来测试我们的合约，这就是我们想要记录的区块链。</p>
+<p>在区块链上注册合约涉及创建一个特殊交易，其目的地是一个“零地址”，也就是地址为：0x0000000000000000000000000000000000000000。零地址是一个特殊地址，告诉以太坊区块链我们想要注册合约。不过我们不需要手动输入这么多个0，Remix IDE将为我们处理所有这些并将交易发送到MetaMask。</p>
+<p>首先，切换到“Run”选项卡，然后在“Environment”下拉选择框中选择“Injected Web3”。这将Remix IDE连接到MetaMask钱包，并通过MetaMask连接到Ropsten测试网络。一旦你这样做，你可以在环境下看到“Ropsten”。此外，在帐户选择框中，它显示你的钱包的地址：</p>
+<p>在我们刚刚确认的“Run”设置的正下方，是水龙头合约，准备好了。单击“Deploy”按钮:</p>
+<p>Remix IDE将构建特殊的“Create”交易，MetaMask将要我们批准它。正如从MetaMask中看到的那样，合约创建交易中发送0个以太，但它有224个字节（已编译的合约）并将消耗余额0.000312以太的gas费用。点击“Confirm”批准它：</p>
+<p>现在，稍微等一下：在Ropsten上部署合约大约需要15到30秒。还记得Ropsten采用什么共识机制吗？它和主网完全一样采用了PoW的机制，出块的时间大概是15秒。</p>
+<p>创建合约后，它将显示在“Run”选项卡的底部：</p>
+<p>请注意，水龙头合约现在有一个自己的地址：Remix将其显示为Faucet，位于0x832 …. 095e6。右侧的小剪贴板符号允许你将合约地址复制到剪贴板中。我们将在下一节中使用它。</p>
+<p>另外如果细心我们可以在控制台log中看到，交易成功发送，我们可以用这里的链接到etherscan上查询：</p>
+<p>与合约交互</p>
+<p>让我们回顾一下迄今为止我们学到的东西：以太坊合约是控制资金的程序，它在称为EVM的虚拟机内运行。它们由特殊交易创建，该交易提交其字节码以记录在区块链上。一旦他们在区块链上创建，他们就有了一个以太坊地址，就像钱包一样。只要有人将某个交易发送到合约地址，就会导致合约在EVM中运行，并将该合约作为其输入。</p>
+<p>发送到合约地址的交易可能包含ether或数据或两者。如果它们含有ether，则将其“存入”合约余额。如果它们包含数据，则数据可以在合约中指定命名函数并调用它，将参数传递给函数。</p>
+<p>在区块浏览器中查看合同地址</p>
+<p>现在，我们已经在Ropsten区块链上记录了一份合约，我们可以看到它有一个以太坊地址。让我们在ropsten.etherscan.io区块浏览器上查看它，看看合约是什么样的。</p>
+<p>在一个标签中打开Remix，稍后我们会再次回顾它。现在，将浏览器导航到ropsten.etherscan.io并将地址粘贴到搜索框中。你应该看到合约的以太坊地址历史：在 Remix 上构建简单的水龙头合约 ————————————————————————————— </p>
+<p>11 更多 Java –大数据 –前端 –python 人工智能 –区块链资料下载，可访问百度：尚硅谷官网 </p>
+<p>资助合约</p>
+<p>目前，合约在其历史记录中只有一个交易：合约创建交易。我们刚才在etherscan上也看到了，合约也还没有以太（零余额）。那是因为我们没有在创建交易中向合约发送任何以太，当然这本来是可以的。</p>
+<p>那就让我们现在给合约发一些以太。你仍然应该在剪贴板中包含合约的地址（如果没有，从Remix再次复制）。打开MetaMask，并向其发送1个以太，就像你发送给其他任何以太坊地址一样：</p>
+<p>在一分钟内，如果你重新加载etherscan区块资源管理器，它将显示合约地址的另一个交易以及1个以太网的更新余额。</p>
+<p>还记得我们的Faucet.sol代码中未命名的默认公共应付款功能吗？它看起来像这样：在 Remix 上构建简单的水龙头合约 ————————————————————————————— </p>
+<p>12 更多 Java –大数据 –前端 –python 人工智能 –区块链资料下载，可访问百度：尚硅谷官网 </p>
+<p>function () public payable {} </p>
+<p>当你将交易发送到合同地址时，没有数据指定要调用的函数，它会调用此默认函数。因为我们将其声明为应付款，所以它接受并将1以太币存入合约账户余额。你的交易导致合约在EVM中运行，更新其余额。我们已经顺利资助了我们的水龙头！</p>
+<p>提现我们的合约</p>
+<p>接下来，让我们从水龙头中提取一些资金。要提现，我们必须构造一个调用withdraw函数的交易，并将withdraw_amount参数传递给它。为了使事情变得简单，Remix将为我们构建该交易，MetaMask将提供它以供我们批准。</p>
+<p>返回Remix选项卡，查看“Run”选项卡下的合约。你应该看到一个标有“Withdraw”的红色框，其中包含一个标记为uint256 withdraw_amount的字段条目：</p>
+<p>这是合约的Remix接口。它允许我们构造调用合约中定义的函数的交易。我们将输入withdraw_amount并单击“Withdraw”按钮以生成交易。</p>
+<p>首先，让我们弄清一下withdraw_amount。我们想尝试提现0.1以太，这是我们合约允许的最大金额。请记住，以太坊中的所有货币值都在内部以wei表示，而我们的提现功能期望withdraw_amount也以wei计价。我们想要的数量是0.1以太，这是在 Remix 上构建简单的水龙头合约 ————————————————————————————— </p>
+<p>13 更多 Java –大数据 –前端 –python 人工智能 –区块链资料下载，可访问百度：尚硅谷官网 </p>
+<p>100000000000000000 wei（1后跟17个零）。</p>
+<p>由于<em>JavaScript</em>的限制，<em>Remix</em>无法处理大到<em>10 ^ 17</em>的数字。相反，我们将它括在双引号中，以允许<em>Remix</em>将其作为字符串接收并将其作为<em>BigNumber</em>进行操作。如果我们不将它括在引号中，则<em>Remix IDE</em>将无法处理它并显示<em>“Error encoding arguments</em>：<em>Error</em>：<em>Assertion failed”</em>，好在<em>Remix</em>会帮我们做自动转换 </p>
+<p>在withdraw_amount框中键入100000000000000000，然后单击“Withdraw”按钮：</p>
+<p>MetaMask将弹出一个交易窗口供你批准。点击“Confirm”将你的提款调用发送给合约。</p>
+<p>等一下，然后重新加载etherscan区块资源管理器，以查看在水龙头合约地址历史记录中的交易：</p>
+<p>我们现在看到一个新的交易，其中合约地址为目的地，零以太。合约余额已经改变，现在是0.9以太，因为它按要求向我们发送了0.1以太。但我们在合约地址历史记录中看不到在 Remix 上构建简单的水龙头合约 ————————————————————————————— </p>
+<p>14 更多 Java –大数据 –前端 –python 人工智能 –区块链资料下载，可访问百度：尚硅谷官网 </p>
+<p>“OUT”交易。</p>
+<p>提现的地方在哪里？合约的地址历史记录页面中出现了一个新选项卡，名为“Internal Transactions”。因为0.1以太传输源自合约代码，所以它是内部交易（也称为消息）。单击“Internal Transactions”选项卡以查看它：</p>
+<p>这个“Internal Transactions”是由合约在这行代码中发出的（来自Faucet.sol中的提现功能）：</p>
+<p>msg.sender.transfer（withdraw_amount）; </p>
+<p>回顾一下：我们从MetaMask钱包发送了一个包含数据指令的交易，调用withdraw_amount参数为0.1 ether的withdraw函数；该交易导致合约在EVM内部运行，当EVM运行水龙头合约的提现功能时，首先它调用require函数并验证我们的金额小于或等于允许的最大提现0.1以太；然后它调用传递函数向我们发送以太，运行转账功能会产生一个内部交易，从合约的余额中将0.1以太币存入我们的钱包地址；这就是etherscan中“内部交易”选项卡中显示的那笔交易。</p>
+<p><strong>小结</strong></p>
+<p>在这次课程中，我们在Solidity写了一个水龙头合约，然后使用Remix IDE将合约编译为EVM字节码；我们使用Remix进行交易，并在Ropsten区块链上记录了水龙头合约。一旦记录下来，水龙头合约就有一个以太坊地址，我们给它发了一些ether。最后，我们构建了一个交易来调用withdraw函数并成功请求0.1 ether。合约检查了我们的请求，并通过内部交易向我们发送了0.1以太。</p>
+<p>它可能看起来不多，但我们刚刚成功地与在分散的世界计算机上控制资金的软件进行交互。</p>
+<p>我们将在之后的课程中进行更多智能合约编程，并了解最佳实践和安全注意事项。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/%E4%BB%A5%E5%A4%AA%E5%9D%8A/" rel="tag"># 以太坊</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/01/04/golang/%E5%BE%AE%E6%9C%8D%E5%8A%A1/02grpc%20%E8%BF%9C%E7%A8%8B%E8%B0%83%E7%94%A8/" rel="next" title="微服务学习--02grpc 远程调用">
+                <i class="fa fa-chevron-left"></i> 微服务学习--02grpc 远程调用
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2020/01/04/golang/%E4%BB%A5%E5%A4%AA%E5%9D%8A/2.2%E8%8E%B7%E5%8F%96%20Rinkeby%E6%B5%8B%E8%AF%95%E4%BB%A5%E5%A4%AA/" rel="prev" title="2.2获取Rinkeby测试以太">
+                2.2获取Rinkeby测试以太 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+      <div id="sidebar-dimmer"></div>
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/i.jpeg"
+                alt="" />
+            
+              <p class="site-author-name" itemprop="name"></p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/%7C%7C%20archive">
+              
+                  <span class="site-state-item-count">61</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">9</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">23</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/wangzengming" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:wangzengming@aliyun.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%9C%A8-Remix-%E4%B8%8A%E6%9E%84%E5%BB%BA%E7%AE%80%E5%8D%95%E7%9A%84%E6%B0%B4%E9%BE%99%E5%A4%B4%E5%90%88%E7%BA%A6"><span class="nav-number">1.</span> <span class="nav-text">在 Remix 上构建简单的水龙头合约</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+        <div class="back-to-top">
+          <i class="fa fa-arrow-up"></i>
+          
+            <span id="scrollpercent"><span>0</span>%</span>
+          
+        </div>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">王增明</span>
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+  
+  
+
+
+
+
+
+  
+  
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/three/three.min.js"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/three/three-waves.min.js"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/three/canvas_sphere.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

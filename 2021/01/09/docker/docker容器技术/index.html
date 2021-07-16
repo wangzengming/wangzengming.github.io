@@ -1,0 +1,1237 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+  
+  
+    
+    
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+  <link href="/lib/pace/pace-theme-minimal.min.css?v=1.0.2" rel="stylesheet">
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="linux,docker," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="Docker 是一个开源的应用容器引擎，基于 Go 语言 并遵从 Apache2.0 协议开源。 Docker 可以让开发者打包他们的应用以及依赖包到一个轻量级、可移植的容器中，然后发布到任何流行的 Linux 机器上，也可以实现虚拟化。 容器是完全使用沙箱机制，相互之间不会有任何接口（类似 iPhone 的 app）,更重要的是容器性能开销极低。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="docker容器技术.">
+<meta property="og:url" content="http://example.com/2021/01/09/docker/docker%E5%AE%B9%E5%99%A8%E6%8A%80%E6%9C%AF/index.html">
+<meta property="og:site_name" content="极风键客">
+<meta property="og:description" content="Docker 是一个开源的应用容器引擎，基于 Go 语言 并遵从 Apache2.0 协议开源。 Docker 可以让开发者打包他们的应用以及依赖包到一个轻量级、可移植的容器中，然后发布到任何流行的 Linux 机器上，也可以实现虚拟化。 容器是完全使用沙箱机制，相互之间不会有任何接口（类似 iPhone 的 app）,更重要的是容器性能开销极低。">
+<meta property="og:locale">
+<meta property="og:image" content="https://gitee.com/BestErwin/img/raw/master/xiaoshujing/1559143055248.png">
+<meta property="og:image" content="https://gitee.com/BestErwin/img/raw/master/xiaoshujing/1559055642525.png">
+<meta property="og:image" content="https://gitee.com/BestErwin/img/raw/master/xiaoshujing/1559055988821.png">
+<meta property="og:image" content="https://gitee.com/BestErwin/img/raw/master/xiaoshujing/1559369540559.png">
+<meta property="og:image" content="https://gitee.com/BestErwin/img/raw/master/xiaoshujing/1559369529256.png">
+<meta property="og:image" content="https://gitee.com/BestErwin/img/raw/master/xiaoshujing/1559370362678.png">
+<meta property="og:image" content="https://gitee.com/BestErwin/img/raw/master/xiaoshujing/1559374836752.png">
+<meta property="og:image" content="https://gitee.com/BestErwin/img/raw/master/xiaoshujing/1559374862840.png">
+<meta property="og:image" content="https://gitee.com/BestErwin/img/raw/master/xiaoshujing/1559375300008.png">
+<meta property="og:image" content="https://gitee.com/BestErwin/img/raw/master/xiaoshujing/1559375407164.png">
+<meta property="og:image" content="https://gitee.com/BestErwin/img/raw/master/xiaoshujing/1559375485797.png">
+<meta property="og:image" content="https://gitee.com/BestErwin/img/raw/master/xiaoshujing/1559375640315.png">
+<meta property="og:image" content="https://gitee.com/BestErwin/img/raw/master/xiaoshujing/1559376096212.png">
+<meta property="og:image" content="https://gitee.com/BestErwin/img/raw/master/xiaoshujing/1559375902956.png">
+<meta property="og:image" content="https://gitee.com/BestErwin/img/raw/master/xiaoshujing/1559376424718.png">
+<meta property="og:image" content="https://gitee.com/BestErwin/img/raw/master/xiaoshujing/1559376865301.png">
+<meta property="og:image" content="https://gitee.com/BestErwin/img/raw/master/xiaoshujing/1559377111820.png">
+<meta property="og:image" content="https://gitee.com/BestErwin/img/raw/master/xiaoshujing/1559470576751.png">
+<meta property="og:image" content="https://gitee.com/BestErwin/img/raw/master/xiaoshujing/1559471137666.png">
+<meta property="og:image" content="https://gitee.com/BestErwin/img/raw/master/xiaoshujing/1559471352298.png">
+<meta property="og:image" content="https://gitee.com/BestErwin/img/raw/master/xiaoshujing/1559474321030.png">
+<meta property="og:image" content="https://gitee.com/BestErwin/img/raw/master/xiaoshujing/1559474583116.png">
+<meta property="og:image" content="https://gitee.com/BestErwin/img/raw/master/xiaoshujing/1559472397894.png">
+<meta property="og:image" content="https://gitee.com/BestErwin/img/raw/master/xiaoshujing/1559473048178.png">
+<meta property="og:image" content="https://gitee.com/BestErwin/img/raw/master/xiaoshujing/1559473114259.png">
+<meta property="og:image" content="https://gitee.com/BestErwin/img/raw/master/xiaoshujing/1559475421173.png">
+<meta property="og:image" content="https://gitee.com/BestErwin/img/raw/master/xiaoshujing/1559514591718.png">
+<meta property="og:image" content="https://gitee.com/BestErwin/img/raw/master/xiaoshujing/1559514746519.png">
+<meta property="og:image" content="https://gitee.com/BestErwin/img/raw/master/xiaoshujing/1559515031903.png">
+<meta property="og:image" content="https://gitee.com/BestErwin/img/raw/master/xiaoshujing/1559515128962.png">
+<meta property="og:image" content="https://gitee.com/BestErwin/img/raw/master/xiaoshujing/1559515622159.png">
+<meta property="og:image" content="https://gitee.com/BestErwin/img/raw/master/xiaoshujing/1559515667872.png">
+<meta property="og:image" content="https://gitee.com/BestErwin/img/raw/master/xiaoshujing/1559515810955.png">
+<meta property="og:image" content="https://gitee.com/BestErwin/img/raw/master/xiaoshujing/1559516175798.png">
+<meta property="og:image" content="https://gitee.com/BestErwin/img/raw/master/xiaoshujing/1559516258116.png">
+<meta property="og:image" content="https://gitee.com/BestErwin/img/raw/master/xiaoshujing/1559686263111.png">
+<meta property="og:image" content="https://gitee.com/BestErwin/img/raw/master/xiaoshujing/1559686510603.png">
+<meta property="og:image" content="https://gitee.com/BestErwin/img/raw/master/xiaoshujing/1559686617576.png">
+<meta property="og:image" content="https://gitee.com/BestErwin/img/raw/master/xiaoshujing/1559687203855.png">
+<meta property="og:image" content="https://gitee.com/BestErwin/img/raw/master/xiaoshujing/1559687390208.png">
+<meta property="og:image" content="https://gitee.com/BestErwin/img/raw/master/xiaoshujing/1559687357740.png">
+<meta property="og:image" content="https://gitee.com/BestErwin/img/raw/master/xiaoshujing/1559687546282.png">
+<meta property="og:image" content="https://gitee.com/BestErwin/img/raw/master/xiaoshujing/1559687659969.png">
+<meta property="og:image" content="https://gitee.com/BestErwin/img/raw/master/xiaoshujing/1559687764752.png">
+<meta property="og:image" content="https://gitee.com/BestErwin/img/raw/master/xiaoshujing/1559687992826.png">
+<meta property="og:image" content="https://gitee.com/BestErwin/img/raw/master/xiaoshujing/1559688261062.png">
+<meta property="og:image" content="https://gitee.com/BestErwin/img/raw/master/xiaoshujing/1559688461634.png">
+<meta property="og:image" content="https://gitee.com/BestErwin/img/raw/master/xiaoshujing/1559688386329.png">
+<meta property="og:image" content="https://gitee.com/BestErwin/img/raw/master/xiaoshujing/1559688576800.png">
+<meta property="og:image" content="https://gitee.com/BestErwin/img/raw/master/xiaoshujing/1559900446994.png">
+<meta property="og:image" content="https://gitee.com/BestErwin/img/raw/master/xiaoshujing/1559900618581.png">
+<meta property="og:image" content="https://gitee.com/BestErwin/img/raw/master/xiaoshujing/1559901003457.png">
+<meta property="og:image" content="https://gitee.com/BestErwin/img/raw/master/xiaoshujing/1559901273291.png">
+<meta property="og:image" content="https://gitee.com/BestErwin/img/raw/master/xiaoshujing/1559901707896.png">
+<meta property="og:image" content="https://gitee.com/BestErwin/img/raw/master/xiaoshujing/1559901930147.png">
+<meta property="og:image" content="https://gitee.com/BestErwin/img/raw/master/xiaoshujing/1559904711404.png">
+<meta property="og:image" content="https://gitee.com/BestErwin/img/raw/master/xiaoshujing/1559904758591.png">
+<meta property="article:published_time" content="2021-01-09T12:46:25.000Z">
+<meta property="article:modified_time" content="2021-07-15T09:57:46.091Z">
+<meta property="article:author" content="王增明">
+<meta property="article:tag" content="linux">
+<meta property="article:tag" content="docker">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://gitee.com/BestErwin/img/raw/master/xiaoshujing/1559143055248.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":true,"scrollpercent":true,"onmobile":true},
+    fancybox: true,
+    tabs: false,
+    motion: {"enable":true,"async":true,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://example.com/2021/01/09/docker/docker容器技术/"/>
+
+
+
+
+
+  <title>docker容器技术. | 极风键客</title>
+  
+
+
+
+
+
+
+
+
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">极风键客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-schedule">
+          <a href="/schedule/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-calendar"></i> <br />
+            
+            日程表
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/01/09/docker/docker%E5%AE%B9%E5%99%A8%E6%8A%80%E6%9C%AF/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/i.jpeg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="极风键客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">docker容器技术.</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2021-01-09T20:46:25+08:00">
+                2021-01-09
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/linux/" itemprop="url" rel="index">
+                    <span itemprop="name">linux</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>Docker 是一个开源的应用容器引擎，基于 <a target="_blank" rel="noopener" href="https://www.runoob.com/go/go-tutorial.html">Go 语言</a> 并遵从 Apache2.0 协议开源。</p>
+<p>Docker 可以让开发者打包他们的应用以及依赖包到一个轻量级、可移植的容器中，然后发布到任何流行的 Linux 机器上，也可以实现虚拟化。</p>
+<p>容器是完全使用沙箱机制，相互之间不会有任何接口（类似 iPhone 的 app）,更重要的是容器性能开销极低。</p>
+<span id="more"></span>
+
+<h3 id="一、docker容器技术入门"><a href="#一、docker容器技术入门" class="headerlink" title="一、docker容器技术入门"></a>一、docker容器技术入门</h3><h4 id="1、容器化技术"><a href="#1、容器化技术" class="headerlink" title="1、容器化技术"></a>1、容器化技术</h4><ul>
+<li><p>主机虚拟化</p>
+</li>
+<li><p>共用一组硬件</p>
+</li>
+<li><p>独立内核</p>
+</li>
+<li><p>容器虚拟化</p>
+</li>
+<li><p>共用一组硬件</p>
+</li>
+<li><p>共用一个内核</p>
+</li>
+<li><p>独立UTS,Mount,IPC,PID,User,Net,namespaces<br><img src="https://gitee.com/BestErwin/img/raw/master/xiaoshujing/1559143055248.png"></p>
+</li>
+<li><p>Control Group：分配容器资源</p>
+</li>
+</ul>
+<p>LXC：LinuX Container<br>docker —&gt;LXC的增强版，简化LXC<br>docker优势：统一环境，一次开发多出运行<br>docker劣势：增加运维的难度，因为一个容器一个进程，要进行调试要突破边界，进入容器才能调试</p>
+<h4 id="2、docker的安装"><a href="#2、docker的安装" class="headerlink" title="2、docker的安装"></a>2、docker的安装</h4><p><strong>安装一些必要的系统工具：</strong></p>
+<figure class="highlight haskell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="title">sudo</span> yum install -y yum-utils device-mapper-persistent-<span class="class"><span class="keyword">data</span> lvm2</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>添加软件源信息：</strong></p>
+<figure class="highlight vim"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo yum-config-manager --<span class="built_in">add</span>-repo http://mirrors.aliyun.<span class="keyword">com</span>/docker-<span class="keyword">ce</span>/linux/centos/docker-<span class="keyword">ce</span>.repo</span><br></pre></td></tr></table></figure>
+
+<p><strong>更新 yum 缓存：</strong></p>
+<figure class="highlight ebnf"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">sudo yum makecache fast</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>安装 Docker-ce：</strong></p>
+<figure class="highlight ebnf"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">sudo yum -y install docker-ce</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>启动 Docker 后台服务</strong></p>
+<figure class="highlight ebnf"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">sudo systemctl start docker</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>测试运行 hello-world</strong></p>
+<figure class="highlight elixir"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root<span class="variable">@runoob</span> ~]<span class="comment"># docker run hello-world</span></span><br></pre></td></tr></table></figure>
+
+<p>由于本地没有hello-world这个镜像，所以会下载一个hello-world的镜像，并在容器内运行。</p>
+<p><strong>镜像加速</strong></p>
+<p>鉴于国内网络问题，后续拉取 Docker 镜像十分缓慢，我们可以需要配置加速器来解决，我使用的是网易的镜像地址：<a target="_blank" rel="noopener" href="http://hub-mirror.c.163.com./">http://hub-mirror.c.163.com。</a></p>
+<p>新版的 Docker 使用 /etc/docker/daemon.json（Linux） 或者 %programdata%\docker\config\daemon.json（Windows） 来配置 Daemon。</p>
+<p>请在该配置文件中加入（没有该文件的话，请先建一个）：</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="attr">&quot;registry-mirrors&quot;</span>: [<span class="string">&quot;http://hub-mirror.c.163.com&quot;</span>]</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p><strong>查看docker版本</strong></p>
+<figure class="highlight d"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker <span class="keyword">version</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>查看docker中的镜像</strong></p>
+<figure class="highlight ebnf"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">docker images</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>下载安装centos虚拟镜像</strong><br>查看docker有哪些镜像</p>
+<figure class="highlight stata"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker <span class="keyword">search</span> centos</span><br></pre></td></tr></table></figure>
+
+<p>下载镜像</p>
+<figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">docker</span> pull docker.io/centos</span><br></pre></td></tr></table></figure>
+
+<p>进入docker虚拟镜像</p>
+<figure class="highlight nginx"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">docker</span> run -it docker.io/centos:latest /bin/bash</span><br></pre></td></tr></table></figure>
+
+<h3 id="二、docker的基本用法"><a href="#二、docker的基本用法" class="headerlink" title="二、docker的基本用法"></a>二、docker的基本用法</h3><p>镜像：静态的<br>容器：动态的，有生命周期</p>
+<h4 id="运行守护式容器"><a href="#运行守护式容器" class="headerlink" title="运行守护式容器"></a>运行守护式容器</h4><p><strong>方式一</strong><br>运行容器</p>
+<figure class="highlight applescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker <span class="built_in">run</span> -<span class="keyword">it</span> centos /bin/bash</span><br></pre></td></tr></table></figure>
+
+<p>ctrl+p和ctrl+q退出容器，这个时候容器就在后台启动了<br>进入到运行中的容器：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker attach 容器名</span><br></pre></td></tr></table></figure>
+
+<p><strong>方式二</strong><br>使用run -d</p>
+<figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker <span class="keyword">run</span><span class="bash"> --name dc1 -d centos /bin/sh -c <span class="string">&quot;while true; do echo hello world; sleep 1; done&quot;</span></span></span><br></pre></td></tr></table></figure>
+
+<p>–name：给容器取个名字<br>-d：让容器在后台运行<br>-c：使容器执行sh脚本（打印好看日志）</p>
+<h4 id="查看日志"><a href="#查看日志" class="headerlink" title="查看日志"></a>查看日志</h4><figure class="highlight yaml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">docker</span> <span class="string">logs</span>  [<span class="string">-f</span>] [<span class="string">-t</span>] [<span class="string">-tail</span>] <span class="string">容器名</span></span><br><span class="line"><span class="string">-f</span>  <span class="string">--follows=true</span> <span class="string">|</span> <span class="literal">false</span><span class="string">默认为fase</span></span><br><span class="line"><span class="string">-t</span> <span class="string">--timestamps=true</span> <span class="string">|</span> <span class="literal">false</span> <span class="string">默认</span> <span class="literal">false</span></span><br><span class="line"><span class="string">-tail</span> <span class="string">=</span> <span class="string">&quot;all&quot;</span></span><br></pre></td></tr></table></figure>
+
+<p><img src="https://gitee.com/BestErwin/img/raw/master/xiaoshujing/1559055642525.png">   </p>
+<p>查看容器中的进程</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker top 容器名</span><br></pre></td></tr></table></figure>
+<p><img src="https://gitee.com/BestErwin/img/raw/master/xiaoshujing/1559055988821.png"></p>
+<h4 id="执行新的线程"><a href="#执行新的线程" class="headerlink" title="执行新的线程"></a>执行新的线程</h4><figure class="highlight inform7"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker exec <span class="comment">[-d]</span> <span class="comment">[-i]</span> <span class="comment">[-t]</span> 容器名</span><br></pre></td></tr></table></figure>
+
+<h4 id="停止容器"><a href="#停止容器" class="headerlink" title="停止容器"></a>停止容器</h4><figure class="highlight livecodeserver"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">docker <span class="built_in">stop</span> 容器名（发送一条命令给容器停止）</span><br><span class="line">docker <span class="built_in">kill</span> 容器名（直接停止）</span><br></pre></td></tr></table></figure>
+
+<h4 id="删除容器"><a href="#删除容器" class="headerlink" title="删除容器"></a>删除容器</h4><p>1）首先需要停止所有的容器</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker stop $(docker ps -a -q)</span><br></pre></td></tr></table></figure>
+
+<p>2）删除所有的容器（只删除单个时把后面的变量改为image id即可）</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker rm $(docker ps -a -q)</span><br></pre></td></tr></table></figure>
+<h4 id="删除镜像"><a href="#删除镜像" class="headerlink" title="删除镜像"></a>删除镜像</h4><p>1）查看host中的镜像</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker images</span><br></pre></td></tr></table></figure>
+<p>2）删除指定id的镜像</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker rmi &lt;image id&gt;</span><br></pre></td></tr></table></figure>
+<h3 id="三、docker-镜像管理基础"><a href="#三、docker-镜像管理基础" class="headerlink" title="三、docker 镜像管理基础"></a>三、docker 镜像管理基础</h3><ul>
+<li><p>docker镜像含有启动容器所需要的文件系统及内容，因此，其用于创建并启动docker容器</p>
+<ul>
+<li>采用分层构建机制，最底层为boofs，其之上为roofs<ul>
+<li>bootfs：用于系统引导的文件系统，包括bootloader和kernel，容器启动后会被卸载以节省内存资源；</li>
+<li>roofs：位于bootfs之上，表现为docker容器的根文件系统<ul>
+<li><p>传统模式中，系统启动之时，内核挂载rootfs时会首先将其挂载为“只读”模式，完整性自检完成后将其重现挂载为读写模式。</p>
+</li>
+<li><p>docker中，rootfs由内核挂载为“只读”模式，而后通过“联合挂载”技术额外挂载一个“可写层”</p>
+<p><img src="https://gitee.com/BestErwin/img/raw/master/xiaoshujing/1559369540559.png" alt="enter description here"></p>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>Docker Image Layer</p>
+<ul>
+<li><p>位于下层的镜像称为父镜像，最底层的称为基础镜像</p>
+</li>
+<li><p>最上层为“可读写”层，其下的均为“只读”层</p>
+<p><img src="https://gitee.com/BestErwin/img/raw/master/xiaoshujing/1559369529256.png" alt="enter description here"></p>
+</li>
+</ul>
+</li>
+<li><p>Docker Registry<br>容器启动时，docker daemon会试图从本地获取相关的镜像；本地镜像不存在时，其将从Registry中下载该镜像并保存到本地；</p>
+<p><img src="https://gitee.com/BestErwin/img/raw/master/xiaoshujing/1559370362678.png"></p>
+</li>
+<li><p>Docker Registry 分类</p>
+<ul>
+<li>Registry 用于保存docker镜像，包括镜像的层次结构和元数据</li>
+<li>用户可以自建Registry，也可以使用官方的Docker Hub</li>
+<li>分类：<ul>
+<li>Sponsor Registry：第三方的Registry，供客户和Docker社区使用</li>
+<li>Mirror Registry：第三方的Registry，只让客户使用</li>
+<li>Vcndor Registry：由发布Docker镜像的供应商提供的Registry</li>
+<li>Private Registry：通过设有防火墙和额外的安全层的私有实体提供的Registry</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>Registry(repository and index)</p>
+</li>
+<li><p>Repository</p>
+<ul>
+<li>由某特定的 dockerf镜像的所有迭代版本组成的镜像仓库<ul>
+<li>一个 RegistryRepository<ul>
+<li>Repository可分为“顶层仓”和“用户仓库”</li>
+<li>用户仓库名称格式为“用户名/仓库名</li>
+</ul>
+</li>
+<li>每个仓库可以包含多个ag(标签),每个标签对应一个镜像</li>
+</ul>
+</li>
+<li>Index<ul>
+<li>维护用户帐户、镜像的校验以及公共命名空间的信息</li>
+<li>相当于为registry提供了一个完成用户认证等功能的检索接口</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h4 id="制作镜像"><a href="#制作镜像" class="headerlink" title="制作镜像"></a>制作镜像</h4><h5 id="基于容器制作镜像"><a href="#基于容器制作镜像" class="headerlink" title="基于容器制作镜像"></a>基于容器制作镜像</h5><p><img src="https://gitee.com/BestErwin/img/raw/master/xiaoshujing/1559374836752.png"></p>
+<ul>
+<li>进入交互式镜像</li>
+</ul>
+<figure class="highlight applescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker <span class="built_in">run</span> <span class="comment">--name b1 -it busybox</span></span><br></pre></td></tr></table></figure>
+
+<p><img src="https://gitee.com/BestErwin/img/raw/master/xiaoshujing/1559374862840.png"></p>
+<ul>
+<li>创建一个目录和文件<br><img src="https://gitee.com/BestErwin/img/raw/master/xiaoshujing/1559375300008.png"></li>
+<li>生成镜像文件</li>
+</ul>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker commit -<span class="selector-tag">p</span> b1</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://gitee.com/BestErwin/img/raw/master/xiaoshujing/1559375407164.png"></p>
+<ul>
+<li>查看生成的镜像文件<br>此时的镜像文件只有id没有仓库名的标签名<br><img src="https://gitee.com/BestErwin/img/raw/master/xiaoshujing/1559375485797.png"></li>
+<li>给镜像加上仓库名和标签名</li>
+</ul>
+<figure class="highlight crmsh"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker <span class="keyword">tag</span> <span class="title">92cadba8bb5a</span> erwin/httpd:v0.<span class="number">1</span></span><br></pre></td></tr></table></figure>
+
+<p><img src="https://gitee.com/BestErwin/img/raw/master/xiaoshujing/1559375640315.png"><br>​    一个镜像可以打多个标签</p>
+<ul>
+<li>启动镜像查看文件是否存在</li>
+</ul>
+<figure class="highlight applescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker <span class="built_in">run</span> <span class="comment">--name t1 -it erwin/httpd:v0.1</span></span><br></pre></td></tr></table></figure>
+
+<p><img src="https://gitee.com/BestErwin/img/raw/master/xiaoshujing/1559376096212.png"></p>
+<ul>
+<li>查看镜像启动命令</li>
+</ul>
+<figure class="highlight stata"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker <span class="keyword">inspect</span> b1</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://gitee.com/BestErwin/img/raw/master/xiaoshujing/1559375902956.png"></p>
+<ul>
+<li>制作镜像同时设置标签和修改启动命令</li>
+</ul>
+<figure class="highlight scilab"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker commit -c <span class="string">&#x27;CMD [&quot;</span>/bin/httpd<span class="string">&quot;,&quot;</span>-f<span class="string">&quot;,&quot;</span>-h<span class="string">&quot;,&quot;</span>/data/html/<span class="string">&quot;]&#x27;</span> -p b1 erwin/httpd:v0.<span class="number">2</span></span><br></pre></td></tr></table></figure>
+
+<p><img src="https://gitee.com/BestErwin/img/raw/master/xiaoshujing/1559376424718.png"></p>
+<ul>
+<li>启动镜像</li>
+</ul>
+<figure class="highlight applescript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker <span class="built_in">run</span> <span class="comment">--name t2 erwin/httpd:v0.2</span></span><br></pre></td></tr></table></figure>
+
+<p> -访问服务<br> <img src="https://gitee.com/BestErwin/img/raw/master/xiaoshujing/1559376865301.png"></p>
+<h5 id="镜像的导入导出"><a href="#镜像的导入导出" class="headerlink" title="镜像的导入导出"></a>镜像的导入导出</h5><ul>
+<li>导入</li>
+</ul>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker save -o myimages<span class="selector-class">.gz</span> erwin/httpd:v0.<span class="number">2</span></span><br></pre></td></tr></table></figure>
+
+<p><img src="https://gitee.com/BestErwin/img/raw/master/xiaoshujing/1559377111820.png"></p>
+<ul>
+<li>导出</li>
+</ul>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker load -<span class="selector-tag">i</span> myimages.gz</span><br></pre></td></tr></table></figure>
+
+<h5 id="docker启动jar文件"><a href="#docker启动jar文件" class="headerlink" title="docker启动jar文件"></a>docker启动jar文件</h5><ul>
+<li>下载java镜像</li>
+</ul>
+<figure class="highlight css"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker pull java:<span class="number">8</span>u111</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>启动可执行文件</li>
+</ul>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run -d -<span class="selector-tag">p</span> <span class="number">9090</span>:<span class="number">9090</span> -v /usr/springboot-<span class="number">1</span><span class="selector-class">.jar</span>:/usr/springboot-<span class="number">1</span><span class="selector-class">.jar</span> --name springboot java:<span class="number">8</span>u111 java -jar /usr/springboot-<span class="number">1</span>.jar</span><br></pre></td></tr></table></figure>
+
+<p>==-d 表示在后台启动<br>-p 9090:9090 表示将容器的端口 映射成宿主主机的端口，否则9090端口访问不到<br>-v /usr/springboot-1.jar:/usr/springboot-1.jar 表示将宿主主机的jar文件，映射到容器中（分号前为宿主主机的路径，分号后为容器中的路径）<br>–name springboot 表示为该容器取一个全局唯一的名称，这里我取的名称为springboot<br>java:8u111 表示镜像文件的名称和tag<br>java -jar /usr/springboot-1.jar 表示运行jar包，注意：这里的jar包为容器中的位置，是通过前面的-v属性映射的==</p>
+<h3 id="四、docker容器虚拟化网络"><a href="#四、docker容器虚拟化网络" class="headerlink" title="四、docker容器虚拟化网络"></a>四、docker容器虚拟化网络</h3><h4 id="docker的四种网络类型"><a href="#docker的四种网络类型" class="headerlink" title="docker的四种网络类型"></a>docker的四种网络类型</h4><p><img src="https://gitee.com/BestErwin/img/raw/master/xiaoshujing/1559470576751.png"></p>
+<ul>
+<li>封闭式网络<br>创建封闭式网络的容器</li>
+</ul>
+<figure class="highlight dsconfig"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">docker</span> <span class="string">run</span> <span class="built_in">--name</span> <span class="string">t1</span> -<span class="string">it</span> <span class="built_in">--network</span> <span class="string">none</span> <span class="built_in">--rm</span> <span class="string">busybox:latest</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="built_in">--rm</span> 表示退出即删除容器</span><br><span class="line"><span class="built_in">--network</span> 网络名称 创建容器并接入哪个网络</span><br></pre></td></tr></table></figure>
+
+<p>通过ifconfig查看网络<br><img src="https://gitee.com/BestErwin/img/raw/master/xiaoshujing/1559471137666.png"></p>
+<ul>
+<li>桥接网络（默认）<br>创建交接网路</li>
+</ul>
+<figure class="highlight dsconfig"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">docker</span> <span class="string">run</span> <span class="built_in">--name</span> <span class="string">t1</span> -<span class="string">it</span> <span class="built_in">--network</span> <span class="string">bridge</span> <span class="built_in">--rm</span> <span class="string">busybox:latest</span></span><br></pre></td></tr></table></figure>
+
+<p>查看网络<br><img src="https://gitee.com/BestErwin/img/raw/master/xiaoshujing/1559471352298.png"></p>
+<ul>
+<li>容器联盟网络（共享容器net名称空间）<br>创建容器</li>
+</ul>
+<figure class="highlight dsconfig"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">docker</span> <span class="string">run</span> <span class="built_in">--name</span> <span class="string">t1</span> <span class="built_in">--network</span> <span class="string">container:t2 </span>-<span class="string">it</span> <span class="built_in">--rm</span> <span class="string">busybox</span></span><br><span class="line">创建容易并共享容器<span class="string">t2</span>的网络名称空间</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://gitee.com/BestErwin/img/raw/master/xiaoshujing/1559474321030.png"></p>
+<ul>
+<li>主机联盟网络（共享主机net名称空间）</li>
+</ul>
+<figure class="highlight dsconfig"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">docker</span> <span class="string">run</span> <span class="built_in">--name</span> <span class="string">t1</span> <span class="built_in">--network</span> <span class="string">host</span> -<span class="string">it</span> <span class="built_in">--rm</span> <span class="string">busybox</span></span><br><span class="line">创建并共享宿主机的网络名称空间</span><br></pre></td></tr></table></figure>
+
+<p><img src="https://gitee.com/BestErwin/img/raw/master/xiaoshujing/1559474583116.png"></p>
+<h4 id="docker容器的端口映射"><a href="#docker容器的端口映射" class="headerlink" title="docker容器的端口映射"></a>docker容器的端口映射</h4><ul>
+<li>Docker为NAT桥,因此容器一般获得的是私有网络地址</li>
+<li>可以把容器想像为宿主机NAT服务背后的主机</li>
+<li>如果开放容器或其上的服务为外部网络访问,需要在宿主机上为其定义DNAT规则,例如<ul>
+<li>对宿主机某IP地址的访问全部映射给某容器地址<ul>
+<li>主机IP : : 容器IP</li>
+</ul>
+</li>
+<li>对宿主机某IP地址的某端口的访问映射给某容器地址的某端口<ul>
+<li>主机IP:PORT : : 容器IP:PORT</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>为docker run命令使用-p选项即可实现端口映射,无须手动添加规则</li>
+<li>-p选项的使用格式<br><img src="https://gitee.com/BestErwin/img/raw/master/xiaoshujing/1559472397894.png"></li>
+<li><strong>映射容器的80端口</strong></li>
+</ul>
+<figure class="highlight dsconfig"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">docker</span> <span class="string">run</span> <span class="built_in">--name</span> <span class="string">t1</span> <span class="built_in">--rm</span> -<span class="string">p</span> <span class="string">80</span> <span class="string">erwin</span>/<span class="string">httpd:v0.</span><span class="string">2</span></span><br></pre></td></tr></table></figure>
+
+<p>使用<code>iptables -t nat -vnL</code>查看映射的端口（或<code>docker ports 容器名</code>）<br><img src="https://gitee.com/BestErwin/img/raw/master/xiaoshujing/1559473048178.png"><br>自此可以通过访问宿主机的32768端口访问到容器的80端口<br><img src="https://gitee.com/BestErwin/img/raw/master/xiaoshujing/1559473114259.png"></p>
+<h4 id="修改docker网桥地址"><a href="#修改docker网桥地址" class="headerlink" title="修改docker网桥地址"></a>修改docker网桥地址</h4><ul>
+<li>关闭docker</li>
+</ul>
+<figure class="highlight vbscript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">systemctl <span class="keyword">stop</span> docker</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>修改/etc/docker/daemon.json</li>
+</ul>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">&#123;</span><br><span class="line">  <span class="attr">&quot;registry-mirrors&quot;</span>: [<span class="string">&quot;http://hub-mirror.c.163.com&quot;</span>],</span><br><span class="line">  <span class="attr">&quot;bip&quot;</span>:<span class="string">&quot;10.0.0.1/16&quot;</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>查看网桥地址<br><img src="https://gitee.com/BestErwin/img/raw/master/xiaoshujing/1559475421173.png"></li>
+</ul>
+<h3 id="五、docker-存储卷"><a href="#五、docker-存储卷" class="headerlink" title="五、docker 存储卷"></a>五、docker 存储卷</h3><ol>
+<li><p>什么是存储卷？容器与宿主机的文件关联。</p>
+</li>
+<li><p>为什么使用存储卷？<br><img src="https://gitee.com/BestErwin/img/raw/master/xiaoshujing/1559514591718.png"></p>
+<p><img src="https://gitee.com/BestErwin/img/raw/master/xiaoshujing/1559514746519.png"></p>
+</li>
+<li><p>存储卷的类型<br><img src="https://gitee.com/BestErwin/img/raw/master/xiaoshujing/1559515031903.png"></p>
+</li>
+<li><p>在容器中使用Volumes（卷）<br><img src="https://gitee.com/BestErwin/img/raw/master/xiaoshujing/1559515128962.png"><br><strong>案例</strong></p>
+</li>
+</ol>
+<p>启动一个容器，使容器目录/data/t1挂载到主机/data/t1上</p>
+<figure class="highlight jboss-cli"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run <span class="params">--name</span> t1 <span class="params">--rm</span> -it -v <span class="string">/data/t1</span>:<span class="string">/data/t1</span> busybox</span><br></pre></td></tr></table></figure>
+
+<p>在容器/data/t1中添加文件index.html<br><img src="https://gitee.com/BestErwin/img/raw/master/xiaoshujing/1559515622159.png"><br>查看宿主机的是否有这个文件<br><img src="https://gitee.com/BestErwin/img/raw/master/xiaoshujing/1559515667872.png"></p>
+<ol>
+<li>多容器共享存储卷<br><img src="https://gitee.com/BestErwin/img/raw/master/xiaoshujing/1559515810955.png"><br><strong>使用–volumes-from</strong><br>启动一个新的容器t2绑定t1的卷</li>
+</ol>
+<figure class="highlight dsconfig"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">docker</span> <span class="string">run</span> <span class="built_in">--name</span> <span class="string">t2</span> -<span class="string">it</span> <span class="built_in">--volumes-from</span> <span class="string">t1</span>  <span class="string">busybox</span></span><br></pre></td></tr></table></figure>
+
+<p>增加一个t2.txt文件<br><img src="https://gitee.com/BestErwin/img/raw/master/xiaoshujing/1559516175798.png"><br>宿主机查看是否存在文件<br><img src="https://gitee.com/BestErwin/img/raw/master/xiaoshujing/1559516258116.png"></p>
+<h3 id="六、Dockerfile详解"><a href="#六、Dockerfile详解" class="headerlink" title="六、Dockerfile详解"></a>六、Dockerfile详解</h3><h4 id="1、什么是Dockerfile？"><a href="#1、什么是Dockerfile？" class="headerlink" title="1、什么是Dockerfile？"></a>1、什么是Dockerfile？</h4><p>简单一句话：Dockerfile是制作镜像的指令文件。<br>Dockerfile文件注意事项：</p>
+<ul>
+<li>Dockerfile文件首字母必须大写</li>
+<li>制作镜像用到的文件不能再Dockerfile所在文件的父目录</li>
+<li>Dockerfile指令不区分大小写，不过约定俗成都用大写</li>
+</ul>
+<h4 id="2、Dockerfile各指令功能详情"><a href="#2、Dockerfile各指令功能详情" class="headerlink" title="2、Dockerfile各指令功能详情"></a>2、Dockerfile各指令功能详情</h4><h5 id="2-1、FROM"><a href="#2-1、FROM" class="headerlink" title="2.1、FROM"></a>2.1、FROM</h5><p><img src="https://gitee.com/BestErwin/img/raw/master/xiaoshujing/1559686263111.png"></p>
+<h5 id="2-2、MAINTANIER"><a href="#2-2、MAINTANIER" class="headerlink" title="2.2、MAINTANIER"></a>2.2、MAINTANIER</h5><p><img src="https://gitee.com/BestErwin/img/raw/master/xiaoshujing/1559686510603.png"></p>
+<h5 id="2-3、COPY"><a href="#2-3、COPY" class="headerlink" title="2.3、COPY"></a>2.3、COPY</h5><p><img src="https://gitee.com/BestErwin/img/raw/master/xiaoshujing/1559686617576.png"></p>
+<h5 id="2-4、ADD"><a href="#2-4、ADD" class="headerlink" title="2.4、ADD"></a>2.4、ADD</h5><p><img src="https://gitee.com/BestErwin/img/raw/master/xiaoshujing/1559687203855.png"></p>
+<h5 id="2-5、WORKDIR"><a href="#2-5、WORKDIR" class="headerlink" title="2.5、WORKDIR"></a>2.5、WORKDIR</h5><p><img src="https://gitee.com/BestErwin/img/raw/master/xiaoshujing/1559687390208.png"></p>
+<h5 id="2-6、VOLUME"><a href="#2-6、VOLUME" class="headerlink" title="2.6、VOLUME"></a>2.6、VOLUME</h5><p><img src="https://gitee.com/BestErwin/img/raw/master/xiaoshujing/1559687357740.png"></p>
+<h5 id="2-7、EXPOSE"><a href="#2-7、EXPOSE" class="headerlink" title="2.7、EXPOSE"></a>2.7、EXPOSE</h5><p><img src="https://gitee.com/BestErwin/img/raw/master/xiaoshujing/1559687546282.png"></p>
+<h5 id="2-8、ENV"><a href="#2-8、ENV" class="headerlink" title="2.8、ENV"></a>2.8、ENV</h5><p><img src="https://gitee.com/BestErwin/img/raw/master/xiaoshujing/1559687659969.png"></p>
+<h5 id="2-9、RUN"><a href="#2-9、RUN" class="headerlink" title="2.9、RUN"></a>2.9、RUN</h5><p><img src="https://gitee.com/BestErwin/img/raw/master/xiaoshujing/1559687764752.png"></p>
+<h5 id="2-10、CMD"><a href="#2-10、CMD" class="headerlink" title="2.10、CMD"></a>2.10、CMD</h5><p><img src="https://gitee.com/BestErwin/img/raw/master/xiaoshujing/1559687992826.png"></p>
+<h5 id="2-11、ENTRYPOINT"><a href="#2-11、ENTRYPOINT" class="headerlink" title="2.11、ENTRYPOINT"></a>2.11、ENTRYPOINT</h5><p><img src="https://gitee.com/BestErwin/img/raw/master/xiaoshujing/1559688261062.png"></p>
+<h5 id="2-12、HEALTHCHCK"><a href="#2-12、HEALTHCHCK" class="headerlink" title="2.12、HEALTHCHCK"></a>2.12、HEALTHCHCK</h5><p><img src="https://gitee.com/BestErwin/img/raw/master/xiaoshujing/1559688461634.png"></p>
+<h5 id="2-13、USER"><a href="#2-13、USER" class="headerlink" title="2.13、USER"></a>2.13、USER</h5><p><img src="https://gitee.com/BestErwin/img/raw/master/xiaoshujing/1559688386329.png"></p>
+<h5 id="2-14、SHLEE"><a href="#2-14、SHLEE" class="headerlink" title="2.14、SHLEE"></a>2.14、SHLEE</h5><p><img src="https://gitee.com/BestErwin/img/raw/master/xiaoshujing/1559688576800.png"></p>
+<h4 id="3、一个Dockerfile的文件示例"><a href="#3、一个Dockerfile的文件示例" class="headerlink" title="3、一个Dockerfile的文件示例"></a>3、一个Dockerfile的文件示例</h4><figure class="highlight dockerfile"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># This my first nginx Dockerfile</span></span><br><span class="line"><span class="comment"># Version 1.0</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># Base images 基础镜像</span></span><br><span class="line"><span class="keyword">FROM</span> centos</span><br><span class="line"></span><br><span class="line"><span class="comment">#MAINTAINER 维护者信息</span></span><br><span class="line"><span class="keyword">MAINTAINER</span> tianfeiyu </span><br><span class="line"></span><br><span class="line"><span class="comment">#ENV 设置环境变量</span></span><br><span class="line"><span class="keyword">ENV</span> PATH /usr/local/nginx/sbin:$PATH</span><br><span class="line"></span><br><span class="line"><span class="comment">#ADD  文件放在当前目录下，拷过去会自动解压</span></span><br><span class="line"><span class="keyword">ADD</span><span class="bash"> nginx-1.8.0.tar.gz /usr/<span class="built_in">local</span>/  </span></span><br><span class="line"><span class="keyword">ADD</span><span class="bash"> epel-release-latest-7.noarch.rpm /usr/<span class="built_in">local</span>/  </span></span><br><span class="line"></span><br><span class="line"><span class="comment">#RUN 执行以下命令 </span></span><br><span class="line"><span class="keyword">RUN</span><span class="bash"> rpm -ivh /usr/<span class="built_in">local</span>/epel-release-latest-7.noarch.rpm</span></span><br><span class="line"><span class="keyword">RUN</span><span class="bash"> yum install -y wget lftp gcc gcc-c++ make openssl-devel pcre-devel pcre &amp;&amp; yum clean all</span></span><br><span class="line"><span class="keyword">RUN</span><span class="bash"> useradd -s /sbin/nologin -M www</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#WORKDIR 相当于cd</span></span><br><span class="line"><span class="keyword">WORKDIR</span><span class="bash"> /usr/<span class="built_in">local</span>/nginx-1.8.0 </span></span><br><span class="line"></span><br><span class="line"><span class="keyword">RUN</span><span class="bash"> ./configure --prefix=/usr/<span class="built_in">local</span>/nginx --user=www --group=www --with-http_ssl_module --with-pcre &amp;&amp; make &amp;&amp; make install</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">RUN</span><span class="bash"> <span class="built_in">echo</span> <span class="string">&quot;daemon off;&quot;</span> &gt;&gt; /etc/nginx.conf</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#EXPOSE 映射端口</span></span><br><span class="line"><span class="keyword">EXPOSE</span> <span class="number">80</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#CMD 运行以下命令</span></span><br><span class="line"><span class="keyword">CMD</span><span class="bash"> [<span class="string">&quot;nginx&quot;</span>]</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="七、Docker私有Registry"><a href="#七、Docker私有Registry" class="headerlink" title="七、Docker私有Registry"></a>七、Docker私有Registry</h3><h4 id="1、docker-registry-分类"><a href="#1、docker-registry-分类" class="headerlink" title="1、docker registry 分类"></a>1、docker registry 分类</h4><p><img src="https://gitee.com/BestErwin/img/raw/master/xiaoshujing/1559900446994.png"></p>
+<h4 id="2、安装配置registry"><a href="#2、安装配置registry" class="headerlink" title="2、安装配置registry"></a>2、安装配置registry</h4><ul>
+<li>安装registry</li>
+</ul>
+<figure class="highlight ebnf"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">yum -y install docker-registry</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>查看安装目录<code>rpm -ql docker-distribution</code><br><img src="https://gitee.com/BestErwin/img/raw/master/xiaoshujing/1559900618581.png"></li>
+<li>查看config.yml配合文件</li>
+</ul>
+<p><code>cd /etc/docker-distribution/registry/</code></p>
+<p><code>vi config.yml</code></p>
+<figure class="highlight dts"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="symbol">version:</span> <span class="number">0.1</span></span><br><span class="line"><span class="symbol">log:</span></span><br><span class="line"><span class="symbol">  fields:</span></span><br><span class="line"><span class="symbol">    service:</span> registry</span><br><span class="line"><span class="symbol">storage:</span></span><br><span class="line"><span class="symbol">    cache:</span></span><br><span class="line"><span class="symbol">        layerinfo:</span> inmemory</span><br><span class="line"><span class="symbol">    filesystem:</span></span><br><span class="line"><span class="symbol">        rootdirectory:</span> <span class="meta-keyword">/var/</span>lib/registry</span><br><span class="line"><span class="symbol">http:</span></span><br><span class="line"><span class="symbol">    addr:</span> :<span class="number">5000</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>启动registry</li>
+</ul>
+<figure class="highlight ebnf"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="attribute">systemctl start docker-distribution</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>查看下端口映射<br><img src="https://gitee.com/BestErwin/img/raw/master/xiaoshujing/1559901003457.png"></li>
+<li>修改daemon.json配置文件，增加信任路径</li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">&quot;insecure-registries&quot;</span>:[<span class="string">&quot;192.168.80.128:5000&quot;</span>]</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>推送镜像到registry<br>给镜像打个标签：<code>docker tag busybox:latest 192.168.80.128:5000/b1:v02</code><br>推送到仓库：<code>docker push 192.168.80.128:5000/b1:v02</code><br><img src="https://gitee.com/BestErwin/img/raw/master/xiaoshujing/1559901273291.png"></li>
+</ul>
+<h4 id="3、安装配置barbor"><a href="#3、安装配置barbor" class="headerlink" title="3、安装配置barbor"></a>3、安装配置barbor</h4><p>barbor是提供可是话ui的docker registry<br>可以去github上下载最新版的barbor：<a target="_blank" rel="noopener" href="https://github.com/goharbor/harbor">https://github.com/goharbor/harbor</a> ，在视频教程目录也有1.8版的</p>
+<ul>
+<li>安装<br>下载下来之后放入一个自定义的目录，然后解压<br><code>tar xf harbor-offline-installer-v1.8.0.tgz -C /usr/local/</code><br><img src="https://gitee.com/BestErwin/img/raw/master/xiaoshujing/1559901707896.png"></li>
+<li>安装docker-compose</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">sudo curl -L <span class="string">&quot;https://github.com/docker/compose/releases/download/1.24.0/docker-compose-<span class="subst">$(uname -s)</span>-<span class="subst">$(uname -m)</span>&quot;</span> -o /usr/<span class="built_in">local</span>/bin/docker-compose</span><br><span class="line">sudo chmod +x /usr/<span class="built_in">local</span>/bin/docker-compose</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>可以查看harbor.yml配置文件，修改host为自己的ip</li>
+<li><img src="https://gitee.com/BestErwin/img/raw/master/xiaoshujing/1559901930147.png"><br>配置指南：<a target="_blank" rel="noopener" href="https://github.com/goharbor/harbor/blob/master/docs/installation_guide.md">https://github.com/goharbor/harbor/blob/master/docs/installation_guide.md</a></li>
+<li>启动harbor</li>
+</ul>
+<figure class="highlight stylus"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./install<span class="selector-class">.sh</span> </span><br></pre></td></tr></table></figure>
+
+<p>第一次启动较慢，启动成功，打开页面<br><img src="https://gitee.com/BestErwin/img/raw/master/xiaoshujing/1559904711404.png"><br>初始账号密码：admin，Harbor12345<br><img src="https://gitee.com/BestErwin/img/raw/master/xiaoshujing/1559904758591.png"></p>
+<hr>
+<p>end</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/linux/" rel="tag"># linux</a>
+          
+            <a href="/tags/docker/" rel="tag"># docker</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2021/01/08/linux/08_SHELL%E7%BC%96%E7%A8%8B%E4%B9%8B%E6%96%87%E6%9C%AC%E5%A4%84%E7%90%86%E5%B7%A5%E5%85%B7awk/" rel="next" title="08_SHELL编程之文本处理工具awk">
+                <i class="fa fa-chevron-left"></i> 08_SHELL编程之文本处理工具awk
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2021/01/09/docker/%E5%9C%A8docker%E4%B8%AD%E9%83%A8%E7%BD%B2mysql/" rel="prev" title="在docker中部署mysql">
+                在docker中部署mysql <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+      <div id="sidebar-dimmer"></div>
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/i.jpeg"
+                alt="" />
+            
+              <p class="site-author-name" itemprop="name"></p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/%7C%7C%20archive">
+              
+                  <span class="site-state-item-count">61</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">9</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">23</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/wangzengming" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:wangzengming@aliyun.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%80%E3%80%81docker%E5%AE%B9%E5%99%A8%E6%8A%80%E6%9C%AF%E5%85%A5%E9%97%A8"><span class="nav-number">1.</span> <span class="nav-text">一、docker容器技术入门</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1%E3%80%81%E5%AE%B9%E5%99%A8%E5%8C%96%E6%8A%80%E6%9C%AF"><span class="nav-number">1.1.</span> <span class="nav-text">1、容器化技术</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2%E3%80%81docker%E7%9A%84%E5%AE%89%E8%A3%85"><span class="nav-number">1.2.</span> <span class="nav-text">2、docker的安装</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BA%8C%E3%80%81docker%E7%9A%84%E5%9F%BA%E6%9C%AC%E7%94%A8%E6%B3%95"><span class="nav-number">2.</span> <span class="nav-text">二、docker的基本用法</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E8%BF%90%E8%A1%8C%E5%AE%88%E6%8A%A4%E5%BC%8F%E5%AE%B9%E5%99%A8"><span class="nav-number">2.1.</span> <span class="nav-text">运行守护式容器</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%9F%A5%E7%9C%8B%E6%97%A5%E5%BF%97"><span class="nav-number">2.2.</span> <span class="nav-text">查看日志</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%89%A7%E8%A1%8C%E6%96%B0%E7%9A%84%E7%BA%BF%E7%A8%8B"><span class="nav-number">2.3.</span> <span class="nav-text">执行新的线程</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%81%9C%E6%AD%A2%E5%AE%B9%E5%99%A8"><span class="nav-number">2.4.</span> <span class="nav-text">停止容器</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%88%A0%E9%99%A4%E5%AE%B9%E5%99%A8"><span class="nav-number">2.5.</span> <span class="nav-text">删除容器</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%88%A0%E9%99%A4%E9%95%9C%E5%83%8F"><span class="nav-number">2.6.</span> <span class="nav-text">删除镜像</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%89%E3%80%81docker-%E9%95%9C%E5%83%8F%E7%AE%A1%E7%90%86%E5%9F%BA%E7%A1%80"><span class="nav-number">3.</span> <span class="nav-text">三、docker 镜像管理基础</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%88%B6%E4%BD%9C%E9%95%9C%E5%83%8F"><span class="nav-number">3.1.</span> <span class="nav-text">制作镜像</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#%E5%9F%BA%E4%BA%8E%E5%AE%B9%E5%99%A8%E5%88%B6%E4%BD%9C%E9%95%9C%E5%83%8F"><span class="nav-number">3.1.1.</span> <span class="nav-text">基于容器制作镜像</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#%E9%95%9C%E5%83%8F%E7%9A%84%E5%AF%BC%E5%85%A5%E5%AF%BC%E5%87%BA"><span class="nav-number">3.1.2.</span> <span class="nav-text">镜像的导入导出</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#docker%E5%90%AF%E5%8A%A8jar%E6%96%87%E4%BB%B6"><span class="nav-number">3.1.3.</span> <span class="nav-text">docker启动jar文件</span></a></li></ol></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%9B%9B%E3%80%81docker%E5%AE%B9%E5%99%A8%E8%99%9A%E6%8B%9F%E5%8C%96%E7%BD%91%E7%BB%9C"><span class="nav-number">4.</span> <span class="nav-text">四、docker容器虚拟化网络</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#docker%E7%9A%84%E5%9B%9B%E7%A7%8D%E7%BD%91%E7%BB%9C%E7%B1%BB%E5%9E%8B"><span class="nav-number">4.1.</span> <span class="nav-text">docker的四种网络类型</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#docker%E5%AE%B9%E5%99%A8%E7%9A%84%E7%AB%AF%E5%8F%A3%E6%98%A0%E5%B0%84"><span class="nav-number">4.2.</span> <span class="nav-text">docker容器的端口映射</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BF%AE%E6%94%B9docker%E7%BD%91%E6%A1%A5%E5%9C%B0%E5%9D%80"><span class="nav-number">4.3.</span> <span class="nav-text">修改docker网桥地址</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BA%94%E3%80%81docker-%E5%AD%98%E5%82%A8%E5%8D%B7"><span class="nav-number">5.</span> <span class="nav-text">五、docker 存储卷</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%85%AD%E3%80%81Dockerfile%E8%AF%A6%E8%A7%A3"><span class="nav-number">6.</span> <span class="nav-text">六、Dockerfile详解</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1%E3%80%81%E4%BB%80%E4%B9%88%E6%98%AFDockerfile%EF%BC%9F"><span class="nav-number">6.1.</span> <span class="nav-text">1、什么是Dockerfile？</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2%E3%80%81Dockerfile%E5%90%84%E6%8C%87%E4%BB%A4%E5%8A%9F%E8%83%BD%E8%AF%A6%E6%83%85"><span class="nav-number">6.2.</span> <span class="nav-text">2、Dockerfile各指令功能详情</span></a><ol class="nav-child"><li class="nav-item nav-level-5"><a class="nav-link" href="#2-1%E3%80%81FROM"><span class="nav-number">6.2.1.</span> <span class="nav-text">2.1、FROM</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#2-2%E3%80%81MAINTANIER"><span class="nav-number">6.2.2.</span> <span class="nav-text">2.2、MAINTANIER</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#2-3%E3%80%81COPY"><span class="nav-number">6.2.3.</span> <span class="nav-text">2.3、COPY</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#2-4%E3%80%81ADD"><span class="nav-number">6.2.4.</span> <span class="nav-text">2.4、ADD</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#2-5%E3%80%81WORKDIR"><span class="nav-number">6.2.5.</span> <span class="nav-text">2.5、WORKDIR</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#2-6%E3%80%81VOLUME"><span class="nav-number">6.2.6.</span> <span class="nav-text">2.6、VOLUME</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#2-7%E3%80%81EXPOSE"><span class="nav-number">6.2.7.</span> <span class="nav-text">2.7、EXPOSE</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#2-8%E3%80%81ENV"><span class="nav-number">6.2.8.</span> <span class="nav-text">2.8、ENV</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#2-9%E3%80%81RUN"><span class="nav-number">6.2.9.</span> <span class="nav-text">2.9、RUN</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#2-10%E3%80%81CMD"><span class="nav-number">6.2.10.</span> <span class="nav-text">2.10、CMD</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#2-11%E3%80%81ENTRYPOINT"><span class="nav-number">6.2.11.</span> <span class="nav-text">2.11、ENTRYPOINT</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#2-12%E3%80%81HEALTHCHCK"><span class="nav-number">6.2.12.</span> <span class="nav-text">2.12、HEALTHCHCK</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#2-13%E3%80%81USER"><span class="nav-number">6.2.13.</span> <span class="nav-text">2.13、USER</span></a></li><li class="nav-item nav-level-5"><a class="nav-link" href="#2-14%E3%80%81SHLEE"><span class="nav-number">6.2.14.</span> <span class="nav-text">2.14、SHLEE</span></a></li></ol></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3%E3%80%81%E4%B8%80%E4%B8%AADockerfile%E7%9A%84%E6%96%87%E4%BB%B6%E7%A4%BA%E4%BE%8B"><span class="nav-number">6.3.</span> <span class="nav-text">3、一个Dockerfile的文件示例</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%83%E3%80%81Docker%E7%A7%81%E6%9C%89Registry"><span class="nav-number">7.</span> <span class="nav-text">七、Docker私有Registry</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1%E3%80%81docker-registry-%E5%88%86%E7%B1%BB"><span class="nav-number">7.1.</span> <span class="nav-text">1、docker registry 分类</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2%E3%80%81%E5%AE%89%E8%A3%85%E9%85%8D%E7%BD%AEregistry"><span class="nav-number">7.2.</span> <span class="nav-text">2、安装配置registry</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3%E3%80%81%E5%AE%89%E8%A3%85%E9%85%8D%E7%BD%AEbarbor"><span class="nav-number">7.3.</span> <span class="nav-text">3、安装配置barbor</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+        <div class="back-to-top">
+          <i class="fa fa-arrow-up"></i>
+          
+            <span id="scrollpercent"><span>0</span>%</span>
+          
+        </div>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">王增明</span>
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+  
+  
+
+
+
+
+
+  
+  
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/three/three.min.js"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/three/three-waves.min.js"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/three/canvas_sphere.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

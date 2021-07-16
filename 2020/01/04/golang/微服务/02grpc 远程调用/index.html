@@ -1,0 +1,1049 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+  
+  
+    
+    
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+  <link href="/lib/pace/pace-theme-minimal.min.css?v=1.0.2" rel="stylesheet">
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="微服务," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="grpc 远程调用。 服务端 grpc  初始一个 grpc 对象 注册服务 设置监听， 指定 IP、port 启动服务。—- serve()   客户端 grpc 连接 grpc 服务 给 grpc.Dial() 传参2 ： grpc.WithInsecure()  .  表示：以安全的方式操作。   初始化 grpc 客户端 调用远程服务。 给 grpc.SayHello() 传参1： con">
+<meta property="og:type" content="article">
+<meta property="og:title" content="微服务学习--02grpc 远程调用">
+<meta property="og:url" content="http://example.com/2020/01/04/golang/%E5%BE%AE%E6%9C%8D%E5%8A%A1/02grpc%20%E8%BF%9C%E7%A8%8B%E8%B0%83%E7%94%A8/index.html">
+<meta property="og:site_name" content="极风键客">
+<meta property="og:description" content="grpc 远程调用。 服务端 grpc  初始一个 grpc 对象 注册服务 设置监听， 指定 IP、port 启动服务。—- serve()   客户端 grpc 连接 grpc 服务 给 grpc.Dial() 传参2 ： grpc.WithInsecure()  .  表示：以安全的方式操作。   初始化 grpc 客户端 调用远程服务。 给 grpc.SayHello() 传参1： con">
+<meta property="og:locale">
+<meta property="og:image" content="http://example.com/2020/01/04/golang/%E5%BE%AE%E6%9C%8D%E5%8A%A1/02grpc%20%E8%BF%9C%E7%A8%8B%E8%B0%83%E7%94%A8/%E8%AF%BE%E5%A0%82%E7%AC%94%E8%AE%B0-%E7%AC%AC2%E5%A4%A9.assets/1581732082449.png">
+<meta property="og:image" content="http://example.com/2020/01/04/golang/%E5%BE%AE%E6%9C%8D%E5%8A%A1/02grpc%20%E8%BF%9C%E7%A8%8B%E8%B0%83%E7%94%A8/%E8%AF%BE%E5%A0%82%E7%AC%94%E8%AE%B0-%E7%AC%AC2%E5%A4%A9.assets/1581734008422.png">
+<meta property="og:image" content="http://example.com/2020/01/04/golang/%E5%BE%AE%E6%9C%8D%E5%8A%A1/02grpc%20%E8%BF%9C%E7%A8%8B%E8%B0%83%E7%94%A8/%E8%AF%BE%E5%A0%82%E7%AC%94%E8%AE%B0-%E7%AC%AC2%E5%A4%A9.assets/1581737388273.png">
+<meta property="og:image" content="http://example.com/2020/01/04/golang/%E5%BE%AE%E6%9C%8D%E5%8A%A1/02grpc%20%E8%BF%9C%E7%A8%8B%E8%B0%83%E7%94%A8/%E8%AF%BE%E5%A0%82%E7%AC%94%E8%AE%B0-%E7%AC%AC2%E5%A4%A9.assets/1581737508458.png">
+<meta property="og:image" content="http://example.com/2020/01/04/golang/%E5%BE%AE%E6%9C%8D%E5%8A%A1/02grpc%20%E8%BF%9C%E7%A8%8B%E8%B0%83%E7%94%A8/%E8%AF%BE%E5%A0%82%E7%AC%94%E8%AE%B0-%E7%AC%AC2%E5%A4%A9.assets/1581738360648.png">
+<meta property="og:image" content="http://example.com/2020/01/04/golang/%E5%BE%AE%E6%9C%8D%E5%8A%A1/02grpc%20%E8%BF%9C%E7%A8%8B%E8%B0%83%E7%94%A8/%E8%AF%BE%E5%A0%82%E7%AC%94%E8%AE%B0-%E7%AC%AC2%E5%A4%A9.assets/1581738450004.png">
+<meta property="og:image" content="http://example.com/2020/01/04/golang/%E5%BE%AE%E6%9C%8D%E5%8A%A1/02grpc%20%E8%BF%9C%E7%A8%8B%E8%B0%83%E7%94%A8/%E8%AF%BE%E5%A0%82%E7%AC%94%E8%AE%B0-%E7%AC%AC2%E5%A4%A9.assets/1581738514380.png">
+<meta property="og:image" content="http://example.com/2020/01/04/golang/%E5%BE%AE%E6%9C%8D%E5%8A%A1/02grpc%20%E8%BF%9C%E7%A8%8B%E8%B0%83%E7%94%A8/%E8%AF%BE%E5%A0%82%E7%AC%94%E8%AE%B0-%E7%AC%AC2%E5%A4%A9.assets/1581738272128.png">
+<meta property="og:image" content="http://example.com/2020/01/04/golang/%E5%BE%AE%E6%9C%8D%E5%8A%A1/02grpc%20%E8%BF%9C%E7%A8%8B%E8%B0%83%E7%94%A8/%E8%AF%BE%E5%A0%82%E7%AC%94%E8%AE%B0-%E7%AC%AC2%E5%A4%A9.assets/1581739388605.png">
+<meta property="og:image" content="http://example.com/2020/01/04/golang/%E5%BE%AE%E6%9C%8D%E5%8A%A1/02grpc%20%E8%BF%9C%E7%A8%8B%E8%B0%83%E7%94%A8/%E8%AF%BE%E5%A0%82%E7%AC%94%E8%AE%B0-%E7%AC%AC2%E5%A4%A9.assets/1581755524432.png">
+<meta property="article:published_time" content="2020-01-04T12:46:25.000Z">
+<meta property="article:modified_time" content="2021-07-15T09:58:16.092Z">
+<meta property="article:author" content="王增明">
+<meta property="article:tag" content="微服务">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/2020/01/04/golang/%E5%BE%AE%E6%9C%8D%E5%8A%A1/02grpc%20%E8%BF%9C%E7%A8%8B%E8%B0%83%E7%94%A8/%E8%AF%BE%E5%A0%82%E7%AC%94%E8%AE%B0-%E7%AC%AC2%E5%A4%A9.assets/1581732082449.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":true,"scrollpercent":true,"onmobile":true},
+    fancybox: true,
+    tabs: false,
+    motion: {"enable":true,"async":true,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://example.com/2020/01/04/golang/微服务/02grpc 远程调用/"/>
+
+
+
+
+
+  <title>微服务学习--02grpc 远程调用 | 极风键客</title>
+  
+
+
+
+
+
+
+
+
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">极风键客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-schedule">
+          <a href="/schedule/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-calendar"></i> <br />
+            
+            日程表
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2020/01/04/golang/%E5%BE%AE%E6%9C%8D%E5%8A%A1/02grpc%20%E8%BF%9C%E7%A8%8B%E8%B0%83%E7%94%A8/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/i.jpeg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="极风键客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">微服务学习--02grpc 远程调用</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-01-04T20:46:25+08:00">
+                2020-01-04
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/golang/" itemprop="url" rel="index">
+                    <span itemprop="name">golang</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="grpc-远程调用。"><a href="#grpc-远程调用。" class="headerlink" title="grpc 远程调用。"></a>grpc 远程调用。</h1><ul>
+<li>服务端 grpc <ol>
+<li>初始一个 grpc 对象</li>
+<li>注册服务</li>
+<li>设置监听， 指定 IP、port</li>
+<li>启动服务。—- serve()</li>
+</ol>
+</li>
+<li>客户端 grpc<ol>
+<li>连接 grpc 服务<ol>
+<li>给 grpc.Dial() 传参2 ： grpc.WithInsecure()  .  表示：以安全的方式操作。</li>
+</ol>
+</li>
+<li>初始化 grpc 客户端</li>
+<li>调用远程服务。<ol>
+<li>给 grpc.SayHello() 传参1： context.TODO() 表示：空对象。</li>
+</ol>
+</li>
+</ol>
+</li>
+</ul>
+<span id="more"></span>
+
+
+
+<p>服务器端代码</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">    <span class="string">&quot;context&quot;</span></span><br><span class="line">    <span class="string">&quot;fmt&quot;</span></span><br><span class="line">    <span class="string">&quot;google.golang.org/grpc&quot;</span></span><br><span class="line">    <span class="string">&quot;net&quot;</span></span><br><span class="line">    <span class="string">&quot;testrpc/day01/pb&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="comment">//定义类</span></span><br><span class="line"><span class="keyword">type</span> Children <span class="keyword">struct</span> &#123;</span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(this *Children)</span> <span class="title">SayHello</span><span class="params">(ctx context.Context,t *pb.Teacher)</span><span class="params">(*pb.Teacher,error)</span></span>&#123;</span><br><span class="line">    t.Name +=<span class="string">&quot;is Sleeping&quot;</span></span><br><span class="line">    <span class="keyword">return</span> t,<span class="literal">nil</span></span><br><span class="line">&#125;</span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span>&#123;</span><br><span class="line">    <span class="comment">//1.初始一个grpc对象</span></span><br><span class="line">    grpcServer := grpc.NewServer()</span><br><span class="line">    <span class="comment">//2.注册服务</span></span><br><span class="line">    pb.RegisterSayNameServer(grpcServer,<span class="built_in">new</span>(Children))</span><br><span class="line">    <span class="comment">//3.设置监听(指定IP,port)</span></span><br><span class="line">    listener, err := net.Listen(<span class="string">&quot;tcp&quot;</span>, <span class="string">&quot;127.0.0.1:8800&quot;</span>)</span><br><span class="line">    <span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">        fmt.Println(<span class="string">&quot;listener Error&quot;</span>,err)</span><br><span class="line">        <span class="keyword">return</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">defer</span> listener.Close()</span><br><span class="line">    <span class="comment">//启动服务(serve())</span></span><br><span class="line">    grpcServer.Serve(listener)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>客户端代码</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h1 id="go-mirco"><a href="#go-mirco" class="headerlink" title="go-mirco"></a>go-mirco</h1><h2 id="micro-简介"><a href="#micro-简介" class="headerlink" title="micro 简介"></a>micro 简介</h2><ul>
+<li>go-micro：微服务开发使用资源库。添加 RCP、GRPC</li>
+<li>micro：微服务开发的生态。包含 微服务命令、API、插件。。。</li>
+<li>go-plugins：微服务使用的插件。（新版微服务，舍弃了旧版的内容。）</li>
+<li>服务发现：微服务开发的核心</li>
+</ul>
+<p>从 github 搜索 micro</p>
+<p><img src="%E8%AF%BE%E5%A0%82%E7%AC%94%E8%AE%B0-%E7%AC%AC2%E5%A4%A9.assets/1581732082449.png" alt="1581732082449"></p>
+<h2 id="服务发现"><a href="#服务发现" class="headerlink" title="服务发现"></a>服务发现</h2><ul>
+<li>是微服务开发中，必须的 核心技术</li>
+</ul>
+<p><img src="%E8%AF%BE%E5%A0%82%E7%AC%94%E8%AE%B0-%E7%AC%AC2%E5%A4%A9.assets/1581734008422.png" alt="1581734008422"></p>
+<ul>
+<li><strong>==服务发现，也可以看做一个 “服务”， 是给 “服务” 提供服务的。==</strong></li>
+</ul>
+<h3 id="有服务发现后，client、server工作流程："><a href="#有服务发现后，client、server工作流程：" class="headerlink" title="有服务发现后，client、server工作流程："></a>有服务发现后，client、server工作流程：</h3><ol>
+<li>每个server启动时，都将自己的IP、port 和 服务名 注册给 ”服务发现“</li>
+<li>当 client 向服务发现发起服务请求时， “服务发现” 会自动找一个可用的 服务，将其 IP/port/服务名返回给 client</li>
+<li>client 再借助服务发现，访问 server。</li>
+</ol>
+<h3 id="服务发现的种类："><a href="#服务发现的种类：" class="headerlink" title="服务发现的种类："></a>服务发现的种类：</h3><ul>
+<li>consul： 常应用于 go-micro 中。</li>
+<li>mdns：go-micro中默认自带的服务发现。</li>
+<li>etcd：k8s 内嵌的服务发现</li>
+<li>zookeeper：java中较常用。</li>
+</ul>
+<h3 id="consul-关键特性"><a href="#consul-关键特性" class="headerlink" title="consul 关键特性"></a>consul 关键特性</h3><ol>
+<li><p>服务发现： consul 提供服务， 服务端 主动向 consul 发起注册。</p>
+</li>
+<li><p>健康检查： 定时发送消息，类似于 “心跳包”，保证 客户端获得到的 一定是 健康的服务。</p>
+</li>
+<li><p>键值存储： consul 提供，但是我们使用 redis</p>
+</li>
+<li><p>多数据中心：可以轻松搭建集群。</p>
+</li>
+</ol>
+<h3 id="consul-安装说明："><a href="#consul-安装说明：" class="headerlink" title="consul 安装说明："></a>consul 安装说明：</h3><ol>
+<li>下载 consul： <a target="_blank" rel="noopener" href="https://releases.hashicorp.com/consul/">https://releases.hashicorp.com/consul/</a>   从中选择版本下载。得到 zip 压缩包。</li>
+<li>解压缩 ：  命令：unzip。</li>
+<li>将解压缩的文件 拷贝至 /usr/local/bin/  —— 可执行文件。</li>
+<li>终端使用 consul -h 验证 安装是否成功。</li>
+</ol>
+<h3 id="consul-常用命令"><a href="#consul-常用命令" class="headerlink" title="consul 常用命令"></a>consul 常用命令</h3><ul>
+<li><p>consul agent</p>
+<ul>
+<li><p>-bind=0.0.0.0         指定 consul所在机器的 IP地址。 默认值：0.0.0.0</p>
+</li>
+<li><p>-http-port=8500    consul 自带一个web访问的默认端口：8500</p>
+</li>
+<li><p>-client=127.0.0.1   表明哪些机器可以访问consul 。 默认本机。0.0.0.0 所有机器均可访问。</p>
+</li>
+<li><p>-config-dir=foo      所有主动注册服务的 描述信息</p>
+</li>
+<li><p>-data-dir=path       储存所有注册过来的srv机器的详细信息。</p>
+</li>
+<li><p>-dev                         开发者模式，直接以默认配置启动 consul</p>
+</li>
+<li><p>-node=hostname  服务发现的名字。</p>
+</li>
+<li><p>-rejoin                     consul 启动的时候，加入到的 consul集群</p>
+</li>
+<li><p>-server                    以服务方式开启consul， 允许其他的consul 连接到开启的 consul上 （形成集群）。如果不加 -server， 表示以 “客户端” 的方式开启。不能被连接。</p>
+</li>
+<li><p>-ui                           可以使用 web 页面 来查看服务发现的详情</p>
+</li>
+</ul>
+</li>
+<li><p>测试上述 命令：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">#</span><span class="bash"> 在终端中，键入：</span></span><br><span class="line">consul agent -server -bootstrap-expect 1 -data-dir /tmp/consul -node=n1 -bind=192.168.6.108 -ui -rejoin -config-dir=/etc/consul.d/ -client 0.0.0.0</span><br><span class="line"><span class="meta"></span></span><br><span class="line"><span class="meta">#</span><span class="bash">看到提示：</span></span><br><span class="line">==&gt; Consul agent running!</span><br></pre></td></tr></table></figure>
+
+<p>  启动 Google 浏览器， 测试：</p>
+<p>  <img src="%E8%AF%BE%E5%A0%82%E7%AC%94%E8%AE%B0-%E7%AC%AC2%E5%A4%A9.assets/1581737388273.png" alt="1581737388273"></p>
+</li>
+<li><p>consul members： 查看集群中有多少个成员。</p>
+</li>
+<li><p><img src="%E8%AF%BE%E5%A0%82%E7%AC%94%E8%AE%B0-%E7%AC%AC2%E5%A4%A9.assets/1581737508458.png" alt="1581737508458"></p>
+</li>
+<li><p>consul info： 查看当前 consul 的 IP 信息。</p>
+</li>
+<li><p>consul leave： 优雅的关闭 consul 。—— 不优雅！Ctrl -c </p>
+</li>
+</ul>
+<h3 id="注册服务到-consul-并查看"><a href="#注册服务到-consul-并查看" class="headerlink" title="注册服务到 consul 并查看"></a>注册服务到 consul 并查看</h3><p>步骤：</p>
+<ol>
+<li><p>进入配置文件路径 cd  /etc/consul.d/</p>
+</li>
+<li><p>创建 json 文件。 sudo vim web.json</p>
+</li>
+<li><p>按 json 的语法，填写 服务信息。</p>
+<p> <img src="%E8%AF%BE%E5%A0%82%E7%AC%94%E8%AE%B0-%E7%AC%AC2%E5%A4%A9.assets/1581738360648.png" alt="1581738360648"></p>
+</li>
+<li><p>重新启动 consul </p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">consul agent -server -bootstrap-expect 1 -data-dir /tmp/consul -node=n1 -bind=192.168.6.108 -ui -rejoin -config-dir=/etc/consul.d/ -client 0.0.0.0</span><br></pre></td></tr></table></figure></li>
+<li><p>查询 服务</p>
+<ol>
+<li><p>浏览器查看：</p>
+<p><img src="%E8%AF%BE%E5%A0%82%E7%AC%94%E8%AE%B0-%E7%AC%AC2%E5%A4%A9.assets/1581738450004.png" alt="1581738450004"></p>
+</li>
+<li><p>终端命令查看：</p>
+<p> <img src="%E8%AF%BE%E5%A0%82%E7%AC%94%E8%AE%B0-%E7%AC%AC2%E5%A4%A9.assets/1581738514380.png" alt="1581738514380"></p>
+<p> 将 终端终端的 json数据，粘贴至 json在线网站中，查看消息。</p>
+<p> <img src="%E8%AF%BE%E5%A0%82%E7%AC%94%E8%AE%B0-%E7%AC%AC2%E5%A4%A9.assets/1581738272128.png" alt="1581738272128"></p>
+</li>
+</ol>
+</li>
+</ol>
+<h3 id="健康检查"><a href="#健康检查" class="headerlink" title="健康检查"></a>健康检查</h3><ol>
+<li><p>sudo vim /etc/consul.d/web.json  打开配置文件</p>
+</li>
+<li><p>写入 服务的配置 信息。</p>
+<p><img src="%E8%AF%BE%E5%A0%82%E7%AC%94%E8%AE%B0-%E7%AC%AC2%E5%A4%A9.assets/1581739388605.png" alt="1581739388605"></p>
+</li>
+<li><p>执行命令，consul reload。 或者，关闭consul 再重启。</p>
+</li>
+<li><p>使用 浏览器 键入 192.168.6.108:8500 查看 “bj38” 这个服务 的 健康状况</p>
+<ul>
+<li>不健康！没有服务bj38 给 consul 实时回复！</li>
+</ul>
+</li>
+<li><p>除了 http 实现健康检查外，还可以使用 “脚本”、“tcp”、“ttl” 方式进行健康检查。</p>
+</li>
+</ol>
+<h2 id="consul-和-grpc-结合"><a href="#consul-和-grpc-结合" class="headerlink" title="consul 和 grpc 结合"></a>consul 和 grpc 结合</h2><p>安装 consul 源码包：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">$</span><span class="bash"> go get -u -v github.com/hashicorp/consul</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="使用整体流程"><a href="#使用整体流程" class="headerlink" title="使用整体流程"></a>使用整体流程</h3><ol>
+<li>创建 proto文件 ， 指定 rpc 服务</li>
+<li>启动 consul 服务发现  consul agent -dev</li>
+<li>启动server<ol>
+<li>获取consul 对象。</li>
+<li>使用 consul对象，将 server 信息，注册给 consul </li>
+<li>启动服务</li>
+</ol>
+</li>
+<li>启动client<ol>
+<li>获取consul 对象。</li>
+<li>使用consul对象，从consul 上获取健康的 服务。</li>
+<li>再访问服务 （grpc远程调用）</li>
+</ol>
+</li>
+</ol>
+<h3 id="编码实现："><a href="#编码实现：" class="headerlink" title="编码实现："></a>编码实现：</h3><ul>
+<li><p>用到的函数：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 从 consul 服务发送上获取 健康服务</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(h *Health)</span> <span class="title">Service</span><span class="params">(service, tag <span class="keyword">string</span>, passingOnly <span class="keyword">bool</span>, q *QueryOptions)</span> <span class="params">([]*ServiceEntry, *QueryMeta, error)</span></span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 参数：</span></span><br><span class="line">service: 服务名。 -- 注册服务时，指定该<span class="keyword">string</span></span><br><span class="line">tag：外名/别名。 如果有多个， 任选一个</span><br><span class="line">passingOnly：是否通过健康检查。 <span class="literal">true</span></span><br><span class="line">q：查询参数。 通常传 <span class="literal">nil</span></span><br><span class="line"><span class="comment">// 返回值：</span></span><br><span class="line">ServiceEntry： 存储服务的切片。</span><br><span class="line">QueryMeta：额外查询返回值。 <span class="literal">nil</span></span><br><span class="line">error： 错误信息</span><br></pre></td></tr></table></figure></li>
+<li><p>proto文件</p>
+<figure class="highlight protobuf"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">syntax = <span class="string">&quot;proto3&quot;</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">package</span> pb;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">message</span> <span class="title">Person</span> </span>&#123;</span><br><span class="line">    <span class="built_in">string</span> name = <span class="number">1</span>;</span><br><span class="line">    <span class="built_in">int32</span> age = <span class="number">2</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 添加 rpc服务</span></span><br><span class="line"><span class="class"><span class="keyword">service</span> <span class="title">hello</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">rpc</span> sayHello (Person) <span class="keyword">returns</span> (Person)</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>  protoc –go_out=plugins=grpc:./ *.proto</p>
+</li>
+<li><p>服务端</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">    <span class="string">&quot;google.golang.org/grpc&quot;</span></span><br><span class="line">    <span class="string">&quot;day02/pb&quot;</span></span><br><span class="line">    <span class="string">&quot;context&quot;</span></span><br><span class="line">    <span class="string">&quot;net&quot;</span></span><br><span class="line">    <span class="string">&quot;fmt&quot;</span></span><br><span class="line">    <span class="string">&quot;github.com/hashicorp/consul/api&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="comment">// 定义类</span></span><br><span class="line"><span class="keyword">type</span> Children <span class="keyword">struct</span> &#123;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 绑定类方法, 实现借口</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(this *Children)</span><span class="title">SayHello</span><span class="params">(ctx context.Context, p *pb.Person)</span> <span class="params">(*pb.Person, error)</span></span> &#123;</span><br><span class="line">    p.Name = <span class="string">&quot;hello  &quot;</span> + p.Name</span><br><span class="line">    <span class="keyword">return</span> p, <span class="literal">nil</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span>  &#123;</span><br><span class="line">    <span class="comment">// 把grpc服务,注册到consul上.</span></span><br><span class="line">    <span class="comment">// 1. 初始化 consul 配置</span></span><br><span class="line">    consulConfig := api.DefaultConfig()</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 2. 创建 consul 对象</span></span><br><span class="line">    consulClient, err := api.NewClient(consulConfig)</span><br><span class="line">    <span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">        fmt.Println(<span class="string">&quot;api.NewClient err:&quot;</span>, err)</span><br><span class="line">        <span class="keyword">return</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="comment">// 3. 告诉consul, 即将注册的服务的配置信息</span></span><br><span class="line">    reg := api.AgentServiceRegistration &#123;</span><br><span class="line">        ID:<span class="string">&quot;bj38&quot;</span>,</span><br><span class="line">        Tags:[]<span class="keyword">string</span>&#123;<span class="string">&quot;grcp&quot;</span>, <span class="string">&quot;consul&quot;</span>&#125;,</span><br><span class="line">        Name:<span class="string">&quot;grpc And Consul&quot;</span>,</span><br><span class="line">        Address:<span class="string">&quot;127.0.0.1&quot;</span>,</span><br><span class="line">        Port:<span class="number">8800</span>,</span><br><span class="line">        Check:&amp;api.AgentServiceCheck&#123;</span><br><span class="line">            CheckID:<span class="string">&quot;consul grpc test&quot;</span>,</span><br><span class="line">            TCP:<span class="string">&quot;127.0.0.1:8800&quot;</span>,</span><br><span class="line">            Timeout:<span class="string">&quot;1s&quot;</span>,</span><br><span class="line">            Interval:<span class="string">&quot;5s&quot;</span>,</span><br><span class="line">        &#125;,</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 4. 注册 grpc 服务到 consul 上</span></span><br><span class="line">    consulClient.Agent().ServiceRegister(&amp;reg)</span><br><span class="line"></span><br><span class="line"><span class="comment">//////////////////////以下为 grpc 服务远程调用////////////////////////</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// 1.初始化 grpc 对象,</span></span><br><span class="line">    grpcServer := grpc.NewServer()</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 2.注册服务</span></span><br><span class="line">    pb.RegisterHelloServer(grpcServer, <span class="built_in">new</span>(Children))</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 3.设置监听, 指定 IP/port</span></span><br><span class="line">    listener, err := net.Listen(<span class="string">&quot;tcp&quot;</span>, <span class="string">&quot;127.0.0.1:8800&quot;</span>)</span><br><span class="line">    <span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">        fmt.Println(<span class="string">&quot;Listen err:&quot;</span>, err)</span><br><span class="line">        <span class="keyword">return</span></span><br><span class="line">    &#125;</span><br><span class="line">    <span class="keyword">defer</span> listener.Close()</span><br><span class="line"></span><br><span class="line">    fmt.Println(<span class="string">&quot;服务启动... &quot;</span>)</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 4. 启动服务</span></span><br><span class="line">    grpcServer.Serve(listener)</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+<li><p>客户端</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">    <span class="string">&quot;google.golang.org/grpc&quot;</span></span><br><span class="line">    <span class="string">&quot;day02/pb&quot;</span></span><br><span class="line">    <span class="string">&quot;context&quot;</span></span><br><span class="line">    <span class="string">&quot;fmt&quot;</span></span><br><span class="line">    <span class="string">&quot;github.com/hashicorp/consul/api&quot;</span></span><br><span class="line">    <span class="string">&quot;strconv&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span>  &#123;</span><br><span class="line">    <span class="comment">// 初始化 consul 配置</span></span><br><span class="line">    consulConfig := api.DefaultConfig()</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 创建consul对象 -- (可以重新指定 consul 属性: IP/Port , 也可以使用默认)</span></span><br><span class="line">    consulClient, err := api.NewClient(consulConfig)</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 服务发现. 从consuL上, 获取健康的服务</span></span><br><span class="line">    services, _, err := consulClient.Health().Service(<span class="string">&quot;grpc And Consul&quot;</span>, <span class="string">&quot;grcp&quot;</span>, <span class="literal">true</span>, <span class="literal">nil</span>)</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 简单的负载均衡.</span></span><br><span class="line"></span><br><span class="line">    addr := services[<span class="number">0</span>].Service.Address + <span class="string">&quot;:&quot;</span> + strconv.Itoa(services[<span class="number">0</span>].Service.Port)</span><br><span class="line"></span><br><span class="line"><span class="comment">//////////////////////以下为 grpc 服务远程调用///////////////////////////</span></span><br><span class="line">    <span class="comment">// 1. 链接服务</span></span><br><span class="line">    <span class="comment">//grpcConn, _ := grpc.Dial(&quot;127.0.0.1:8800&quot;, grpc.WithInsecure())</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// 使用 服务发现consul 上的 IP/port 来与服务建立链接</span></span><br><span class="line">    grpcConn, _ := grpc.Dial(addr, grpc.WithInsecure())</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 2. 初始化 grpc 客户端</span></span><br><span class="line">    grpcClient := pb.NewHelloClient(grpcConn)</span><br><span class="line"></span><br><span class="line">    <span class="keyword">var</span> person pb.Person</span><br><span class="line">    person.Name = <span class="string">&quot;Andy&quot;</span></span><br><span class="line">    person.Age = <span class="number">18</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// 3. 调用远程函数</span></span><br><span class="line">    p, err := grpcClient.SayHello(context.TODO(), &amp;person)</span><br><span class="line"></span><br><span class="line">    fmt.Println(p, err)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h3 id="服务注销"><a href="#服务注销" class="headerlink" title="服务注销"></a>服务注销</h3><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> <span class="string">&quot;github.com/hashicorp/consul/api&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span>  &#123;</span><br><span class="line">    <span class="comment">// 1. 初始化 consul 配置</span></span><br><span class="line">    consuConfig := api.DefaultConfig()</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 2. 创建 consul 对象</span></span><br><span class="line">    consulClient, _ := api.NewClient(consuConfig)</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 3. 注销服务</span></span><br><span class="line">    consulClient.Agent().ServiceDeregister(<span class="string">&quot;bj38&quot;</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="go-micro-安装"><a href="#go-micro-安装" class="headerlink" title="go-micro 安装"></a>go-micro 安装</h2><ul>
+<li>在线安装：  参考讲义。</li>
+<li>docker 镜像安装： 参考讲义。</li>
+<li>测试：micro 命令！</li>
+</ul>
+<h2 id="go-micro-的使用"><a href="#go-micro-的使用" class="headerlink" title="go-micro 的使用"></a>go-micro 的使用</h2><h3 id="new命令"><a href="#new命令" class="headerlink" title="new命令"></a>new命令</h3><ul>
+<li>参数：<ul>
+<li>–namespace： 命名空间  == 包名</li>
+<li>–type ： 微服务类型。<ul>
+<li>srv： 微服务</li>
+<li>web：基于微服务的 web 网站。</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h3 id="创建服务"><a href="#创建服务" class="headerlink" title="创建服务"></a>创建服务</h3><ul>
+<li>==micro new –type srv bj38  —— 创建一个微服务项目!==</li>
+</ul>
+<p><img src="%E8%AF%BE%E5%A0%82%E7%AC%94%E8%AE%B0-%E7%AC%AC2%E5%A4%A9.assets/1581755524432.png" alt="1581755524432"></p>
+<ul>
+<li>main.go : 项目的入口文件。</li>
+<li>handler/:  处理 grpc 实现的接口。对应实现接口的子类，都放置在 handler 中。</li>
+<li>proto/： 预生成的 protobuf 文件。</li>
+<li>Dockerfile：部署微服务使用的 Dockerfile</li>
+<li>Makefile：编译文件。—— 快速编译 protobuf 文件。 </li>
+</ul>
+<h4 id="查看创建的项目"><a href="#查看创建的项目" class="headerlink" title="查看创建的项目"></a>查看创建的项目</h4><ol>
+<li><p>makefile 编译 proto </p>
+</li>
+<li><p>查看 make proto生 成 的 文件：</p>
+<ol>
+<li>xxx.pb.go</li>
+<li>xxx.micro.go<ul>
+<li>RegisterBj38Handler()【168行】服务端用 ———— 对应 grpc  RegisterXXXService() </li>
+<li>NewBj38Service()【47行】客户端用 —— 对应 grpc NewXXXClient() —— 对应自己封装的 IintXXX</li>
+</ul>
+</li>
+</ol>
+</li>
+<li><p>查看 main.go</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">    <span class="comment">// New Service   -- 初始化服务器对象.</span></span><br><span class="line">    service := micro.NewService(</span><br><span class="line">        micro.Name(<span class="string">&quot;go.micro.srv.bj38&quot;</span>),   <span class="comment">// 服务器名</span></span><br><span class="line">        micro.Version(<span class="string">&quot;latest&quot;</span>),           <span class="comment">// 版本</span></span><br><span class="line">    )</span><br><span class="line">    <span class="comment">// Initialise service 与newService作用一致,但优先级高.后续代码运行期,初始化才有使用的必要.</span></span><br><span class="line">    <span class="comment">//service.Init()</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// Register Handler --- 注册服务</span></span><br><span class="line">    bj38.RegisterBj38Handler(service.Server(), <span class="built_in">new</span>(handler.Bj38))</span><br><span class="line"></span><br><span class="line">    <span class="comment">// Register Struct as Subscriber -- redis 发布订阅.</span></span><br><span class="line">    <span class="comment">//micro.RegisterSubscriber(&quot;go.micro.srv.bj38&quot;, service.Server(), new(subscriber.Bj38))</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// Register Function as Subscriber</span></span><br><span class="line">    <span class="comment">//micro.RegisterSubscriber(&quot;go.micro.srv.bj38&quot;, service.Server(), subscriber.Handler)</span></span><br><span class="line"></span><br><span class="line">    <span class="comment">// Run service  --- 运行服务</span></span><br><span class="line">    <span class="keyword">if</span> err := service.Run(); err != <span class="literal">nil</span> &#123;</span><br><span class="line">        log.Fatal(err)</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+<li><p>查看 handler/ xxx.go 文件</p>
+<p> 包含 与 Interface 严格对应的 3 个函数实现！！</p>
+</li>
+</ol>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/%E5%BE%AE%E6%9C%8D%E5%8A%A1/" rel="tag"># 微服务</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/01/04/golang/%E5%BE%AE%E6%9C%8D%E5%8A%A1/04%E5%BC%80%E5%8F%91%E8%80%85%E5%B9%B3%E5%8F%B0%E4%B8%8Eredis/" rel="next" title="微服务学习--04开发者平台与redis">
+                <i class="fa fa-chevron-left"></i> 微服务学习--04开发者平台与redis
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2020/01/04/golang/%E4%BB%A5%E5%A4%AA%E5%9D%8A/2.3%E5%9C%A8Remix%E4%B8%8A%E6%9E%84%E5%BB%BA%E7%AE%80%E5%8D%95%E7%9A%84%E6%B0%B4%E9%BE%99%E5%A4%B4%E5%90%88%E7%BA%A6/" rel="prev" title="2.3在 Remix 上构建简单的水龙头合约 ">
+                2.3在 Remix 上构建简单的水龙头合约  <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+      <div id="sidebar-dimmer"></div>
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/i.jpeg"
+                alt="" />
+            
+              <p class="site-author-name" itemprop="name"></p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/%7C%7C%20archive">
+              
+                  <span class="site-state-item-count">61</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">9</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">23</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/wangzengming" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:wangzengming@aliyun.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#grpc-%E8%BF%9C%E7%A8%8B%E8%B0%83%E7%94%A8%E3%80%82"><span class="nav-number">1.</span> <span class="nav-text">grpc 远程调用。</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#go-mirco"><span class="nav-number">2.</span> <span class="nav-text">go-mirco</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#micro-%E7%AE%80%E4%BB%8B"><span class="nav-number">2.1.</span> <span class="nav-text">micro 简介</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%9C%8D%E5%8A%A1%E5%8F%91%E7%8E%B0"><span class="nav-number">2.2.</span> <span class="nav-text">服务发现</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9C%89%E6%9C%8D%E5%8A%A1%E5%8F%91%E7%8E%B0%E5%90%8E%EF%BC%8Cclient%E3%80%81server%E5%B7%A5%E4%BD%9C%E6%B5%81%E7%A8%8B%EF%BC%9A"><span class="nav-number">2.2.1.</span> <span class="nav-text">有服务发现后，client、server工作流程：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9C%8D%E5%8A%A1%E5%8F%91%E7%8E%B0%E7%9A%84%E7%A7%8D%E7%B1%BB%EF%BC%9A"><span class="nav-number">2.2.2.</span> <span class="nav-text">服务发现的种类：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#consul-%E5%85%B3%E9%94%AE%E7%89%B9%E6%80%A7"><span class="nav-number">2.2.3.</span> <span class="nav-text">consul 关键特性</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#consul-%E5%AE%89%E8%A3%85%E8%AF%B4%E6%98%8E%EF%BC%9A"><span class="nav-number">2.2.4.</span> <span class="nav-text">consul 安装说明：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#consul-%E5%B8%B8%E7%94%A8%E5%91%BD%E4%BB%A4"><span class="nav-number">2.2.5.</span> <span class="nav-text">consul 常用命令</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B3%A8%E5%86%8C%E6%9C%8D%E5%8A%A1%E5%88%B0-consul-%E5%B9%B6%E6%9F%A5%E7%9C%8B"><span class="nav-number">2.2.6.</span> <span class="nav-text">注册服务到 consul 并查看</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%81%A5%E5%BA%B7%E6%A3%80%E6%9F%A5"><span class="nav-number">2.2.7.</span> <span class="nav-text">健康检查</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#consul-%E5%92%8C-grpc-%E7%BB%93%E5%90%88"><span class="nav-number">2.3.</span> <span class="nav-text">consul 和 grpc 结合</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8%E6%95%B4%E4%BD%93%E6%B5%81%E7%A8%8B"><span class="nav-number">2.3.1.</span> <span class="nav-text">使用整体流程</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E7%BC%96%E7%A0%81%E5%AE%9E%E7%8E%B0%EF%BC%9A"><span class="nav-number">2.3.2.</span> <span class="nav-text">编码实现：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%9C%8D%E5%8A%A1%E6%B3%A8%E9%94%80"><span class="nav-number">2.3.3.</span> <span class="nav-text">服务注销</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#go-micro-%E5%AE%89%E8%A3%85"><span class="nav-number">2.4.</span> <span class="nav-text">go-micro 安装</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#go-micro-%E7%9A%84%E4%BD%BF%E7%94%A8"><span class="nav-number">2.5.</span> <span class="nav-text">go-micro 的使用</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#new%E5%91%BD%E4%BB%A4"><span class="nav-number">2.5.1.</span> <span class="nav-text">new命令</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%88%9B%E5%BB%BA%E6%9C%8D%E5%8A%A1"><span class="nav-number">2.5.2.</span> <span class="nav-text">创建服务</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E6%9F%A5%E7%9C%8B%E5%88%9B%E5%BB%BA%E7%9A%84%E9%A1%B9%E7%9B%AE"><span class="nav-number">2.5.2.1.</span> <span class="nav-text">查看创建的项目</span></a></li></ol></li></ol></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+        <div class="back-to-top">
+          <i class="fa fa-arrow-up"></i>
+          
+            <span id="scrollpercent"><span>0</span>%</span>
+          
+        </div>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">王增明</span>
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+  
+  
+
+
+
+
+
+  
+  
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/three/three.min.js"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/three/three-waves.min.js"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/three/canvas_sphere.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

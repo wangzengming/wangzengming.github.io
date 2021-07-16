@@ -1,0 +1,994 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+  
+  
+    
+    
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+  <link href="/lib/pace/pace-theme-minimal.min.css?v=1.0.2" rel="stylesheet">
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="java,shiro," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="​    Apache Shiro 是一个强大易用的 Java 安全框架，提供了认证、授权、加密和会话管理等功能，对于任何一个应用程序，Shiro 都可以提供全面的安全管理服务。并且相对于其他安全框架，Shiro 要简单的多。本教程只介绍基本的 Shiro 使用，不会过多分析源码等，重在使用。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Shiro">
+<meta property="og:url" content="http://example.com/2021/01/01/java/Shiro/index.html">
+<meta property="og:site_name" content="极风键客">
+<meta property="og:description" content="​    Apache Shiro 是一个强大易用的 Java 安全框架，提供了认证、授权、加密和会话管理等功能，对于任何一个应用程序，Shiro 都可以提供全面的安全管理服务。并且相对于其他安全框架，Shiro 要简单的多。本教程只介绍基本的 Shiro 使用，不会过多分析源码等，重在使用。">
+<meta property="og:locale">
+<meta property="og:image" content="c:/Users/王增明/AppData/Roaming/Typora/typora-user-images/1569459223098.png">
+<meta property="og:image" content="c:/Users/王增明/AppData/Roaming/Typora/typora-user-images/1569461311305.png">
+<meta property="og:image" content="c:/Users/王增明/AppData/Roaming/Typora/typora-user-images/1569461185882.png">
+<meta property="og:image" content="c:/Users/王增明/AppData/Roaming/Typora/typora-user-images/1569466712747.png">
+<meta property="og:image" content="c:/Users/王增明/AppData/Roaming/Typora/typora-user-images/1569501506084.png">
+<meta property="article:published_time" content="2020-12-31T18:46:25.000Z">
+<meta property="article:modified_time" content="2021-07-15T09:59:46.095Z">
+<meta property="article:author" content="王增明">
+<meta property="article:tag" content="java">
+<meta property="article:tag" content="shiro">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="c:/Users/王增明/AppData/Roaming/Typora/typora-user-images/1569459223098.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":true,"scrollpercent":true,"onmobile":true},
+    fancybox: true,
+    tabs: false,
+    motion: {"enable":true,"async":true,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://example.com/2021/01/01/java/Shiro/"/>
+
+
+
+
+
+  <title>Shiro | 极风键客</title>
+  
+
+
+
+
+
+
+
+
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">极风键客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-schedule">
+          <a href="/schedule/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-calendar"></i> <br />
+            
+            日程表
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/01/01/java/Shiro/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/i.jpeg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="极风键客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Shiro</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2021-01-01T02:46:25+08:00">
+                2021-01-01
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/java/" itemprop="url" rel="index">
+                    <span itemprop="name">java</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>​    Apache Shiro 是一个强大易用的 Java 安全框架，提供了认证、授权、加密和会话管理等功能，对于任何一个应用程序，Shiro 都可以提供全面的安全管理服务。并且相对于其他安全框架，Shiro 要简单的多。本教程只介绍基本的 Shiro 使用，不会过多分析源码等，重在使用。</p>
+<span id="more"></span>
+
+<h1 id="认识Shiro"><a href="#认识Shiro" class="headerlink" title="认识Shiro"></a>认识Shiro</h1><h2 id="什么是Shiro"><a href="#什么是Shiro" class="headerlink" title="什么是Shiro"></a>什么是Shiro</h2><p>​    Apache Shiro 是一个强大易用的 Java 安全框架，提供了认证、授权、加密和会话管理等功能，对于任何一个应用程序，Shiro 都可以提供全面的安全管理服务。并且相对于其他安全框架，Shiro 要简单的多。本教程只介绍基本的 Shiro 使用，不会过多分析源码等，重在使用。</p>
+<h2 id="为什么要学习Shiro"><a href="#为什么要学习Shiro" class="headerlink" title="为什么要学习Shiro"></a>为什么要学习Shiro</h2><p>​    在java的世界中，安全管理框架有 spring security 和 shiro ，spring security基于spring，而且比较复杂，学习曲线比较高。Shiro比较简单，既可以在java se中使用，也可以在java se中使用，并可以在分布式集群环境下也可以使用。</p>
+<p>​    难点在于名词太多。</p>
+<h2 id="Shiro结构体系"><a href="#Shiro结构体系" class="headerlink" title="Shiro结构体系"></a>Shiro结构体系</h2><p>​    <img src="C:\Users\王增明\AppData\Roaming\Typora\typora-user-images\1569459223098.png" alt="Shiro"></p>
+<p><strong>Authentication</strong>：身份认证 / 登录，验证用户是否合法；</p>
+<p><strong>Authorization</strong>：授权，即权限验证，验证某个已认证的用户是否拥有某个权限；即判断用户是否能做事情，常见的如：验证某个用户是否拥有某个角色。或者细粒度的验证某个用户对某个资源是否具有某个权限；</p>
+<p><strong>Session Manager</strong>：会话管理，即用户登录后就是一次会话，在没有退出之前，它的所有信息都在会话中；会话可以是普通 JavaSE 环境的，也可以是如 Web 环境的；</p>
+<p><strong>Cryptography</strong>：加密，保护数据的安全性，如密码加密存储到数据库，而不是明文存储；</p>
+<p><strong>Web Support</strong>：Web 支持，可以非常容易的集成到 Web 环境；</p>
+<p><strong>Caching</strong>：缓存，比如用户登录后，其用户信息、拥有的角色 / 权限不必每次去查，这样可以提高效率；</p>
+<p><strong>Concurrency</strong>：shiro 支持多线程应用的并发验证，即如在一个线程中开启另一个线程，能把权限自动传播过去；</p>
+<p><strong>Testing</strong>：提供测试支持；</p>
+<p><strong>Run As</strong>：允许一个用户假装为另一个用户（如果他们允许）的身份进行访问；</p>
+<p><strong>Remember Me</strong>：记住我，这个是非常常见的功能，即一次登录后，下次再来的话不用登录了。</p>
+<h2 id="Shrio架构"><a href="#Shrio架构" class="headerlink" title="Shrio架构"></a>Shrio架构</h2><h3 id="外部来看"><a href="#外部来看" class="headerlink" title="外部来看"></a>外部来看</h3><p><img src="C:\Users\王增明\AppData\Roaming\Typora\typora-user-images\1569461311305.png" alt="1569461311305"></p>
+<p><strong>Subject</strong>：主体，代表了当前 “用户”，这个用户不一定是一个具体的人，与当前应用交互的任何东西都是 Subject，如网络爬虫，机器人等；即一个抽象概念；所有 Subject 都绑定到 SecurityManager，与 Subject 的所有交互都会委托给 SecurityManager；可以把 Subject 认为是一个门面；SecurityManager 才是实际的执行者；</p>
+<p><strong>SecurityManager</strong>：安全管理器；即所有与安全有关的操作都会与 SecurityManager 交互；且它管理着所有 Subject；可以看出它是 Shiro 的核心，它负责与后边介绍的其他组件进行交互，如果学习过 SpringMVC，你可以把它看成 DispatcherServlet 前端控制器；</p>
+<p><strong>Realm</strong>：域，Shiro 从从 Realm 获取安全数据（如用户、角色、权限），就是说 SecurityManager 要验证用户身份，那么它需要从 Realm 获取相应的用户进行比较以确定用户身份是否合法；也需要从 Realm 得到用户相应的角色 / 权限进行验证用户是否能进行操作；可以把 Realm 看成 DataSource，即安全数据源。</p>
+<p>也就是说对于我们而言，最简单的一个 Shiro 应用：</p>
+<ol>
+<li> 应用代码通过 Subject 来进行认证和授权，而 Subject 又委托给 SecurityManager；</li>
+<li> 我们需要给 Shiro 的 SecurityManager 注入 Realm，从而让 SecurityManager 能得到合法的用户及其权限进行判断。</li>
+</ol>
+<h3 id="内部来看"><a href="#内部来看" class="headerlink" title="内部来看"></a>内部来看</h3><p><img src="C:\Users\王增明\AppData\Roaming\Typora\typora-user-images\1569461185882.png" alt="1569461185882"></p>
+<p><strong>Subject</strong>：主体（用户，第三方程序等），用于花去主体信息—&gt;princials  和 cred entials；</p>
+<p><strong>SecurityManager</strong>：安全管理器，是Shiro的核心，由其协调管理Shiro各个组件之间的工作。 如它管理着所有 Subject、且负责进行认证和授权、及会话、缓存的管理。相当于 SpringMVC 中的 DispatcherServlet 或者 Struts2 中的 FilterDispatcher。</p>
+<p><strong>Authenticator</strong>：认证器，负责验证用户身份，这是一个扩展点，如果用户觉得 Shiro 默认的不好，可以自定义实现；其需要认证策略（Authentication Strategy），即什么情况下算用户认证通过了；</p>
+<p><strong>Authrizer</strong>：授权器，或者访问控制器，负责为合法的用户指定其权限，控制用户可以访问哪些资源。</p>
+<p><strong>Realm</strong>：域，在Shiro中可以有 1 个或多个 Realm。用户通过Shiro来完成相关的安全工作，Shiro是不会去维护数据信息的，在Shiro工作的过程中，数据的查询和获取工作是realm通过从不同的数据源来获取的，Realm可以获取数据库信息，文本信息等。注意：Shiro 不知道你的用户 / 权限存储在哪及以何种格式存储；所以我们一般在应用中都需要实现自己的 Realm；</p>
+<p><strong>SessionManager</strong>：（session管理器）如果写过 Servlet 就应该知道 Session 的概念，Session 呢需要有人去管理它的生命周期，这个组件就是 SessionManager；而 Shiro 并不仅仅可以用在 Web 环境，也可以用在如普通的 JavaSE 环境、EJB 等环境；所有呢，Shiro 就抽象了一个自己的 Session 来管理主体与应用之间交互的数据；这样的话，比如我们在 Web 环境用，刚开始是一台 Web 服务器；接着又上了台 EJB 服务器；这时想把两台服务器的会话数据放到一个地方，这个时候就可以实现自己的分布式会话（如把数据放到 Memcached 服务器）；</p>
+<p><strong>SessionDAO</strong>：DAO 大家都用过，数据访问对象，用于会话的 CRUD，比如我们想把 Session 保存到数据库，那么可以实现自己的 SessionDAO，通过如 JDBC 写到数据库；比如想把 Session 放到 Memcached 中，可以实现自己的 Memcached SessionDAO；另外 SessionDAO 中可以使用 Cache 进行缓存，以提高性能；</p>
+<p><strong>CacheManager</strong>：缓存控制器，来管理如用户、角色、权限等的缓存的；因为这些数据基本上很少去改变，放到缓存中后可以提高访问的性能</p>
+<p><strong>Cryptography</strong>：密码模块，Shiro 提高了一些常见的加密组件用于如密码加密 / 解密的。</p>
+<h1 id="身份认证"><a href="#身份认证" class="headerlink" title="身份认证"></a>身份认证</h1><p>​    （Authenticator）即在应用中谁能证明他就是他本人。一般提供如他们的身份 ID 一些标识信息来表明他就是他本人，如提供身份证，用户名 / 密码来证明。</p>
+<p>在 shiro 中，用户需要提供 principals （身份）和 credentials（证明）给 shiro，从而应用能验证用户身份：</p>
+<p><strong>principals</strong>：身份，即主体的标识属性，可以是任何东西，如用户名、邮箱等，唯一即可。一个主体可以有多个 principals，但只有一个 Primary principals，一般是用户名 / 密码 / 手机号。</p>
+<p><strong>credentials</strong>：证明 / 凭证，即只有主体知道的安全值，如密码 / 数字证书等。</p>
+<p>最常见的 principals 和 credentials 组合就是用户名 / 密码了。接下来先进行一个基本的身份认证。 </p>
+<p>另外两个相关的概念是之前提到的 <strong>Subject</strong> 及 <strong>Realm</strong>，分别是主体及验证主体的数据源。</p>
+<h2 id="流程"><a href="#流程" class="headerlink" title="流程"></a>流程</h2><p><img src="C:\Users\王增明\AppData\Roaming\Typora\typora-user-images\1569466712747.png" alt="1569466712747"></p>
+<p>流程如下：</p>
+<ol>
+<li>首先调用 Subject.login(token) 进行登录，其会自动委托给 Security Manager，调用之前必须通过 SecurityUtils.setSecurityManager() 设置；</li>
+<li>SecurityManager 负责真正的身份验证逻辑；它会委托给 Authenticator 进行身份验证；</li>
+<li>Authenticator 才是真正的身份验证者，Shiro API 中核心的身份认证入口点，此处可以自定义插入自己的实现；</li>
+<li>Authenticator 可能会委托给相应的 AuthenticationStrategy 进行多 Realm 身份验证，默认 ModularRealmAuthenticator 会调用 AuthenticationStrategy 进行多 Realm 身份验证；</li>
+<li>Authenticator 会把相应的 token 传入 Realm，从 Realm 获取身份验证信息，如果没有返回 / 抛出异常表示身份验证失败了。此处可以配置多个 Realm，将按照相应的顺序及策略进行访问。</li>
+</ol>
+<h2 id="环境准备"><a href="#环境准备" class="headerlink" title="环境准备"></a>环境准备</h2><ol>
+<li><p>使用 Maven 构建,添加 junit、common-logging 及 shiro-core 依赖即可。</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dependencies</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>junit<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>junit<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">version</span>&gt;</span>4.9<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>commons-logging<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>commons-logging<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">version</span>&gt;</span>1.1.3<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">dependency</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">groupId</span>&gt;</span>org.apache.shiro<span class="tag">&lt;/<span class="name">groupId</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">artifactId</span>&gt;</span>shiro-core<span class="tag">&lt;/<span class="name">artifactId</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">version</span>&gt;</span>1.2.2<span class="tag">&lt;/<span class="name">version</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;/<span class="name">dependency</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dependencies</span>&gt;</span></span><br></pre></td></tr></table></figure></li>
+<li><p>首先准备一些用户身份 / 凭据（shiro.ini），创建shiro.ini文件</p>
+<figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="section">[users]</span></span><br><span class="line">   <span class="attr">zhang</span>=<span class="number">123</span></span><br><span class="line"><span class="attr">wang</span>=<span class="number">123</span></span><br></pre></td></tr></table></figure></li>
+<li><p>测试用例</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@Test</span></span><br><span class="line">   <span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">testHelloworld</span><span class="params">()</span> </span>&#123;</span><br><span class="line">       <span class="comment">//1、获取SecurityManager工厂，此处使用Ini配置文件初始化SecurityManager  </span></span><br><span class="line">       Factory&lt;org.apache.shiro.mgt.SecurityManager&gt; factory = <span class="keyword">new</span> IniSecurityManagerFactory(<span class="string">&quot;classpath:shiro.ini&quot;</span>);</span><br><span class="line">       <span class="comment">//2、得到SecurityManager实例 并绑定给SecurityUtils   </span></span><br><span class="line">       org.apache.shiro.mgt.SecurityManager securityManager = factory.getInstance();</span><br><span class="line">    SecurityUtils.setSecurityManager(securityManager);</span><br><span class="line">       <span class="comment">//3、得到Subject及创建用户名/密码身份验证Token（即用户身份/凭证）</span></span><br><span class="line">    Subject subject = SecurityUtils.getSubject();</span><br><span class="line">       UsernamePasswordToken token = <span class="keyword">new</span> UsernamePasswordToken(<span class="string">&quot;zhang&quot;</span>, <span class="string">&quot;123&quot;</span>);</span><br><span class="line">       <span class="keyword">try</span> &#123;</span><br><span class="line">           <span class="comment">//4、登录，即身份验证</span></span><br><span class="line">           subject.login(token);</span><br><span class="line">           <span class="comment">//5. 通过subect.isAuthenticated(),判断用户是否通过验证</span></span><br><span class="line">           <span class="keyword">if</span>(subject.isAuthenticated())&#123;</span><br><span class="line">               System.out.println(<span class="string">&quot;用户通过验证，登陆成功&quot;</span>);</span><br><span class="line">           &#125;</span><br><span class="line">       &#125; <span class="keyword">catch</span> (AuthenticationException e) &#123;</span><br><span class="line">           <span class="comment">//5、身份验证失败</span></span><br><span class="line">           System.out.println(<span class="string">&quot;用户验证失败，登陆失败&quot;</span>);</span><br><span class="line">       &#125;</span><br><span class="line">       subject.logout();</span><br><span class="line">   &#125;</span><br></pre></td></tr></table></figure></li>
+</ol>
+<ul>
+<li><p>首先通过 new IniSecurityManagerFactory 并指定一个 ini 配置文件来创建一个 SecurityManager 工厂；</p>
+</li>
+<li><p>接着获取 SecurityManager 并绑定到 SecurityUtils，这是一个全局设置，设置一次即可；</p>
+</li>
+<li><p>通过 SecurityUtils 得到 Subject，其会自动绑定到当前线程；如果在 web 环境在请求结束时需要解除绑定；然后获取身份验证的 Token，如用户名 / 密码；</p>
+</li>
+<li><p>调用 subject.login 方法进行登录，其会自动委托给 SecurityManager.login 方法进行登录；</p>
+</li>
+<li><p>用subject.isAuthenticated()来判断是否认证成功。</p>
+</li>
+<li><p>如果身份验证失败请捕获 AuthenticationException 或其子类，常见的如：<br>DisabledAccountException（禁用的帐号）、<br>LockedAccountException（锁定的帐号）、<br>UnknownAccountException（错误的帐号）、<br>ExcessiveAttemptsException（登录失败次数过多）、<br>IncorrectCredentialsException （错误的凭证）、<br>ExpiredCredentialsException（过期的凭证）等，<br>具体请查看其继承关系；对于页面的错误消息展示，应提示给用户的异常为模糊的，防止用户知道详细异常，有助于安全。</p>
+</li>
+<li><p>最后可以调用 subject.logout 退出，其会自动委托给 SecurityManager.logout 方法退出。</p>
+</li>
+</ul>
+<h1 id="Realm"><a href="#Realm" class="headerlink" title="Realm"></a>Realm</h1><pre><code> ![1569482028101](C:\Users\王增明\AppData\Roaming\Typora\typora-user-images\1569482028101.png)
+</code></pre>
+<p>​    使用Shiro框架来完成认证工作，默认使用的是iniRealm，如果需要使用其他Realm。需要进行相关配置。</p>
+<h2 id="ini配置文件"><a href="#ini配置文件" class="headerlink" title="ini配置文件"></a>ini配置文件</h2><figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="section">[main]</span></span><br><span class="line"><span class="comment">#提供了对根对象securityManager及其依赖的配置</span></span><br><span class="line"><span class="attr">securityManager</span>=org.apache.shiro.mgt.DefaultSecurityManager</span><br><span class="line">…………</span><br><span class="line"><span class="attr">securityManager.realms</span>=<span class="variable">$jdbcRealm</span></span><br><span class="line"><span class="section">[users]</span></span><br><span class="line"><span class="comment">#提供了对用户/密码及其角色的配置，用户名=密码，角色1，角色2</span></span><br><span class="line"><span class="attr">username</span>=password,role1,role2</span><br><span class="line"><span class="section">[roles]</span></span><br><span class="line"><span class="comment">#提供了角色及权限之间关系的配置，角色=权限1，权限2</span></span><br><span class="line"><span class="attr">role1</span>=permission1,permission2</span><br><span class="line"><span class="section">[urls]</span></span><br><span class="line"><span class="comment">#用于web，提供了对web url拦截相关的配置，url=拦截器[参数]，拦截器</span></span><br><span class="line">/<span class="attr">index.html</span> = anon</span><br><span class="line">/admin/** = authc, roles<span class="section">[admin]</span>, perms<span class="section">[&quot;permission1&quot;]</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="JDBC-Realm"><a href="#JDBC-Realm" class="headerlink" title="JDBC Realm"></a>JDBC Realm</h2><p>使用JdbcRealm来完成身份认证。通过观察源码可知，要实现JdbcRealm</p>
+<ol>
+<li>需要为Jdbc设置dataSource</li>
+<li>在指定的DataSource所对应的数据库中应用表user，该表中有username，password，password_salt等字段</li>
+</ol>
+<h3 id="实现步骤"><a href="#实现步骤" class="headerlink" title="实现步骤"></a>实现步骤</h3><ol>
+<li><p>新建数据库表</p>
+</li>
+<li><p>配置ini文件</p>
+<figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="section">[main]</span></span><br><span class="line"><span class="attr">jdbcRealm</span></span><br><span class="line">=org.apache.shiro.realm.jdbc.JdbcRealm</span><br><span class="line"><span class="attr">dataSource</span>=com.alibaba.druid.pool.DruidDataSource</span><br><span class="line"></span><br><span class="line"><span class="attr">dataSource.driverClassName</span>=com.mysql.jdbc.Driver</span><br><span class="line"><span class="attr">dataSource.url</span>=jdbc:mysql://localhost:<span class="number">3306</span>/shiro</span><br><span class="line"><span class="attr">dataSource.username</span>=root</span><br><span class="line"><span class="attr">dataSource.password</span>=<span class="number">123</span></span><br><span class="line"></span><br><span class="line"><span class="attr">jdbcRealm.dataSource</span>=<span class="variable">$dataSource</span></span><br><span class="line"><span class="attr">securityManager.realms</span>=<span class="variable">$jdbcRealm</span>&amp;nbsp<span class="comment">;</span></span><br></pre></td></tr></table></figure></li>
+<li><p> 编写测试代码</p>
+</li>
+</ol>
+   <figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">JdbcRealmDemo</span></span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">mian</span><span class="params">(String args[])</span></span>&#123;</span><br><span class="line">   </span><br><span class="line">    	Factory&lt;org.apache.shiro.mgt.SecurityManager&gt; factory = <span class="keyword">new</span> IniSecurityManagerFactory(<span class="string">&quot;classpath:shiro.ini&quot;</span>);</span><br><span class="line">    	org.apache.shiro.mgt.SecurityManager securityManager = factory.getInstance();    </span><br><span class="line">        SecurityUtils.setSecurityManager(securityManager);</span><br><span class="line">    	Subject subject = SecurityUtils.getSubject();</span><br><span class="line">    	UsernamePasswordToken token = <span class="keyword">new</span> UsernamePasswordToken(<span class="string">&quot;zhang&quot;</span>, <span class="string">&quot;123&quot;</span>);</span><br><span class="line">    <span class="keyword">try</span> &#123;</span><br><span class="line">        subject.login(token);</span><br><span class="line">        <span class="keyword">if</span>(subject.isAuthenticated())&#123;</span><br><span class="line">            System.out.println(<span class="string">&quot;用户通过验证，登陆成功&quot;</span>);</span><br><span class="line">        &#125;</span><br><span class="line">    &#125; <span class="keyword">catch</span> (AuthenticationException e) &#123;</span><br><span class="line">        System.out.println(<span class="string">&quot;用户验证失败，登陆失败&quot;</span>);</span><br><span class="line">    &#125;</span><br><span class="line">    subject.logout();</span><br><span class="line">    &#125;</span><br><span class="line">&#125;  </span><br></pre></td></tr></table></figure>
+<h2 id="认证策略"><a href="#认证策略" class="headerlink" title="认证策略"></a>认证策略</h2><p>Authenticator 及 AuthenticationStrategy</p>
+<p>Authenticator 的职责是验证用户帐号，是 Shiro API 中身份验证核心的入口点</p>
+<p>如果验证成功，将返回 AuthenticationInfo 验证信息；此信息中包含了身份及凭证；如果验证失败将抛出相应的 AuthenticationException 实现。</p>
+<p>SecurityManager 接口继承了 Authenticator，另外还有一个 ModularRealmAuthenticator 实现，其委托给多个 Realm 进行验证，验证规则通过 AuthenticationStrategy 接口指定，默认提供的实现：</p>
+<ul>
+<li><p><strong>FirstSuccessfulStrategy</strong>：只要有一个 Realm 验证成功即可，只返回第一个 Realm 身份验证成功的认证信息，其他的忽略；</p>
+</li>
+<li><p><strong>AtLeastOneSuccessfulStrategy</strong>：只要有一个 Realm 验证成功即可，和 FirstSuccessfulStrategy 不同，返回所有 Realm 身份验证成功的认证信息；</p>
+</li>
+<li><p><strong>AllSuccessfulStrategy</strong>：所有 Realm 验证成功才算成功，且返回所有 Realm 身份验证成功的认证信息，如果有一个失败就失败了。</p>
+</li>
+</ul>
+<p>ModularRealmAuthenticator 默认使用 AtLeastOneSuccessfulStrategy 策略。</p>
+<h3 id="使用步骤"><a href="#使用步骤" class="headerlink" title="使用步骤"></a>使用步骤</h3><ol>
+<li><p>配置ini文件，配置认证器</p>
+<figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="section">[main]</span></span><br><span class="line"><span class="comment">#指定securityManager的authenticator实现</span></span><br><span class="line"><span class="attr">authenticator</span>=org.apache.shiro.authc.pam.ModularRealmAuthenticator</span><br><span class="line"><span class="attr">securityManager.authenticator</span>=<span class="variable">$authenticator</span></span><br><span class="line"><span class="comment">#指定securityManager.authenticator的authenticationStrategy</span></span><br><span class="line"><span class="attr">allSuccessfulStrategy</span>=org.apache.shiro.authc.pam.AllSuccessfulStrategy</span><br><span class="line"><span class="attr">securityManager.authenticator.authenticationStrategy</span>=<span class="variable">$allSuccessfulStrategy</span></span><br><span class="line"></span><br><span class="line"><span class="attr">myRealm1</span>=com.github.zhangkaitao.shiro.chapter2.realm.MyRealm1</span><br><span class="line"><span class="attr">myRealm2</span>=com.github.zhangkaitao.shiro.chapter2.realm.MyRealm2</span><br><span class="line"><span class="attr">myRealm3</span>=com.github.zhangkaitao.shiro.chapter2.realm.MyRealm3</span><br><span class="line"><span class="attr">securityManager.realms</span>=<span class="variable">$myRealm1</span>,<span class="variable">$myRealm3</span></span><br></pre></td></tr></table></figure></li>
+</ol>
+<h2 id="自定义Realm"><a href="#自定义Realm" class="headerlink" title="自定义Realm"></a>自定义Realm</h2><p>   ​    Shiro 默认使用自带的IniRealm，IniRealm 从ini 配置文件中读取用户的信息，大部分情<br>   况下需要从系统的数据库中读取用户信息，所以需要自定义realm。</p>
+<p>   ​    Realm接口中，最基础的是Realm 接口，CachingRealm 负责缓存处理，AuthenticationRealm 负责认证，AuthorizingRealm 负责授权，通常自定义的realm 继承AuthorizingRealm。</p>
+<h3 id="实现步骤-1"><a href="#实现步骤-1" class="headerlink" title="实现步骤"></a>实现步骤</h3><ol>
+<li>编写Realm实现类，继承AuthorizingRealm<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">UserRealm</span> <span class="keyword">extends</span> <span class="title">AuthorizingRealm</span> </span>&#123;</span><br><span class="line">	<span class="meta">@Override</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> String <span class="title">getName</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="string">&quot;UserRealm&quot;</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="comment">//用于认证</span></span><br><span class="line">	<span class="meta">@Override</span></span><br><span class="line">	<span class="function"><span class="keyword">protected</span> AuthenticationInfo <span class="title">doGetAuthenticationInfo</span><span class="params">(AuthenticationToken token)</span> <span class="keyword">throws</span> AuthenticationException </span>&#123;</span><br><span class="line">		<span class="comment">//从token 中获取身份信息</span></span><br><span class="line">		String username = (String)token.getPrincipal();</span><br><span class="line">		<span class="comment">//根据用户名到数据库中取出用户信息如果查询不到返回null</span></span><br><span class="line">		String password = <span class="string">&quot;1111&quot;</span>;<span class="comment">//假如从数据库中获取密码为1111</span></span><br><span class="line">		<span class="comment">//返回认证信息</span></span><br><span class="line">		SimpleAuthenticationInfo simpleAuthenticationInfo = <span class="keyword">new</span> SimpleAuthenticationInfo(username, password, <span class="keyword">this</span>.getName());</span><br><span class="line">		<span class="keyword">return</span> simpleAuthenticationInfo;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="comment">//用于授权</span></span><br><span class="line">	<span class="meta">@Override</span></span><br><span class="line">	<span class="function"><span class="keyword">protected</span> AuthorizationInfo <span class="title">doGetAuthorizationInfo</span><span class="params">( PrincipalCollection principals)</span> </span>&#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure></li>
+<li>需要在shiro.ini 配置realm 注入到securityManager 中。<figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="section">[main]</span></span><br><span class="line"><span class="comment">#自定义realm</span></span><br><span class="line"><span class="attr">userRealm</span>=cn.siggy.realm.UserRealm</span><br><span class="line"><span class="comment">#将realm 设置到securityManager</span></span><br><span class="line"><span class="attr">securityManager.realms</span>=<span class="variable">$userRealm</span></span><br></pre></td></tr></table></figure></li>
+</ol>
+<ol start="3">
+<li>测试</li>
+</ol>
+<h1 id="散列算法"><a href="#散列算法" class="headerlink" title="散列算法"></a>散列算法</h1><p>（加密）如MD5、SHA等 </p>
+<h2 id="使用方法"><a href="#使用方法" class="headerlink" title="使用方法"></a>使用方法</h2><figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">//使用md5加密算法</span></span><br><span class="line">Md5Hash md5 = <span class="keyword">new</span> Md5Hash(<span class="string">&quot;11111&quot;</span>);</span><br><span class="line">System.out.println(md5);</span><br><span class="line"><span class="comment">//md5加密加盐</span></span><br><span class="line">md5 = <span class="keyword">new</span> Md5Hash(<span class="string">&quot;11111&quot;</span>,<span class="string">&quot;wzm&quot;</span>);</span><br><span class="line">System.out.println(md5);</span><br><span class="line"><span class="comment">//迭代加密--迭代3次</span></span><br><span class="line">md5 = <span class="keyword">new</span> Md5Hash(<span class="string">&quot;11111&quot;</span>,<span class="string">&quot;wzm&quot;</span>,<span class="number">3</span>);</span><br><span class="line">System.out.println(md5);</span><br><span class="line"></span><br><span class="line"><span class="comment">//散列</span></span><br><span class="line">simpleHash hash = <span class="keyword">new</span> SimpleHash(<span class="string">&quot;md5&quot;</span>,<span class="string">&quot;1111&quot;</span>,<span class="string">&quot;wzm&quot;</span>,<span class="number">2</span>);</span><br><span class="line">System.out.println(hash.toString());</span><br></pre></td></tr></table></figure>
+
+<h2 id="案例"><a href="#案例" class="headerlink" title="案例"></a>案例</h2><p>在自定义Realm中使用散列算法</p>
+<ol>
+<li><p>编写realm实现类</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">UserRealm</span> <span class="keyword">extends</span> <span class="title">AuthorizingRealm</span> </span>&#123;</span><br><span class="line">	<span class="meta">@Override</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> String <span class="title">getName</span><span class="params">()</span> </span>&#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="string">&quot;UserRealm&quot;</span>;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="comment">//用于认证</span></span><br><span class="line">	<span class="meta">@Override</span></span><br><span class="line">	<span class="function"><span class="keyword">protected</span> AuthenticationInfo <span class="title">doGetAuthenticationInfo</span><span class="params">(AuthenticationToken token)</span> <span class="keyword">throws</span> AuthenticationException </span>&#123;</span><br><span class="line">		<span class="comment">//从token 中获取身份信息</span></span><br><span class="line">		String username = (String)token.getPrincipal();</span><br><span class="line">		<span class="comment">//根据用户名到数据库中取出用户信息如果查询不到返回null</span></span><br><span class="line">		String password = <span class="string">&quot;1111&quot;</span>;<span class="comment">//假如从数据库中获取密码为1111 和 盐值 wzm</span></span><br><span class="line">        String salt=<span class="string">&quot;wzm&quot;</span>;</span><br><span class="line">		<span class="comment">//返回认证信息</span></span><br><span class="line">		SimpleAuthenticationInfo simpleAuthenticationInfo = <span class="keyword">new</span> SimpleAuthenticationInfo(username,password,ByteSource.Util.bytes(salt),<span class="keyword">this</span>.getName());</span><br><span class="line">		<span class="keyword">return</span> simpleAuthenticationInfo;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="comment">//用于授权</span></span><br><span class="line">	<span class="meta">@Override</span></span><br><span class="line">	<span class="function"><span class="keyword">protected</span> AuthorizationInfo <span class="title">doGetAuthorizationInfo</span><span class="params">( PrincipalCollection principals)</span> </span>&#123;</span><br><span class="line">		<span class="keyword">return</span> <span class="keyword">null</span>;</span><br><span class="line">	&#125;</span><br><span class="line">&#125; </span><br></pre></td></tr></table></figure></li>
+<li><p>配置Realm配置文件ini</p>
+<figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="section">[main]</span></span><br><span class="line"><span class="comment">#定义凭证匹配器</span></span><br><span class="line"><span class="attr">credentialsMatcher</span>=org.apache.shiro.authc.credential.HashedCredentialsMatcher</span><br><span class="line"><span class="comment">#散列算法</span></span><br><span class="line"><span class="attr">credentialsMatcher.hashAlgorithmName</span>=md5</span><br><span class="line"><span class="comment">#散列次数</span></span><br><span class="line"><span class="attr">credentialsMatcher.hashIterations</span>=<span class="number">2</span></span><br></pre></td></tr></table></figure></li>
+</ol>
+<h1 id="授权"><a href="#授权" class="headerlink" title="授权"></a>授权</h1><p>授权，也叫访问控制，即在应用中控制谁能访问哪些资源（如访问页面/编辑数据/页面操作等）。在授权中需了解的几个关键对象：主体（Subject）、资源（Resource）、权限（Permission）、角色（Role）。</p>
+<p><strong>主体</strong><br>主体，即访问应用的用户，在 Shiro 中使用 Subject 代表该用户。用户只有授权后才允许访问相应的资源。</p>
+<p><strong>资源</strong><br>在应用中用户可以访问的任何东西，比如访问 JSP 页面、查看/编辑某些数据、访问某个业务方法、打印文本等等都是资源。用户只要授权后才能访问。</p>
+<p><strong>权限</strong><br>安全策略中的原子授权单位，通过权限我们可以表示在应用中用户有没有操作某个资源的权力。即权限表示在应用中用户能不能访问某个资源，如： 访问用户列表页面<br>查看/新增/修改/删除用户数据（即很多时候都是 CRUD（增查改删）式权限控制）<br>打印文档等等。。。</p>
+<p>如上可以看出，权限代表了用户有没有操作某个资源的权利，即反映在某个资源上的操作允不允许，不反映谁去执行这个操作。所以后续还需要把权限赋予给用户，即定义哪个用户允许在某个资源上做什么操作（权限），Shiro 不会去做这件事情，而是由实现人员提供。</p>
+<p>Shiro 支持粗粒度权限（如用户模块的所有权限）和细粒度权限（操作某个用户的权限，即实例级别的），后续部分介绍。</p>
+<p><strong>角色</strong><br>角色代表了操作集合，可以理解为权限的集合，一般情况下我们会赋予用户角色而不是权限，即这样用户可以拥有一组权限，赋予权限时比较方便。典型的如：项目经理、技术总监、CTO、开发工程师等都是角色，不同的角色拥有一组不同的权限。</p>
+<p><strong>隐式角色</strong>：<br>即直接通过角色来验证用户有没有操作权限，如在应用中 CTO、技术总监、开发工程师可以使用打印机，假设某天不允许开发工程师使用打印机，此时需要从应用中删除相应代码；再如在应用中 CTO、技术总监可以查看用户、查看权限；突然有一天不允许技术总监查看用户、查看权限了，需要在相关代码中把技术总监角色从判断逻辑中删除掉；即粒度是以角色为单位进行访问控制的，粒度较粗；如果进行修改可能造成多处代码修改。</p>
+<p><strong>显示角色</strong>：<br>在程序中通过权限控制谁能访问某个资源，角色聚合一组权限集合；这样假设哪个角色不能访问某个资源，只需要从角色代表的权限集合中移除即可；无须修改多处代码；即粒度是以资源/实例为单位的；粒度较细。</p>
+<p>请 google 搜索“RBAC”和“RBAC新解”分别了解“基于角色的访问控制”“基于资源的访问控制(Resource-Based Access Control)”。</p>
+<h2 id="表示规则"><a href="#表示规则" class="headerlink" title="表示规则"></a>表示规则</h2><p>权限表示规则—&gt;   资源 ：操作 ：实例    </p>
+<p>可以使用通配符表示，如：</p>
+<p>​    user:add  表示对user有添加的权限</p>
+<p>​    user:*   表示对user具有所有操作权限    </p>
+<p>​    user:delete:100 表示对user表示为100的实例具有删除权限 </p>
+<h2 id="授权方式"><a href="#授权方式" class="headerlink" title="授权方式"></a>授权方式</h2><p>Shiro 支持三种方式的授权：</p>
+<ul>
+<li><p>编程式</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">Subject subject = SecurityUtils.getSubject();</span><br><span class="line"><span class="keyword">if</span>(subject.hasRole(“admin”)) &#123;</span><br><span class="line">    <span class="comment">//有权限</span></span><br><span class="line">&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    <span class="comment">//无权限</span></span><br><span class="line">&#125;&amp;nbsp;</span><br></pre></td></tr></table></figure></li>
+<li><p>注解式</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">@RequiresRoles(&quot;admin&quot;)</span></span><br><span class="line"><span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">hello</span><span class="params">()</span> </span>&#123;</span><br><span class="line">    <span class="comment">//有权限</span></span><br><span class="line">&#125;&amp;nbsp;</span><br></pre></td></tr></table></figure></li>
+<li><p>标签</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">shiro:hasRole</span> <span class="attr">name</span>=<span class="string">&quot;admin&quot;</span>&gt;</span></span><br><span class="line">&lt;!— 有权限 —&gt;</span><br><span class="line"><span class="tag">&lt;/<span class="name">shiro:hasRole</span>&gt;</span><span class="symbol">&amp;nbsp;</span></span><br></pre></td></tr></table></figure></li>
+</ul>
+<h2 id="授权流程"><a href="#授权流程" class="headerlink" title="授权流程"></a>授权流程</h2><p><img src="C:\Users\王增明\AppData\Roaming\Typora\typora-user-images\1569501506084.png" alt="1569501506084"></p>
+<p>流程如下：</p>
+<ol>
+<li>首先调用 <code>Subject.isPermitted*/hasRole*</code>接口，其会委托给 SecurityManager，而 SecurityManager 接着会委托给 Authorizer；</li>
+<li>Authorizer 是真正的授权者，如果我们调用如 isPermitted(“user:view”)，其首先会通过 PermissionResolver 把字符串转换成相应的 Permission 实例；</li>
+<li>在进行授权之前，其会调用相应的 Realm 获取 Subject 相应的角色/权限用于匹配传入的角色/权限；</li>
+<li>Authorizer 会判断 Realm 的角色/权限是否和传入的匹配，如果有多个 Realm，会委托给 ModularRealmAuthorizer 进行循环判断，如果匹配如 <code>isPermitted*/hasRole*</code> 会返回 true，否则返回 false 表示授权失败。</li>
+</ol>
+<p>ModularRealmAuthorizer 进行多 Realm 匹配流程：</p>
+<ul>
+<li>首先检查相应的 Realm 是否实现了实现了 Authorizer；</li>
+<li>如果实现了 Authorizer，那么接着调用其相应的 <code>isPermitted*/hasRole*</code> 接口进行匹配；</li>
+<li>如果有一个 Realm 匹配那么将返回 true，否则返回 false。</li>
+</ul>
+<p>如果 Realm 进行授权的话，应该继承 AuthorizingRealm，其流程是：</p>
+<ul>
+<li>如果调用 <code>hasRole*</code>，则直接获取 AuthorizationInfo.getRoles() 与传入的角色比较即可；首先如果调用如 isPermitted(“user:view”)，首先通过 PermissionResolver 将权限字符串转换成相应的 Permission 实例，默认使用 WildcardPermissionResolver，即转换为通配符的 WildcardPermission；</li>
+<li>通过 AuthorizationInfo.getObjectPermissions() 得到 Permission 实例集合；通过 AuthorizationInfo.getStringPermissions() 得到字符串集合并通过 PermissionResolver 解析为 Permission 实例；然后获取用户的角色，并通过 RolePermissionResolver 解析角色对应的权限集合（默认没有实现，可以自己提供）；</li>
+<li>接着调用 Permission.implies(Permission p) 逐个与传入的权限比较，如果有匹配的则返回 true，否则 false。</li>
+</ul>
+<h2 id="授权实现"><a href="#授权实现" class="headerlink" title="授权实现"></a>授权实现</h2><ol>
+<li><p>配置ini文件</p>
+<figure class="highlight ini"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="section">[users]</span></span><br><span class="line"><span class="attr">zhangsan</span>=<span class="number">1111</span>,role1,role2</span><br><span class="line"><span class="attr">lisi</span>=<span class="number">1111</span>,role1</span><br><span class="line"><span class="section">[roles]</span></span><br><span class="line"><span class="attr">role1</span>=user:create,user:update</span><br><span class="line"><span class="attr">role2</span>=user:*</span><br></pre></td></tr></table></figure></li>
+<li><p>实现代码</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">ShiroTest</span> </span>&#123;</span><br><span class="line">	<span class="comment">//用户登录和退出</span></span><br><span class="line">	<span class="meta">@Test</span></span><br><span class="line">	<span class="function"><span class="keyword">public</span> <span class="keyword">void</span> <span class="title">testPermission</span><span class="params">()</span></span>&#123;</span><br><span class="line">		<span class="comment">// 构建SecurityManager 工厂，IniSecurityManagerFactory 可以从ini 文件中初始化SecurityManager 环境</span></span><br><span class="line">		Factory&lt;SecurityManager&gt; factory = <span class="keyword">new</span> IniSecurityManagerFactory(<span class="string">&quot;classpath:shiro-permission.ini&quot;</span>);</span><br><span class="line">		<span class="comment">//通过工厂获得SecurityManager 实例</span></span><br><span class="line">		SecurityManager securityManager = factory.getInstance();</span><br><span class="line">		<span class="comment">//将securityManager 设置到运行环境中</span></span><br><span class="line">		SecurityUtils.setSecurityManager(securityManager);</span><br><span class="line">		<span class="comment">//获取subject 实例</span></span><br><span class="line">		Subject subject = SecurityUtils.getSubject();</span><br><span class="line">		<span class="comment">//创建用户名,密码身份验证Token</span></span><br><span class="line">		UsernamePasswordToken token = <span class="keyword">new</span> UsernamePasswordToken(<span class="string">&quot;zhangsan&quot;</span>, <span class="string">&quot;1111&quot;</span>);</span><br><span class="line">		<span class="keyword">try</span> &#123;</span><br><span class="line">			<span class="comment">//登录，即身份验证</span></span><br><span class="line">			subject.login(token);</span><br><span class="line">		&#125; <span class="keyword">catch</span> (AuthenticationException e) &#123;</span><br><span class="line">			e.printStackTrace();</span><br><span class="line">		<span class="comment">//身份认证失败</span></span><br><span class="line">		&#125;</span><br><span class="line">		<span class="comment">// 用户认证状态</span></span><br><span class="line">		<span class="keyword">boolean</span> isAuthenticated = subject.isAuthenticated();</span><br><span class="line">		System.out.println(<span class="string">&quot;用户认证状态：&quot;</span> + isAuthenticated);</span><br><span class="line">		<span class="comment">//判断拥有角色：role1</span></span><br><span class="line">		Assert.assertTrue(subject.hasRole(<span class="string">&quot;role1&quot;</span>));</span><br><span class="line">		<span class="comment">//判断拥有角色：role1 and role2</span></span><br><span class="line">		Assert.assertTrue(subject.hasAllRoles(Arrays.asList(<span class="string">&quot;role1&quot;</span>, <span class="string">&quot;role2&quot;</span>)));</span><br><span class="line">		<span class="comment">//判断拥有角色：role1 and role2 and !role3</span></span><br><span class="line">		<span class="keyword">boolean</span>[] result = subject.hasRoles(Arrays.asList(<span class="string">&quot;role1&quot;</span>,<span class="string">&quot;role2&quot;</span>, <span class="string">&quot;role3&quot;</span>));</span><br><span class="line">		Assert.assertEquals(<span class="keyword">true</span>, result[<span class="number">0</span>]);</span><br><span class="line">		Assert.assertEquals(<span class="keyword">true</span>, result[<span class="number">1</span>]);</span><br><span class="line">		Assert.assertEquals(<span class="keyword">false</span>, result[<span class="number">2</span>]);	</span><br><span class="line">		<span class="comment">//判断拥有权限：user:create</span></span><br><span class="line">		Assert.assertTrue(subject.isPermitted(<span class="string">&quot;user:create&quot;</span>));</span><br><span class="line">		<span class="comment">//判断拥有权限：user:update and user:delete</span></span><br><span class="line">		Assert.assertTrue(subject.isPermittedAll(<span class="string">&quot;user:update&quot;</span>,<span class="string">&quot;user:delete&quot;</span>));</span><br><span class="line">		<span class="comment">//判断没有权限：user:view	</span></span><br><span class="line">		Assert.assertFalse(subject.isPermitted(<span class="string">&quot;user:view&quot;</span>));</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+</ol>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/java/" rel="tag"># java</a>
+          
+            <a href="/tags/shiro/" rel="tag"># shiro</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/12/05/%E6%B5%81%E5%AA%92%E4%BD%93%E6%9C%8D%E5%8A%A1%E5%99%A8/nfinx-remp%E6%90%AD%E5%BB%BA/" rel="next" title="流媒体服务器搭建">
+                <i class="fa fa-chevron-left"></i> 流媒体服务器搭建
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2021/01/01/%E6%95%B0%E6%8D%AE%E5%BA%93/mycat/" rel="prev" title="mycat使用">
+                mycat使用 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+      <div id="sidebar-dimmer"></div>
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/i.jpeg"
+                alt="" />
+            
+              <p class="site-author-name" itemprop="name"></p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/%7C%7C%20archive">
+              
+                  <span class="site-state-item-count">61</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">9</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">23</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/wangzengming" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:wangzengming@aliyun.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%AE%A4%E8%AF%86Shiro"><span class="nav-number">1.</span> <span class="nav-text">认识Shiro</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BB%80%E4%B9%88%E6%98%AFShiro"><span class="nav-number">1.1.</span> <span class="nav-text">什么是Shiro</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%BA%E4%BB%80%E4%B9%88%E8%A6%81%E5%AD%A6%E4%B9%A0Shiro"><span class="nav-number">1.2.</span> <span class="nav-text">为什么要学习Shiro</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Shiro%E7%BB%93%E6%9E%84%E4%BD%93%E7%B3%BB"><span class="nav-number">1.3.</span> <span class="nav-text">Shiro结构体系</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Shrio%E6%9E%B6%E6%9E%84"><span class="nav-number">1.4.</span> <span class="nav-text">Shrio架构</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%A4%96%E9%83%A8%E6%9D%A5%E7%9C%8B"><span class="nav-number">1.4.1.</span> <span class="nav-text">外部来看</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%86%85%E9%83%A8%E6%9D%A5%E7%9C%8B"><span class="nav-number">1.4.2.</span> <span class="nav-text">内部来看</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%BA%AB%E4%BB%BD%E8%AE%A4%E8%AF%81"><span class="nav-number">2.</span> <span class="nav-text">身份认证</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B5%81%E7%A8%8B"><span class="nav-number">2.1.</span> <span class="nav-text">流程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%8E%AF%E5%A2%83%E5%87%86%E5%A4%87"><span class="nav-number">2.2.</span> <span class="nav-text">环境准备</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Realm"><span class="nav-number">3.</span> <span class="nav-text">Realm</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#ini%E9%85%8D%E7%BD%AE%E6%96%87%E4%BB%B6"><span class="nav-number">3.1.</span> <span class="nav-text">ini配置文件</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#JDBC-Realm"><span class="nav-number">3.2.</span> <span class="nav-text">JDBC Realm</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%9E%E7%8E%B0%E6%AD%A5%E9%AA%A4"><span class="nav-number">3.2.1.</span> <span class="nav-text">实现步骤</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%AE%A4%E8%AF%81%E7%AD%96%E7%95%A5"><span class="nav-number">3.3.</span> <span class="nav-text">认证策略</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8%E6%AD%A5%E9%AA%A4"><span class="nav-number">3.3.1.</span> <span class="nav-text">使用步骤</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%87%AA%E5%AE%9A%E4%B9%89Realm"><span class="nav-number">3.4.</span> <span class="nav-text">自定义Realm</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AE%9E%E7%8E%B0%E6%AD%A5%E9%AA%A4-1"><span class="nav-number">3.4.1.</span> <span class="nav-text">实现步骤</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%95%A3%E5%88%97%E7%AE%97%E6%B3%95"><span class="nav-number">4.</span> <span class="nav-text">散列算法</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8%E6%96%B9%E6%B3%95"><span class="nav-number">4.1.</span> <span class="nav-text">使用方法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%A1%88%E4%BE%8B"><span class="nav-number">4.2.</span> <span class="nav-text">案例</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%8E%88%E6%9D%83"><span class="nav-number">5.</span> <span class="nav-text">授权</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%A1%A8%E7%A4%BA%E8%A7%84%E5%88%99"><span class="nav-number">5.1.</span> <span class="nav-text">表示规则</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%8E%88%E6%9D%83%E6%96%B9%E5%BC%8F"><span class="nav-number">5.2.</span> <span class="nav-text">授权方式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%8E%88%E6%9D%83%E6%B5%81%E7%A8%8B"><span class="nav-number">5.3.</span> <span class="nav-text">授权流程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%8E%88%E6%9D%83%E5%AE%9E%E7%8E%B0"><span class="nav-number">5.4.</span> <span class="nav-text">授权实现</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+        <div class="back-to-top">
+          <i class="fa fa-arrow-up"></i>
+          
+            <span id="scrollpercent"><span>0</span>%</span>
+          
+        </div>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">王增明</span>
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+  
+  
+
+
+
+
+
+  
+  
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/three/three.min.js"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/three/three-waves.min.js"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/three/canvas_sphere.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

@@ -1,0 +1,972 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+  
+  
+    
+    
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+  <link href="/lib/pace/pace-theme-minimal.min.css?v=1.0.2" rel="stylesheet">
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="数据库,mycat," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="mycat使用教程">
+<meta property="og:type" content="article">
+<meta property="og:title" content="mycat使用">
+<meta property="og:url" content="http://example.com/2021/01/01/%E6%95%B0%E6%8D%AE%E5%BA%93/mycat/index.html">
+<meta property="og:site_name" content="极风键客">
+<meta property="og:description" content="mycat使用教程">
+<meta property="og:locale">
+<meta property="article:published_time" content="2021-01-01T00:46:25.000Z">
+<meta property="article:modified_time" content="2021-07-15T09:57:16.089Z">
+<meta property="article:author" content="王增明">
+<meta property="article:tag" content="数据库">
+<meta property="article:tag" content="mycat">
+<meta name="twitter:card" content="summary">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":true,"scrollpercent":true,"onmobile":true},
+    fancybox: true,
+    tabs: false,
+    motion: {"enable":true,"async":true,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://example.com/2021/01/01/数据库/mycat/"/>
+
+
+
+
+
+  <title>mycat使用 | 极风键客</title>
+  
+
+
+
+
+
+
+
+
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">极风键客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-schedule">
+          <a href="/schedule/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-calendar"></i> <br />
+            
+            日程表
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/01/01/%E6%95%B0%E6%8D%AE%E5%BA%93/mycat/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/i.jpeg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="极风键客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">mycat使用</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2021-01-01T08:46:25+08:00">
+                2021-01-01
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/java/" itemprop="url" rel="index">
+                    <span itemprop="name">java</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>mycat使用教程</p>
+<span id="more"></span>
+
+<h2 id="安装mycat"><a href="#安装mycat" class="headerlink" title="安装mycat"></a>安装mycat</h2><p>解压及运行</p>
+<h2 id="配置mycat"><a href="#配置mycat" class="headerlink" title="配置mycat"></a>配置mycat</h2><p>①schema.xml 定义逻辑库，表、分片节点等内容<br>②rule.xml：定义 分片 规则<br>③server.xml 定义用户以及系统相关变量，如端口等</p>
+<h4 id="修改server-xml"><a href="#修改server-xml" class="headerlink" title="修改server.xml"></a>修改server.xml</h4><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">...</span><br><span class="line"><span class="tag">&lt;<span class="name">user</span> <span class="attr">name</span>=<span class="string">&quot;mycat&quot;</span> <span class="attr">defaultAccount</span>=<span class="string">&quot;true&quot;</span>&gt;</span> </span><br><span class="line">    <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">&quot;password&quot;</span>&gt;</span>123456<span class="tag">&lt;/<span class="name">property</span>&gt;</span>   </span><br><span class="line">    <span class="tag">&lt;<span class="name">property</span> <span class="attr">name</span>=<span class="string">&quot;schemas&quot;</span>&gt;</span>TESTDB<span class="tag">&lt;/<span class="name">property</span>&gt;</span> </span><br><span class="line"><span class="tag">&lt;/<span class="name">user</span>&gt;</span></span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+
+<h4 id="修改schema-xml"><a href="#修改schema-xml" class="headerlink" title="修改schema.xml"></a>修改schema.xml</h4><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="meta">&lt;?xml version=&quot;1.0&quot;?&gt;</span></span><br><span class="line"><span class="meta">&lt;!DOCTYPE <span class="meta-keyword">mycat</span>:schema <span class="meta-keyword">SYSTEM</span> <span class="meta-string">&quot;schema.dtd&quot;</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;<span class="name">mycat:schema</span> <span class="attr">xmlns:mycat</span>=<span class="string">&quot;http://io.mycat/&quot;</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">schema</span> <span class="attr">name</span>=<span class="string">&quot;TESTDB&quot;</span> <span class="attr">checkSQLschema</span>=<span class="string">&quot;false&quot;</span> <span class="attr">sqlMaxLimit</span>=<span class="string">&quot;100&quot;</span> <span class="attr">dataNode</span>=<span class="string">&quot;dn1&quot;</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">schema</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">dataNode</span> <span class="attr">name</span>=<span class="string">&quot;dn1&quot;</span> <span class="attr">dataHost</span>=<span class="string">&quot;host1&quot;</span> <span class="attr">database</span>=<span class="string">&quot;testdb&quot;</span> /&gt;</span></span><br><span class="line">        <span class="tag">&lt;<span class="name">dataHost</span> <span class="attr">name</span>=<span class="string">&quot;host1&quot;</span> <span class="attr">maxCon</span>=<span class="string">&quot;1000&quot;</span> <span class="attr">minCon</span>=<span class="string">&quot;10&quot;</span> <span class="attr">balance</span>=<span class="string">&quot;0&quot;</span></span></span><br><span class="line"><span class="tag">                          <span class="attr">writeType</span>=<span class="string">&quot;0&quot;</span> <span class="attr">dbType</span>=<span class="string">&quot;mysql&quot;</span> <span class="attr">dbDriver</span>=<span class="string">&quot;native&quot;</span> <span class="attr">switchType</span>=<span class="string">&quot;1&quot;</span>  <span class="attr">slaveThreshold</span>=<span class="string">&quot;100&quot;</span>&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">heartbeat</span>&gt;</span>select user()<span class="tag">&lt;/<span class="name">heartbeat</span>&gt;</span></span><br><span class="line">                <span class="comment">&lt;!-- can have multi write hosts --&gt;</span></span><br><span class="line">                <span class="tag">&lt;<span class="name">writeHost</span> <span class="attr">host</span>=<span class="string">&quot;hostM1&quot;</span> <span class="attr">url</span>=<span class="string">&quot;localhost:3306&quot;</span> <span class="attr">user</span>=<span class="string">&quot;root&quot;</span></span></span><br><span class="line"><span class="tag">                                   <span class="attr">password</span>=<span class="string">&quot;123456&quot;</span>&gt;</span></span><br><span class="line">                        <span class="comment">&lt;!-- can have multi read hosts --&gt;</span></span><br><span class="line">                        <span class="tag">&lt;<span class="name">readHost</span> <span class="attr">host</span>=<span class="string">&quot;hostS2&quot;</span> <span class="attr">url</span>=<span class="string">&quot;localhost:3316&quot;</span> <span class="attr">user</span>=<span class="string">&quot;root&quot;</span> <span class="attr">password</span>=<span class="string">&quot;123456&quot;</span> /&gt;</span></span><br><span class="line">                <span class="tag">&lt;/<span class="name">writeHost</span>&gt;</span></span><br><span class="line">        <span class="tag">&lt;/<span class="name">dataHost</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">mycat:schema</span>&gt;</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h4 id="启动程序"><a href="#启动程序" class="headerlink" title="启动程序"></a>启动程序</h4><p>①控制台启动 去 mycat/bin 目录下 执行 mycat console<br>②后台启动 ：去 mycat/bin 目录下 mycat start<br>为了能第一时间看 到启动日志 ，方便定位问题 ，我们选择 ① 控制台启动 。</p>
+<h2 id="docker创建多个mysql容器"><a href="#docker创建多个mysql容器" class="headerlink" title="docker创建多个mysql容器"></a>docker创建多个mysql容器</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run -itd --name mysql-0 -p 3306:3306 -e MYSQL_ROOT_PASSWORD=123456 mysql</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run -itd --name mysql-1 -p 3316:3306 -e MYSQL_ROOT_PASSWORD=123456 mysql</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run -itd --name mysql-2 -p 3316:3306 -e MYSQL_ROOT_PASSWORD=123456 mysql</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run -itd --name mysql-3 -p 3316:3306 -e MYSQL_ROOT_PASSWORD=123456 mysql</span><br></pre></td></tr></table></figure>
+
+<p><strong>命令</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker run -p 3306:3306 --name mysql -v /opt/docker_v/mysql/conf:/etc/mysql/conf.d -e MYSQL_ROOT_PASSWORD=123456 -d imageID</span><br></pre></td></tr></table></figure>
+
+<p>命令说明：</p>
+<ul>
+<li><strong>-p 3306:3306：</strong>将容器的3306端口映射到主机的3306端口</li>
+<li><strong>-v /opt/docker_v/mysql/conf:/etc/mysql/conf.d：</strong>将主机/opt/docker_v/mysql/conf目录挂载到容器的/etc/mysql/conf.d</li>
+<li><strong>-e MYSQL_ROOT_PASSWORD=123456：</strong>初始化root用户的密码</li>
+<li><strong>-d:</strong> 后台运行容器，并返回容器ID</li>
+<li><strong>imageID:</strong> mysql镜像ID</li>
+</ul>
+<p> <strong>查看容器运行情况</strong></p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker ps</span><br></pre></td></tr></table></figure>
+
+<h2 id="搭建一主一从"><a href="#搭建一主一从" class="headerlink" title="搭建一主一从"></a>搭建一主一从</h2><h4 id="1搭建-MySQL-数据库主从复制"><a href="#1搭建-MySQL-数据库主从复制" class="headerlink" title="1搭建 MySQL 数据库主从复制"></a>1搭建 MySQL 数据库主从复制</h4><p>1、 主机配置</p>
+<p>修改mysql主机配置文件</p>
+<figure class="highlight properties"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 修改配置文件：</span></span><br><span class="line"><span class="attr">vim</span> <span class="string">/etc/my.cnf</span></span><br><span class="line"><span class="comment"># 主服务器唯一 ID</span></span><br><span class="line"><span class="meta">server-id</span>=<span class="string">1</span></span><br><span class="line"><span class="comment"># 启用二进制日志</span></span><br><span class="line"><span class="meta">log-bin</span>=<span class="string">mysql-bin</span></span><br><span class="line"><span class="comment"># 设置不要复制的数据库 可设置多个</span></span><br><span class="line"><span class="meta">binlog-ignore-db</span>=<span class="string">mysql</span></span><br><span class="line"><span class="meta">binlog-ignore-db</span>=<span class="string">information_schema</span></span><br><span class="line"><span class="comment"># 设置需要复制的数据库</span></span><br><span class="line"><span class="meta">binlog-do-db</span>= <span class="string">需要复制的主数据库名字</span></span><br><span class="line"><span class="comment"># 设置 logbin 格式</span></span><br><span class="line"><span class="attr">binlog_format</span>=<span class="string">STATEMENT</span></span><br></pre></td></tr></table></figure>
+
+<p>2、配置从机</p>
+<figure class="highlight properties"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 修改配置文件：</span></span><br><span class="line"><span class="attr">vim</span> <span class="string">/etc/my.cnf</span></span><br><span class="line"><span class="comment"># 从服务器唯一 ID</span></span><br><span class="line"><span class="meta">server-id</span>=<span class="string">2</span></span><br><span class="line"><span class="comment"># 启用中继日志</span></span><br><span class="line"><span class="meta">relay-log</span>=<span class="string">mysql-relay</span></span><br></pre></td></tr></table></figure>
+
+<p>3、主机、从机、都重启Mysql服务</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">docker restart XXXXXXXXX</span><br></pre></td></tr></table></figure>
+
+<p>4、主机、从机、都关闭防火墙</p>
+<p>5、在主机上建立账户并授权slave</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">create</span> <span class="keyword">user</span> <span class="string">&#x27;slave&#x27;</span>@<span class="string">&#x27;%&#x27;</span> identified <span class="keyword">by</span><span class="string">&#x27;123456&#x27;</span>;</span><br><span class="line"><span class="keyword">grant</span> REPLICATION SLAVE   <span class="keyword">on</span> <span class="operator">*</span>.<span class="operator">*</span> <span class="keyword">to</span> <span class="string">&#x27;slave&#x27;</span>@<span class="string">&#x27;%&#x27;</span>;</span><br></pre></td></tr></table></figure>
+
+<p><strong>扩展</strong></p>
+<p>删除用户的话使用：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">drop user &#x27;用户名&#x27;@&#x27;IP地址&#x27;;</span><br></pre></td></tr></table></figure>
+
+<p>修改用户：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">rename user &#x27;用户名&#x27;@&#x27;IP地址&#x27; to &#x27;新用户名&#x27;@&#x27;IP地址&#x27;;</span><br></pre></td></tr></table></figure>
+
+<p>修改密码：</p>
+ <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">set password for &#x27;用户名&#x27;@&#x27;IP地址&#x27; = Password(&#x27;新密码&#x27;);</span><br></pre></td></tr></table></figure>
+
+<p>查看权限</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">show</span> grants <span class="keyword">for</span> <span class="string">&#x27;用户&#x27;</span>@<span class="string">&#x27;IP地址&#x27;</span></span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line">grant  权限 on 数据库.表 to   &#x27;用户&#x27;@&#x27;IP地址&#x27;;</span><br><span class="line"> </span><br><span class="line">//all privileges  除grant外的所有权限</span><br><span class="line">            select          仅查权限</span><br><span class="line">            select,insert   查和插入权限</span><br><span class="line">            ...</span><br><span class="line">            usage                   无访问权限</span><br><span class="line">            alter                   使用alter table</span><br><span class="line">            alter routine           使用alter procedure和drop procedure</span><br><span class="line">            create                  使用create table</span><br><span class="line">            create routine          使用create procedure</span><br><span class="line">            create temporary tables 使用create temporary tables</span><br><span class="line">            create user             使用create user、drop user、rename user和revoke  all privileges</span><br><span class="line">            create view             使用create view</span><br><span class="line">            delete                  使用delete</span><br><span class="line">            drop                    使用drop table</span><br><span class="line">            execute                 使用call和存储过程</span><br><span class="line">            file                    使用select into outfile 和 load data infile</span><br><span class="line">            grant option            使用grant 和 revoke</span><br><span class="line">            index                   使用index</span><br><span class="line">            insert                  使用insert</span><br><span class="line">            lock tables             使用lock table</span><br><span class="line">            process                 使用show full processlist</span><br><span class="line">            select                  使用select</span><br><span class="line">            show databases          使用show databases</span><br><span class="line">            show view               使用show view</span><br><span class="line">            update                  使用update</span><br><span class="line">            reload                  使用flush</span><br><span class="line">            shutdown                使用mysqladmin shutdown(关闭MySQL)</span><br><span class="line">            super                   ??使用change master、kill、logs、purge、master和set global。还允许mysqladmin????调试登陆</span><br><span class="line">            replication client      服务器位置的访问</span><br><span class="line">            replication slave       由复制从属使用</span><br><span class="line"> </span><br><span class="line">// 数据库名.*           数据库中的所有</span><br><span class="line">            数据库名.表          指定数据库中的某张表</span><br><span class="line">            数据库名.存储过程     指定数据库中的存储过程</span><br><span class="line">            *.*                所有数据库</span><br></pre></td></tr></table></figure>
+
+<p>删除权限：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">revoke</span> 权限 <span class="keyword">on</span> 数据库.表 <span class="keyword">from</span> <span class="string">&#x27;用户&#x27;</span>@<span class="string">&#x27;IP地址&#x27;</span>;</span><br></pre></td></tr></table></figure>
+
+<p>6、查询master的状态</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">show master status;</span><br></pre></td></tr></table></figure>
+
+<p>#记录下 File 和 Position 的值<br>#执行完此步骤后不要 再操作主服务器 M y SQL ，防止主服务器状态值变化</p>
+<p>7、在从机上配置需要复制的主机</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">CHANGE MASTER <span class="keyword">TO</span> MASTER_HOST<span class="operator">=</span><span class="string">&#x27;192.168.127.100&#x27;</span>, </span><br><span class="line">MASTER_USER<span class="operator">=</span><span class="string">&#x27;slave&#x27;</span>, </span><br><span class="line">master_port <span class="operator">=</span> <span class="number">3306</span>,</span><br><span class="line">MASTER_PASSWORD<span class="operator">=</span><span class="string">&#x27;123456&#x27;</span>, </span><br><span class="line">MASTER_LOG_FILE<span class="operator">=</span><span class="string">&#x27;mysql-bin.000004&#x27;</span>,</span><br><span class="line">MASTER_LOG_POS<span class="operator">=</span><span class="number">154</span>;</span><br></pre></td></tr></table></figure>
+
+<p>8、启动从服务器复制功能</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">start slave;</span><br></pre></td></tr></table></figure>
+
+<p>#查看从服务器状态</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">show slave status\G;</span><br></pre></td></tr></table></figure>
+
+<p>#下面两个参 数都是 Yes ，则说明主从配置成功<br>#Slave_IO_Running: Yes<br>#Slave_SQL_Running: Yes</p>
+<p>9、如何停止从服务复制功能</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">stop slave;</span><br></pre></td></tr></table></figure>
+
+<p>如何重新配置主从</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">stop slave;</span><br><span class="line">reset master;</span><br></pre></td></tr></table></figure>
+
+<p><strong>2、修改 Mycat 的配置文件 schema.xml</strong> </p>
+<p>修改<br>dataHost 的 balance属性，通过此属性配置读写分离的类型</p>
+<p>负载均衡类型，目前的取值有4 种：</p>
+<ul>
+<li>balance=”0”, 不开启读写分离机制，所有读操作都发送到当前可用的 writeHost </li>
+<li>balance=”1”，全部的 readHost 与 stand by writeHost 参与 select 语句的负载均衡，简单的说，当双主双从模式(M1-&gt;S1，M2-&gt;S2，并且 M1 与 M2 互为主备)，正常情况下，M2,S1,S2 都参与 select 语句的负载均衡。</li>
+<li>balance=”2”，所有读操作都随机的在 writeHost、readhost 上分发。</li>
+<li>balance=”3”，所有读请求随机的分发到 readhost 执行，writerHost 不负担读压力</li>
+</ul>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">dataHost</span> <span class="attr">name</span>=<span class="string">&quot;host1&quot;</span> <span class="attr">maxCon</span>=<span class="string">&quot;1000&quot;</span> <span class="attr">minCon</span>=<span class="string">&quot;10&quot;</span> <span class="attr">balance</span>=<span class="string">&quot;2&quot;</span> <span class="attr">writeType</span>=<span class="string">writeType</span>=<span class="string">&quot;0&quot;</span> <span class="attr">dbType</span>=<span class="string">&quot;mysql&quot;</span> <span class="attr">dbDriver</span>=<span class="string">&quot;native&quot;</span> <span class="attr">switchType</span>=<span class="string">&quot;1&quot;</span></span></span><br><span class="line"><span class="tag"><span class="attr">slaveThreshold</span>=<span class="string">&quot;100&quot;</span>&gt;</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>3、启动mycat</strong></p>
+<p><strong>4、验证读写分离</strong></p>
+<h2 id="搭建双主双从"><a href="#搭建双主双从" class="headerlink" title="搭建双主双从"></a>搭建双主双从</h2><p><strong>1、 搭建 MySQL 数据库主从复制 （双主双从）</strong></p>
+<p>双主机配置-Master1配置</p>
+<figure class="highlight properties"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="attr">修改配置文件：</span></span><br><span class="line"><span class="attr">vim</span> <span class="string">/etc/my.cnf</span></span><br><span class="line"><span class="comment">#主服务器唯一 ID</span></span><br><span class="line"><span class="meta">server-id</span>=<span class="string">1</span></span><br><span class="line"><span class="attr">启用二进制日志</span></span><br><span class="line"><span class="meta">log-bin</span>=<span class="string">mysql-bin</span></span><br><span class="line"><span class="comment">#设置不要复制的数据库 可设置多个</span></span><br><span class="line"><span class="meta">binlog-ignore-db</span>=<span class="string">mysql</span></span><br><span class="line"><span class="meta">binlog-ignore-db</span>=<span class="string">information_schema</span></span><br><span class="line"><span class="comment">#设置需要复制的数据库/需要复制的主数据库名字</span></span><br><span class="line"><span class="meta">binlog-do-db</span>= <span class="string">testdb</span></span><br><span class="line"><span class="comment">#设置 logbin 格式</span></span><br><span class="line"><span class="attr">binlog_format</span>=<span class="string">STATEMENT</span></span><br><span class="line"><span class="comment"></span></span><br><span class="line"><span class="comment">#在作为从数据库的时候， 有写入操作 也要更新二进制日志文件</span></span><br><span class="line"><span class="attr">log-slave-updates</span></span><br><span class="line"><span class="comment">#表示自增长字段每次递增的量，指自增字段的起始值，其默认值是 1 取值范围是 1 .. 65535</span></span><br><span class="line"><span class="meta">auto-increment-increment</span>=<span class="string">2</span></span><br><span class="line"><span class="comment">#表示自增长字段从哪个数开始，指字段一次递增多少，他的取值范围是 1 .. 65535</span></span><br><span class="line"><span class="meta">auto-increment-offset</span>=<span class="string">1</span></span><br></pre></td></tr></table></figure>
+
+<p>双主机配置-Master2配置</p>
+<figure class="highlight properties"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 修改配置文件：</span></span><br><span class="line"><span class="attr">vim</span> <span class="string">/etc/my.cnf</span></span><br><span class="line"><span class="comment"># 主服务器唯一 ID</span></span><br><span class="line"><span class="meta">server-id</span>= <span class="string">2</span></span><br><span class="line"><span class="comment"># 启用二进制日志</span></span><br><span class="line"><span class="meta">log-bin</span> =<span class="string">mysql-bin</span></span><br><span class="line"><span class="comment"># 设置不要复制的数据库 可设置多个</span></span><br><span class="line"><span class="meta">binlog-ignore-db</span>=<span class="string">mysql</span></span><br><span class="line"><span class="meta">binlog-ignore-db</span>=<span class="string">information_schema</span></span><br><span class="line"><span class="comment"># 设置需要复制的数据库/需要复制的主数据库名字</span></span><br><span class="line"><span class="meta">binlog-do-db</span>= <span class="string">testdb</span></span><br><span class="line"><span class="comment"># 设置 logbin 格式</span></span><br><span class="line"><span class="attr">binlog_format</span>=<span class="string">STATEMENT</span></span><br><span class="line"><span class="comment"># 在作为从数据库的时候，有写入操作也要更新二进制日志文件</span></span><br><span class="line"></span><br><span class="line"><span class="attr">log-slave-updates</span></span><br><span class="line"><span class="comment"># 表示自增长字段每次递增的量，指自增字段的起始值，其默认值是 1 ，取值范围是 1 .. 65 535</span></span><br><span class="line"><span class="meta">auto-increment-increment</span>=<span class="string">2</span></span><br><span class="line"><span class="comment">#表示自增长字段从哪个数开始，指字段一次递增多少，他的取值范围是 1 . .. 65535</span></span><br><span class="line"><span class="meta">auto-increment-offset</span>= <span class="string">2</span></span><br></pre></td></tr></table></figure>
+
+<p>双从机配置-Slave1 配置</p>
+<figure class="highlight properties"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 修改配置文件：</span></span><br><span class="line"><span class="attr">vim</span> <span class="string">/etc/my.cnf</span></span><br><span class="line"><span class="comment">#从服务器唯一 ID</span></span><br><span class="line"><span class="meta">server-id</span>=<span class="string">3</span></span><br><span class="line"><span class="comment"># 启用中继日志</span></span><br><span class="line"><span class="meta">relay-log</span>=<span class="string">mysql-relay</span></span><br></pre></td></tr></table></figure>
+
+<p>双从机配置-Slave2 配置</p>
+<figure class="highlight properties"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 修改配置文件：</span></span><br><span class="line"><span class="attr">vim</span> <span class="string">/etc/my.cnf</span></span><br><span class="line"><span class="comment">#从服务器唯一 ID</span></span><br><span class="line"><span class="meta">server-id</span>= <span class="string">4</span></span><br><span class="line"><span class="comment"># 启用中继日 志</span></span><br><span class="line"><span class="meta">relay-log</span>=<span class="string">mysql-relay</span></span><br></pre></td></tr></table></figure>
+
+<p>双 主机、 双 从机重启 m ysql 服务</p>
+<p>主机从机都关闭防火墙</p>
+<p>在 两台 主机上建立帐户并授权 slave</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">create</span> <span class="keyword">user</span> <span class="string">&#x27;slave&#x27;</span>@<span class="string">&#x27;%&#x27;</span> identified <span class="keyword">by</span><span class="string">&#x27;123456&#x27;</span>;</span><br><span class="line"><span class="keyword">grant</span> REPLICATION SLAVE   <span class="keyword">on</span> <span class="operator">*</span>.<span class="operator">*</span> <span class="keyword">to</span> <span class="string">&#x27;slave&#x27;</span>@<span class="string">&#x27;%&#x27;</span>;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">-- 查询Master1的状态</span></span><br><span class="line"><span class="keyword">show</span> master status;</span><br><span class="line"><span class="comment">-- 查询Master2的状态</span></span><br><span class="line"><span class="keyword">show</span> master status;</span><br></pre></td></tr></table></figure>
+
+<p>#分 别 记录下 File 和 Position 的值<br>#执行完此 步骤后不 要再操作主服务器 MYSQL ，防止主服务器状态值变化</p>
+<p>在从机上配置需要复制的主机</p>
+<p>Slava1 复制 Master1、Slava2 复制 Master2</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- slave1 命令</span></span><br><span class="line">CHANGE MASTER <span class="keyword">TO</span> MASTER_HOST<span class="operator">=</span><span class="string">&#x27;192.168.127.100&#x27;</span>, </span><br><span class="line">MASTER_USER<span class="operator">=</span><span class="string">&#x27;slave&#x27;</span>, </span><br><span class="line">master_port <span class="operator">=</span> <span class="number">3306</span>,</span><br><span class="line">MASTER_PASSWORD<span class="operator">=</span><span class="string">&#x27;123456&#x27;</span>, </span><br><span class="line">MASTER_LOG_FILE<span class="operator">=</span><span class="string">&#x27;mysql-bin.000004&#x27;</span>,</span><br><span class="line">MASTER_LOG_POS<span class="operator">=</span><span class="number">154</span>;</span><br><span class="line"><span class="comment">-- slave2 命令</span></span><br><span class="line">CHANGE MASTER <span class="keyword">TO</span> MASTER_HOST<span class="operator">=</span><span class="string">&#x27;192.168.127.100&#x27;</span>, </span><br><span class="line">MASTER_USER<span class="operator">=</span><span class="string">&#x27;slave&#x27;</span>, </span><br><span class="line">master_port <span class="operator">=</span> <span class="number">3326</span>,</span><br><span class="line">MASTER_PASSWORD<span class="operator">=</span><span class="string">&#x27;123456&#x27;</span>, </span><br><span class="line">MASTER_LOG_FILE<span class="operator">=</span><span class="string">&#x27;mysql-bin.000004&#x27;</span>,</span><br><span class="line">MASTER_LOG_POS<span class="operator">=</span><span class="number">154</span>;</span><br><span class="line"><span class="comment">-- (注意地址与端口的不同)</span></span><br></pre></td></tr></table></figure>
+
+<p>启动 两台 从服务器复制功能</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">start</span> slave;</span><br></pre></td></tr></table></figure>
+
+<p>查 看 从服务器状态</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">show</span> slave status\G;</span><br></pre></td></tr></table></figure>
+
+<p>#下面两个参数都是 Yes ，则说明主从配置成功</p>
+<ul>
+<li>Slave_IO_Running: Yes</li>
+<li>Slave_SQL_Running: Yes</li>
+</ul>
+<p>两个主机互相复制</p>
+<p>Maste r2 复制 M aster1 、Master1 复制 M aste r2</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">-- master1 命令</span></span><br><span class="line">CHANGE MASTER <span class="keyword">TO</span> MASTER_HOST<span class="operator">=</span><span class="string">&#x27;192.168.127.100&#x27;</span>, </span><br><span class="line">MASTER_USER<span class="operator">=</span><span class="string">&#x27;slave&#x27;</span>, </span><br><span class="line">master_port <span class="operator">=</span> <span class="number">3316</span>,</span><br><span class="line">MASTER_PASSWORD<span class="operator">=</span><span class="string">&#x27;123456&#x27;</span>, </span><br><span class="line">MASTER_LOG_FILE<span class="operator">=</span><span class="string">&#x27;mysql-bin.000004&#x27;</span>,</span><br><span class="line">MASTER_LOG_POS<span class="operator">=</span><span class="number">154</span>;</span><br><span class="line"><span class="comment">-- master2 命令</span></span><br><span class="line">CHANGE MASTER <span class="keyword">TO</span> MASTER_HOST<span class="operator">=</span><span class="string">&#x27;192.168.127.100&#x27;</span>, </span><br><span class="line">MASTER_USER<span class="operator">=</span><span class="string">&#x27;slave&#x27;</span>, </span><br><span class="line">master_port <span class="operator">=</span> <span class="number">3306</span>,</span><br><span class="line">MASTER_PASSWORD<span class="operator">=</span><span class="string">&#x27;123456&#x27;</span>, </span><br><span class="line">MASTER_LOG_FILE<span class="operator">=</span><span class="string">&#x27;mysql-bin.000004&#x27;</span>,</span><br><span class="line">MASTER_LOG_POS<span class="operator">=</span><span class="number">154</span>;</span><br><span class="line"><span class="comment">-- (注意地址与端口的不同)</span></span><br></pre></td></tr></table></figure>
+
+<p>启动 两台 主 服务器复制功能</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">start slave;</span><br></pre></td></tr></table></figure>
+
+<p>分别查看两个主服务器状态</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">show slave status\G;</span><br></pre></td></tr></table></figure>
+
+<p>#下面两个参数都是 Yes ，则说明主从配置成功</p>
+<ul>
+<li>Slave_IO_Running: Yes</li>
+<li>Slave_SQL_Running: Yes</li>
+</ul>
+<p><strong>2、修改 Mycat 的配置文件 schema.xml</strong></p>
+<p>为了双主双从读写分离balance设置为1</p>
+<figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">…</span><br><span class="line"><span class="tag">&lt;<span class="name">dataHost</span> <span class="attr">name</span>=<span class="string">&quot;host1&quot;</span> <span class="attr">maxCon</span>=<span class="string">&quot;1000&quot;</span> <span class="attr">minCon</span>=<span class="string">&quot;10&quot;</span> <span class="attr">balance</span>=<span class="string">&quot;1&quot;</span> <span class="attr">writeType</span>=<span class="string">&quot;0&quot;</span> <span class="attr">dbType</span>=<span class="string">&quot;mysql&quot;</span> <span class="attr">dbDriver</span>=<span class="string">&quot;native&quot;</span> <span class="attr">switchType</span>=<span class="string">&quot;1&quot;</span> <span class="attr">slaveThreshold</span>=<span class="string">&quot;100&quot;</span> &gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">heartbeat</span>&gt;</span>select user()<span class="tag">&lt;/<span class="name">heartbeat</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">writeHost</span> <span class="attr">host</span>=<span class="string">&quot;hostM1&quot;</span> <span class="attr">url</span>=<span class="string">&quot;192.16 8.140.128:3 306&quot;</span> <span class="attr">user</span>=<span class="string">&quot;root&quot;</span> <span class="attr">password</span>=<span class="string">&quot;123123&quot;</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">readHost</span> <span class="attr">hos</span> <span class="attr">t</span>=<span class="string">&quot; hostS1 &quot;</span> <span class="attr">url</span>=<span class="string">&quot;192.168.140.127:33 06&quot;</span> <span class="attr">user</span>=<span class="string">&quot;root&quot;</span> <span class="attr">password</span>=<span class="string">&quot;123123 &quot;</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;/<span class="name">writeHost</span>&gt;</span></span><br><span class="line">	<span class="tag">&lt;<span class="name">writeHost</span> <span class="attr">host</span>=<span class="string">&quot; hostM2 &quot;</span> <span class="attr">url</span>=<span class="string">&quot;192.168.140.126:3306&quot;</span> <span class="attr">user</span>=<span class="string">&quot;root&quot;</span> <span class="attr">password</span>=<span class="string">&quot;123123&quot;</span>&gt;</span></span><br><span class="line">		<span class="tag">&lt;<span class="name">read</span> <span class="attr">Host</span> <span class="attr">host</span>=<span class="string">&quot; hostS2 &quot;</span> <span class="attr">url</span>=<span class="string">&quot;192.168.140.125:3306&quot;</span> <span class="attr">user</span>=<span class="string">&quot;root&quot;</span> <span class="attr">password</span>=<span class="string">&quot;123123&quot;</span> /&gt;</span></span><br><span class="line">	<span class="tag">&lt;/<span class="name">writeHost</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">dataHost</span>&gt;</span></span><br><span class="line">…</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>balance=”1”  : 全部的 readHost 与 stand by writeHost 参与 select 语句的负载均衡。</li>
+<li>writeType=”0” : 所有写操作发送到配置的第一个 wri teHost ，第一个挂了切到还生存的第二个</li>
+<li>writeType=”1” :所有写操作都随机的发送到配置的 writeHost 1.5 以后废弃不推荐</li>
+<li>writeHost ，重新启动后以切换后的为准，切换记录在配置文件中 :dnindex.properties 。</li>
+<li>switchType=”1”: 1 默认值，自动切换。<ul>
+<li>1 表示不自动切换</li>
+<li>2 基于 MySQL 主从同步的状态决定是否切换。</li>
+</ul>
+</li>
+</ul>
+<p><strong>3、 启动 Mycat</strong><br><strong>4、 验证读写分离</strong></p>
+<p><strong>5、 抗风险能力</strong></p>
+<p>Master1 、 Master 2 互 做备机 ，负责写的主机宕机 ，备机切换负责写操作 ，保证数据库读写分离高<br>可用性</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/%E6%95%B0%E6%8D%AE%E5%BA%93/" rel="tag"># 数据库</a>
+          
+            <a href="/tags/mycat/" rel="tag"># mycat</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2021/01/01/java/Shiro/" rel="next" title="Shiro">
+                <i class="fa fa-chevron-left"></i> Shiro
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2021/01/01/linux/01_SHELL%E7%BC%96%E7%A8%8B%E5%89%8D%E5%A5%8F_%E5%B0%8F%E5%B7%A5%E5%85%B7/" rel="prev" title="01_SHELL编程前奏_小工具">
+                01_SHELL编程前奏_小工具 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+      <div id="sidebar-dimmer"></div>
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/i.jpeg"
+                alt="" />
+            
+              <p class="site-author-name" itemprop="name"></p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/%7C%7C%20archive">
+              
+                  <span class="site-state-item-count">61</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">9</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">23</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/wangzengming" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:wangzengming@aliyun.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%89%E8%A3%85mycat"><span class="nav-number">1.</span> <span class="nav-text">安装mycat</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E9%85%8D%E7%BD%AEmycat"><span class="nav-number">2.</span> <span class="nav-text">配置mycat</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BF%AE%E6%94%B9server-xml"><span class="nav-number">2.0.1.</span> <span class="nav-text">修改server.xml</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E4%BF%AE%E6%94%B9schema-xml"><span class="nav-number">2.0.2.</span> <span class="nav-text">修改schema.xml</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E5%90%AF%E5%8A%A8%E7%A8%8B%E5%BA%8F"><span class="nav-number">2.0.3.</span> <span class="nav-text">启动程序</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#docker%E5%88%9B%E5%BB%BA%E5%A4%9A%E4%B8%AAmysql%E5%AE%B9%E5%99%A8"><span class="nav-number">3.</span> <span class="nav-text">docker创建多个mysql容器</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%90%AD%E5%BB%BA%E4%B8%80%E4%B8%BB%E4%B8%80%E4%BB%8E"><span class="nav-number">4.</span> <span class="nav-text">搭建一主一从</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1%E6%90%AD%E5%BB%BA-MySQL-%E6%95%B0%E6%8D%AE%E5%BA%93%E4%B8%BB%E4%BB%8E%E5%A4%8D%E5%88%B6"><span class="nav-number">4.0.1.</span> <span class="nav-text">1搭建 MySQL 数据库主从复制</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%90%AD%E5%BB%BA%E5%8F%8C%E4%B8%BB%E5%8F%8C%E4%BB%8E"><span class="nav-number">5.</span> <span class="nav-text">搭建双主双从</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+        <div class="back-to-top">
+          <i class="fa fa-arrow-up"></i>
+          
+            <span id="scrollpercent"><span>0</span>%</span>
+          
+        </div>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">王增明</span>
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+  
+  
+
+
+
+
+
+  
+  
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/three/three.min.js"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/three/three-waves.min.js"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/three/canvas_sphere.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

@@ -1,0 +1,790 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+  
+  
+    
+    
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+  <link href="/lib/pace/pace-theme-minimal.min.css?v=1.0.2" rel="stylesheet">
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="以太坊," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="经常混迹币圈，一般都听说过ERC20，今天讲讲什么是ERC20. 首先ERC代表“Etuereum Request for Comment” 以太坊社区为了创建一个以太坊平台的标准， 开发人员提交了一个以太坊改进方案（EIP）， 改进方案中包括协议规范和合约标准。 最终确定的EIP为以太坊开发者提供了一套可实施的标准。 这使得智能合约可以遵循这些通用的接口标准来构建。 ERC-20标准中定义了一些">
+<meta property="og:type" content="article">
+<meta property="og:title" content="3.3 ERC20 代币合约">
+<meta property="og:url" content="http://example.com/2020/03/03/golang/%E4%BB%A5%E5%A4%AA%E5%9D%8A/5.3ERC20%20%E4%BB%A3%E5%B8%81%E5%90%88%E7%BA%A6/index.html">
+<meta property="og:site_name" content="极风键客">
+<meta property="og:description" content="经常混迹币圈，一般都听说过ERC20，今天讲讲什么是ERC20. 首先ERC代表“Etuereum Request for Comment” 以太坊社区为了创建一个以太坊平台的标准， 开发人员提交了一个以太坊改进方案（EIP）， 改进方案中包括协议规范和合约标准。 最终确定的EIP为以太坊开发者提供了一套可实施的标准。 这使得智能合约可以遵循这些通用的接口标准来构建。 ERC-20标准中定义了一些">
+<meta property="og:locale">
+<meta property="article:published_time" content="2020-03-03T12:46:25.000Z">
+<meta property="article:modified_time" content="2021-07-15T09:58:16.092Z">
+<meta property="article:author" content="王增明">
+<meta property="article:tag" content="以太坊">
+<meta name="twitter:card" content="summary">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":true,"scrollpercent":true,"onmobile":true},
+    fancybox: true,
+    tabs: false,
+    motion: {"enable":true,"async":true,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://example.com/2020/03/03/golang/以太坊/5.3ERC20 代币合约/"/>
+
+
+
+
+
+  <title>3.3 ERC20 代币合约 | 极风键客</title>
+  
+
+
+
+
+
+
+
+
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">极风键客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-schedule">
+          <a href="/schedule/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-calendar"></i> <br />
+            
+            日程表
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2020/03/03/golang/%E4%BB%A5%E5%A4%AA%E5%9D%8A/5.3ERC20%20%E4%BB%A3%E5%B8%81%E5%90%88%E7%BA%A6/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/i.jpeg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="极风键客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">3.3 ERC20 代币合约</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-03-03T20:46:25+08:00">
+                2020-03-03
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/golang/" itemprop="url" rel="index">
+                    <span itemprop="name">golang</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>经常混迹币圈，一般都听说过ERC20，今天讲讲什么是ERC20.</p>
+<p>首先ERC代表“Etuereum Request for Comment”</p>
+<p>以太坊社区为了创建一个以太坊平台的标准， 开发人员提交了一个以太坊改进方案（EIP）， 改进方案中包括协议规范和合约标准。 最终确定的EIP为以太坊开发者提供了一套可实施的标准。 这使得智能合约可以遵循这些通用的接口标准来构建。</p>
+<p>ERC-20标准中定义了一些函数接口，这里不做讨论。大部分空投玩家，也不需要深入研究，有兴趣的朋友可以百度一下。</p>
+<p>ERC20标准规定了各个代币的基本功能，它可以快速发币，而且使用又方便，因此空投币和大部分基于以太坊合约的代币基本上就是利用ERC-20标准开发的；</p>
+<p>除了ERC20之外，还有ERC20，ERC721，ERC223，ERC621，ERC827， 具体不做累述，但是对ERC721顺便说一下， ERC721是主要用于区块链游戏的协议，大家经常看到的区块链游戏基本上是基于ERC721。</p>
+<span id="more"></span>
+
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br></pre></td><td class="code"><pre><span class="line">pragma solidity ^<span class="number">0.4</span><span class="number">.16</span>; </span><br><span class="line">interface tokenRecipient &#123; </span><br><span class="line">  <span class="function"><span class="keyword">function</span> <span class="title">receiveApproval</span>(<span class="params">address _from, uint256 _value, address _token, bytes _extraData</span>) <span class="title">external</span></span>; </span><br><span class="line">&#125; </span><br><span class="line">contract TokenERC20 &#123; </span><br><span class="line">  </span><br><span class="line">  <span class="comment">// Public variables of the token </span></span><br><span class="line">  string public name; </span><br><span class="line">  string public symbol; </span><br><span class="line">  uint8 public decimals = <span class="number">18</span>;  <span class="comment">// 代币精度</span></span><br><span class="line">  public totalSupply; </span><br><span class="line">  </span><br><span class="line">  <span class="comment">// This creates an array with all balances </span></span><br><span class="line">  mapping (<span class="function"><span class="params">address</span> =&gt;</span> uint256) public balanceOf; </span><br><span class="line">  mapping (<span class="function"><span class="params">address</span> =&gt;</span> mapping (<span class="function"><span class="params">address</span> =&gt;</span> uint256)) public allowance; <span class="comment">//授权他人可以使用自己的名义转账的额度</span></span><br><span class="line">  </span><br><span class="line">  <span class="comment">// This generates a public event on the blockchain that will notify clients </span></span><br><span class="line">  event Transfer(address indexed <span class="keyword">from</span>, address indexed to, uint256 value); </span><br><span class="line">  </span><br><span class="line">  <span class="comment">// This generates a public event on the blockchain that will notify clients </span></span><br><span class="line">  event Approval(address indexed _owner, address indexed _spender, uint256 _value); </span><br><span class="line">  </span><br><span class="line">  </span><br><span class="line">  <span class="comment">// This notifies clients about the amount burnt(销毁代币) </span></span><br><span class="line">  event Burn(address indexed <span class="keyword">from</span>, uint256 value); </span><br><span class="line"></span><br><span class="line">  <span class="comment">/** </span></span><br><span class="line"><span class="comment">  * Constructor function  </span></span><br><span class="line"><span class="comment">  * Initializes contract with initial supply tokens to the creator of the contract </span></span><br><span class="line"><span class="comment">  */</span> </span><br><span class="line">  <span class="function"><span class="keyword">function</span> <span class="title">TokenERC20</span>(<span class="params"> uint256 initialSupply, string tokenName, string tokenSymbol </span>) <span class="title">public</span></span>&#123; </span><br><span class="line">    totalSupply = initialSupply * <span class="number">10</span> ** uint256(decimals);  <span class="comment">/*Update total supply with the decimal amount*/</span></span><br><span class="line">    balanceOf[msg.sender] = totalSupply; <span class="comment">// Give the creator all initial tokens </span></span><br><span class="line">    name = tokenName; <span class="comment">// Set the name for display purposes </span></span><br><span class="line">    symbol = tokenSymbol; <span class="comment">// Set the symbol for display purposes </span></span><br><span class="line">  &#125; </span><br><span class="line">  </span><br><span class="line">    <span class="comment">/** </span></span><br><span class="line"><span class="comment">    * Internal transfer, only can be called by this contract </span></span><br><span class="line"><span class="comment">    */</span></span><br><span class="line">  <span class="function"><span class="keyword">function</span> <span class="title">_transfer</span>(<span class="params">address _from, address _to, uint _value</span>) <span class="title">internal</span> </span>&#123; </span><br><span class="line">    <span class="comment">// Prevent transfer to 0x0 address. Use burn() instead </span></span><br><span class="line">    <span class="built_in">require</span>(_to != <span class="number">0x0</span>); </span><br><span class="line">    <span class="comment">// Check if the sender has enough </span></span><br><span class="line">    <span class="built_in">require</span>(balanceOf[_from] &gt;= _value); </span><br><span class="line">    <span class="comment">// Check for overflows </span></span><br><span class="line">    <span class="built_in">require</span>(balanceOf[_to] + _value &gt;= balanceOf[_to]); </span><br><span class="line">    <span class="comment">// Save this for an assertion in the future </span></span><br><span class="line">    uint previousBalances = balanceOf[_from] + balanceOf[_to]; </span><br><span class="line">    <span class="comment">// Subtract from the sender </span></span><br><span class="line">    balanceOf[_from] --= _value; </span><br><span class="line">    <span class="comment">// Add the same to the </span></span><br><span class="line">    recipient balanceOf[_to] += _value; emit Transfer(_from, _to, _value); </span><br><span class="line">    <span class="comment">// Asserts are used to use static analysis to find bugs in your code. They should never fail </span></span><br><span class="line">    assert(balanceOf[_from] + balanceOf[_to] == previousBalances); </span><br><span class="line">  &#125; </span><br><span class="line">  </span><br><span class="line">  <span class="comment">/** </span></span><br><span class="line"><span class="comment">  * Transfer tokens </span></span><br><span class="line"><span class="comment">  * Send `_value` tokens to `_to` from your account </span></span><br><span class="line"><span class="comment">  * <span class="doctag">@param </span>_to The address of the recipient </span></span><br><span class="line"><span class="comment">  * <span class="doctag">@param </span>_value the amount to send </span></span><br><span class="line"><span class="comment">  */</span> </span><br><span class="line">  <span class="function"><span class="keyword">function</span> <span class="title">transfer</span>(<span class="params">address _to, uint256 _value</span>) <span class="title">public</span> <span class="title">returns</span> (<span class="params">bool success</span>) </span>&#123;</span><br><span class="line">    _transfer(msg.sender, _to, _value); </span><br><span class="line">    <span class="keyword">return</span> <span class="literal">true</span>; </span><br><span class="line">  &#125; </span><br><span class="line">  </span><br><span class="line">  <span class="comment">/** </span></span><br><span class="line"><span class="comment">  * Transfer tokens from other address </span></span><br><span class="line"><span class="comment">  * Send `_value` tokens to `_to` on behalf of `_from` </span></span><br><span class="line"><span class="comment">  * <span class="doctag">@param </span>_from The address of the sender </span></span><br><span class="line"><span class="comment">  * <span class="doctag">@param </span>_to The address of the recipient </span></span><br><span class="line"><span class="comment">  * <span class="doctag">@param </span>_value the amount to send </span></span><br><span class="line"><span class="comment">  */</span> </span><br><span class="line">  <span class="function"><span class="keyword">function</span> <span class="title">transferFrom</span>(<span class="params">address _from, address _to, uint256 _value</span>) <span class="title">public</span> <span class="title">returns</span> (<span class="params">bool success</span>) </span>&#123;</span><br><span class="line">    <span class="built_in">require</span>(_value &lt;= allowance[_from][msg.sender]); </span><br><span class="line">    <span class="comment">// Check allowance </span></span><br><span class="line">    allowance[_from][msg.sender] -= _value;</span><br><span class="line">    _transfer(_from, _to, _value); </span><br><span class="line">    <span class="keyword">return</span> <span class="literal">true</span>; </span><br><span class="line">  &#125; </span><br><span class="line">  </span><br><span class="line">  <span class="comment">/** </span></span><br><span class="line"><span class="comment">  * Set allowance for other address </span></span><br><span class="line"><span class="comment">  * Allows `_spender` to spend no more than `_value` tokens on your behalf </span></span><br><span class="line"><span class="comment">  * <span class="doctag">@param </span>_spender The address authorized to spend </span></span><br><span class="line"><span class="comment">  * <span class="doctag">@param </span>_value the max amount they can spend </span></span><br><span class="line"><span class="comment">  */</span> </span><br><span class="line">  <span class="function"><span class="keyword">function</span> <span class="title">approve</span>(<span class="params">address _spender, uint256 _value</span>) <span class="title">public</span> <span class="title">returns</span> (<span class="params">bool success</span>) </span>&#123; </span><br><span class="line">    allowance[msg.sender][_spender] = _value; </span><br><span class="line">    emit Approval(msg.sender, _spender, _value); </span><br><span class="line">    <span class="keyword">return</span> <span class="literal">true</span>; </span><br><span class="line">  &#125; </span><br><span class="line">  </span><br><span class="line">  <span class="comment">/** </span></span><br><span class="line"><span class="comment">  * Set allowance for other address and notify </span></span><br><span class="line"><span class="comment">  * Allows `_spender` to spend no more than `_value` tokens on your behalf, and then ping the contract about it </span></span><br><span class="line"><span class="comment">  * <span class="doctag">@param </span>_spender The address authorized to spend </span></span><br><span class="line"><span class="comment">  * <span class="doctag">@param </span>_value the max amount they can spend </span></span><br><span class="line"><span class="comment">  * <span class="doctag">@param </span>_extraData some extra information to send to the approved contract </span></span><br><span class="line"><span class="comment">  */</span> </span><br><span class="line">  <span class="function"><span class="keyword">function</span> <span class="title">approveAndCall</span>(<span class="params">address _spender, uint256 _value, bytes _extraData</span>) <span class="title">public</span> <span class="title">returns</span> (<span class="params">bool success</span>) </span>&#123; </span><br><span class="line">    tokenRecipient spender = tokenRecipient(_spender);</span><br><span class="line">    <span class="keyword">if</span> (approve(_spender, _value)) &#123; </span><br><span class="line">      spender.receiveApproval(msg.sender, _value, <span class="built_in">this</span>, _extraData); </span><br><span class="line">      <span class="keyword">return</span> <span class="literal">true</span>; </span><br><span class="line">    &#125; </span><br><span class="line">  &#125; </span><br><span class="line"> </span><br><span class="line">  <span class="comment">/** </span></span><br><span class="line"><span class="comment">  * Destroy tokens </span></span><br><span class="line"><span class="comment">  * Remove `_value` tokens from the system irreversibly </span></span><br><span class="line"><span class="comment">  * <span class="doctag">@param </span>_value the amount of money to burn </span></span><br><span class="line"><span class="comment">  */</span> </span><br><span class="line">  <span class="function"><span class="keyword">function</span> <span class="title">burn</span>(<span class="params">uint256 _value</span>) <span class="title">public</span> <span class="title">returns</span> (<span class="params">bool success</span>) </span>&#123;</span><br><span class="line">    <span class="built_in">require</span>(balanceOf[msg.sender] &gt;= _value); <span class="comment">// Check if the sender has enough </span></span><br><span class="line">    balanceOf[msg.sender] -= _value; <span class="comment">// Subtract from the sender </span></span><br><span class="line">    totalSupply --= _value; <span class="comment">// Updates totalSupply </span></span><br><span class="line">    emit Burn(msg.sender, _value); </span><br><span class="line">    <span class="keyword">return</span> <span class="literal">true</span>; </span><br><span class="line">  &#125; </span><br><span class="line">  </span><br><span class="line">  <span class="comment">/** </span></span><br><span class="line"><span class="comment">  * Destroy tokens from other account </span></span><br><span class="line"><span class="comment">  * Remove `_value` tokens from the system irreversibly on behalf of `_from`. </span></span><br><span class="line"><span class="comment">  * <span class="doctag">@param </span>_from the address of the sender * <span class="doctag">@param </span>_value the amount of money to burn </span></span><br><span class="line"><span class="comment">  */</span> </span><br><span class="line">  <span class="function"><span class="keyword">function</span> <span class="title">burnFrom</span>(<span class="params">address _from, uint256 _value</span>) <span class="title">public</span> <span class="title">returns</span> (<span class="params">bool success</span>) </span>&#123;</span><br><span class="line">    <span class="built_in">require</span>(balanceOf[_from] &gt;= _value); <span class="comment">// Check if the targeted balance is enough</span></span><br><span class="line">    <span class="built_in">require</span>(_value &lt;= allowance[_from][msg.sender]); <span class="comment">// Check allowance </span></span><br><span class="line">    balanceOf[_from] --= _value; <span class="comment">// Subtract from the targeted balance </span></span><br><span class="line">    allowance[_from][msg.sender] --= _value; <span class="comment">// Subtract from the sender&#x27;s allowance </span></span><br><span class="line">    totalSupply --= _value; <span class="comment">// Update totalSupply </span></span><br><span class="line">    emit Burn(_from, _value); </span><br><span class="line">    <span class="keyword">return</span> <span class="literal">true</span>; </span><br><span class="line">  &#125; </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/%E4%BB%A5%E5%A4%AA%E5%9D%8A/" rel="tag"># 以太坊</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/03/03/golang/%E4%BB%A5%E5%A4%AA%E5%9D%8A/6.2%E7%AE%80%E5%8D%95%E6%8A%95%E7%A5%A8DApp/" rel="next" title="6.2 简单投票Dapp">
+                <i class="fa fa-chevron-left"></i> 6.2 简单投票Dapp
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2020/03/03/golang/%E4%BB%A5%E5%A4%AA%E5%9D%8A/4.1%E4%BB%A5%E5%A4%AA%E5%9D%8A%E8%B4%A6%E6%88%B7/" rel="prev" title="4.1 以太坊账户">
+                4.1 以太坊账户 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+      <div id="sidebar-dimmer"></div>
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+
+      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/i.jpeg"
+                alt="" />
+            
+              <p class="site-author-name" itemprop="name"></p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/%7C%7C%20archive">
+              
+                  <span class="site-state-item-count">61</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">9</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">23</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/wangzengming" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:wangzengming@aliyun.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+
+      
+        <div class="back-to-top">
+          <i class="fa fa-arrow-up"></i>
+          
+            <span id="scrollpercent"><span>0</span>%</span>
+          
+        </div>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">王增明</span>
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+  
+  
+
+
+
+
+
+  
+  
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/three/three.min.js"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/three/three-waves.min.js"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/three/canvas_sphere.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

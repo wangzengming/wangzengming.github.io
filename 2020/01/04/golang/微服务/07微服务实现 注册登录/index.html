@@ -1,0 +1,987 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+  
+  
+    
+    
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+  <link href="/lib/pace/pace-theme-minimal.min.css?v=1.0.2" rel="stylesheet">
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="微服务," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="微服务实现 注册用户微服务端">
+<meta property="og:type" content="article">
+<meta property="og:title" content="微服务学习--07微服务实现 注册登录">
+<meta property="og:url" content="http://example.com/2020/01/04/golang/%E5%BE%AE%E6%9C%8D%E5%8A%A1/07%E5%BE%AE%E6%9C%8D%E5%8A%A1%E5%AE%9E%E7%8E%B0%20%E6%B3%A8%E5%86%8C%E7%99%BB%E5%BD%95/index.html">
+<meta property="og:site_name" content="极风键客">
+<meta property="og:description" content="微服务实现 注册用户微服务端">
+<meta property="og:locale">
+<meta property="og:image" content="http://example.com/2020/01/04/golang/%E5%BE%AE%E6%9C%8D%E5%8A%A1/07%E5%BE%AE%E6%9C%8D%E5%8A%A1%E5%AE%9E%E7%8E%B0%20%E6%B3%A8%E5%86%8C%E7%99%BB%E5%BD%95/%E8%AF%BE%E5%A0%82%E7%AC%94%E8%AE%B0-07.assets/1582438662615.png">
+<meta property="og:image" content="http://example.com/2020/01/04/golang/%E5%BE%AE%E6%9C%8D%E5%8A%A1/07%E5%BE%AE%E6%9C%8D%E5%8A%A1%E5%AE%9E%E7%8E%B0%20%E6%B3%A8%E5%86%8C%E7%99%BB%E5%BD%95/%E8%AF%BE%E5%A0%82%E7%AC%94%E8%AE%B0-07.assets/1582441308868.png">
+<meta property="article:published_time" content="2020-01-04T12:46:25.000Z">
+<meta property="article:modified_time" content="2021-04-21T23:54:35.550Z">
+<meta property="article:author" content="王增明">
+<meta property="article:tag" content="微服务">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/2020/01/04/golang/%E5%BE%AE%E6%9C%8D%E5%8A%A1/07%E5%BE%AE%E6%9C%8D%E5%8A%A1%E5%AE%9E%E7%8E%B0%20%E6%B3%A8%E5%86%8C%E7%99%BB%E5%BD%95/%E8%AF%BE%E5%A0%82%E7%AC%94%E8%AE%B0-07.assets/1582438662615.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":true,"scrollpercent":true,"onmobile":true},
+    fancybox: true,
+    tabs: false,
+    motion: {"enable":true,"async":true,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://example.com/2020/01/04/golang/微服务/07微服务实现 注册登录/"/>
+
+
+
+
+
+  <title>微服务学习--07微服务实现 注册登录 | 极风键客</title>
+  
+
+
+
+
+
+
+
+
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">极风键客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-schedule">
+          <a href="/schedule/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-calendar"></i> <br />
+            
+            日程表
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2020/01/04/golang/%E5%BE%AE%E6%9C%8D%E5%8A%A1/07%E5%BE%AE%E6%9C%8D%E5%8A%A1%E5%AE%9E%E7%8E%B0%20%E6%B3%A8%E5%86%8C%E7%99%BB%E5%BD%95/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/i.jpeg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="极风键客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">微服务学习--07微服务实现 注册登录</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-01-04T20:46:25+08:00">
+                2020-01-04
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/golang/" itemprop="url" rel="index">
+                    <span itemprop="name">golang</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="微服务实现-注册用户"><a href="#微服务实现-注册用户" class="headerlink" title="微服务实现 注册用户"></a>微服务实现 注册用户</h1><h2 id="微服务端"><a href="#微服务端" class="headerlink" title="微服务端"></a>微服务端</h2><span id="more"></span>
+
+<ol>
+<li><p>修改密码本 —— proto 文件</p>
+ <figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line">syntax = <span class="string">&quot;proto3&quot;</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">package</span> <span class="keyword">go</span>.micro.srv.user;</span><br><span class="line"></span><br><span class="line">service User &#123;</span><br><span class="line">	rpc SendSms(Request) returns (Response) &#123;&#125;;</span><br><span class="line">	rpc Register(RegReq) returns (Response) &#123;&#125;;   <span class="comment">// 注册用户</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">message RegReq &#123;</span><br><span class="line">    <span class="keyword">string</span> mobile = <span class="number">1</span>;</span><br><span class="line">    <span class="keyword">string</span> password = <span class="number">2</span>;</span><br><span class="line">    <span class="keyword">string</span> sms_code = <span class="number">3</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">message Request &#123;</span><br><span class="line">	<span class="keyword">string</span> phone = <span class="number">1</span>;</span><br><span class="line">	<span class="keyword">string</span> imgCode = <span class="number">2</span>;</span><br><span class="line">	<span class="keyword">string</span> uuid = <span class="number">3</span>;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">message Response &#123;</span><br><span class="line">	<span class="keyword">string</span> errno = <span class="number">1</span>;</span><br><span class="line">	<span class="keyword">string</span> errmsg = <span class="number">2</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+<li><p>make 编译生成 xxx.micro.go 文件。</p>
+</li>
+<li><p>修改 service/user/main.go    — 没有需要修改的</p>
+</li>
+<li><p>修改 handler/user.go </p>
+ <figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 添加 方法</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(e *User)</span> <span class="title">Register</span><span class="params">(ctx context.Context, req *user.RegReq, rsp *user.Response)</span> <span class="title">error</span></span> &#123;</span><br><span class="line">	<span class="keyword">return</span> <span class="literal">nil</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+<li><p>需要操作，MySQL数据库， 拷贝 web/model/model.go 到  微服务项目中。</p>
+</li>
+<li><p>在 service/user/model/modelFunc.go 中 添加 校验短信验证码函数实现</p>
+ <figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 校验短信验证码</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">CheckSmsCode</span><span class="params">(phone, code <span class="keyword">string</span>)</span> <span class="title">error</span></span> &#123;</span><br><span class="line">	<span class="comment">// 链接redis</span></span><br><span class="line">	conn := RedisPool.Get()</span><br><span class="line"></span><br><span class="line">	<span class="comment">// 从 redis 中, 根据 key 获取 Value --- 短信验证码  码值</span></span><br><span class="line">	smsCode, err := redis.String(conn.Do(<span class="string">&quot;get&quot;</span>, phone+<span class="string">&quot;_code&quot;</span>))</span><br><span class="line">	<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">		fmt.Println(<span class="string">&quot;redis get phone_code err:&quot;</span>, err)</span><br><span class="line">		<span class="keyword">return</span> err</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="comment">// 验证码匹配  失败</span></span><br><span class="line">	<span class="keyword">if</span> smsCode != code &#123;</span><br><span class="line">		<span class="keyword">return</span> errors.New(<span class="string">&quot;验证码匹配失败!&quot;</span>)</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="comment">// 匹配成功!</span></span><br><span class="line">	<span class="keyword">return</span> <span class="literal">nil</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+<li><p>  service/user/model/modelFunc.go 中, 添加函数RegisterUser， 实现 用户注册信息，写入MySQL数据库</p>
+</li>
+</ol>
+<pre><code><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 注册用户信息,写 MySQL 数据库.</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">RegisterUser</span><span class="params">(mobile, pwd <span class="keyword">string</span>)</span> <span class="title">error</span></span> &#123;</span><br><span class="line">	<span class="keyword">var</span> user User</span><br><span class="line">	user.Name = mobile		<span class="comment">// 默认使用手机号作为用户名</span></span><br><span class="line"></span><br><span class="line">	<span class="comment">// 使用 md5 对 pwd 加密</span></span><br><span class="line">	m5 := md5.New()			<span class="comment">// 初始md5对象</span></span><br><span class="line">	m5.Write([]<span class="keyword">byte</span>(pwd))			<span class="comment">// 将 pwd 写入缓冲区</span></span><br><span class="line">	pwd_hash := hex.EncodeToString(m5.Sum(<span class="literal">nil</span>))	<span class="comment">// 不使用额外的秘钥</span></span><br><span class="line"></span><br><span class="line">	user.Password_hash = pwd_hash</span><br><span class="line"></span><br><span class="line">	<span class="comment">// 插入数据到MySQL</span></span><br><span class="line">	<span class="keyword">return</span> GlobalConn.Create(&amp;user).Error</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</code></pre>
+<ol start="8">
+<li><p>完成  Register  函数 实现</p>
+ <figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(e *User)</span> <span class="title">Register</span><span class="params">(ctx context.Context, req *user.RegReq, rsp *user.Response)</span> <span class="title">error</span></span> &#123;</span><br><span class="line">	<span class="comment">// 先校验短信验证码,是否正确. redis 中存储短信验证码.</span></span><br><span class="line">	err := model.CheckSmsCode(req.Mobile, req.SmsCode)</span><br><span class="line">	<span class="keyword">if</span> err == <span class="literal">nil</span> &#123;</span><br><span class="line"></span><br><span class="line">		<span class="comment">// 如果校验正确. 注册用户. 将数据写入到 MySQL数据库.</span></span><br><span class="line">		err = model.RegisterUser(req.Mobile, req.Password)</span><br><span class="line">		<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">			rsp.Errno = utils.RECODE_DBERR</span><br><span class="line">			rsp.Errmsg = utils.RecodeText(utils.RECODE_DBERR)</span><br><span class="line">		&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">			rsp.Errno = utils.RECODE_OK</span><br><span class="line">			rsp.Errmsg = utils.RecodeText(utils.RECODE_OK)</span><br><span class="line">		&#125;</span><br><span class="line">	&#125; <span class="keyword">else</span> &#123;  <span class="comment">// 短信验证码错误</span></span><br><span class="line">		rsp.Errno = utils.RECODE_DATAERR</span><br><span class="line">		rsp.Errmsg = utils.RecodeText(utils.RECODE_DATAERR)</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> <span class="literal">nil</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+</li>
+</ol>
+<h2 id="web-端"><a href="#web-端" class="headerlink" title="web 端"></a>web 端</h2><ol>
+<li><p> 拷贝密码本 ——proto</p>
+</li>
+<li><p>创建 web/utils/utils.go 文件， 封装 函数实现 初始 consul 客户端代码</p>
+ <figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 初始化micro</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">InitMicro</span><span class="params">()</span> <span class="title">micro</span>.<span class="title">Service</span></span> &#123;</span><br><span class="line">	<span class="comment">// 初始化客户端</span></span><br><span class="line">	consulReg := consul.NewRegistry()</span><br><span class="line">	<span class="keyword">return</span> micro.NewService(</span><br><span class="line">		micro.Registry(consulReg),</span><br><span class="line">	)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>实现 web/controller/user.go 中的 PostRet 函数</p>
+ <figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 发送注册信息</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">PostRet</span><span class="params">(ctx *gin.Context)</span></span> &#123;</span><br><span class="line">	<span class="comment">// 获取数据</span></span><br><span class="line">	<span class="keyword">var</span> regData <span class="keyword">struct</span> &#123;</span><br><span class="line">		Mobile   <span class="keyword">string</span> <span class="string">`json:&quot;mobile&quot;`</span></span><br><span class="line">		PassWord <span class="keyword">string</span> <span class="string">`json:&quot;password&quot;`</span></span><br><span class="line">		SmsCode  <span class="keyword">string</span> <span class="string">`json:&quot;sms_code&quot;`</span></span><br><span class="line">	&#125;</span><br><span class="line">	ctx.Bind(&amp;regData)</span><br><span class="line"></span><br><span class="line">	<span class="comment">// 初始化consul</span></span><br><span class="line">	microService := utils.InitMicro()</span><br><span class="line">    </span><br><span class="line">    <span class="comment">// 初始化客户端</span></span><br><span class="line">	microClient := userMicro.NewUserService(<span class="string">&quot;go.micro.srv.user&quot;</span>, microService.Client())</span><br><span class="line"></span><br><span class="line">	<span class="comment">// 调用远程函数</span></span><br><span class="line">	resp, err := microClient.Register(context.TODO(), &amp;userMicro.RegReq&#123;</span><br><span class="line">		Mobile:regData.Mobile,</span><br><span class="line">		SmsCode:regData.SmsCode,</span><br><span class="line">		Password:regData.PassWord,</span><br><span class="line">	&#125;)</span><br><span class="line">	<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">		fmt.Println(<span class="string">&quot;注册用户, 找不到远程服务!&quot;</span>, err)</span><br><span class="line">		<span class="keyword">return</span></span><br><span class="line">	&#125;</span><br><span class="line">	<span class="comment">// 写给浏览器</span></span><br><span class="line">	ctx.JSON(http.StatusOK, resp)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>测试：</p>
+<ul>
+<li>consul 启动</li>
+<li>getCaptcha 服务启动  — 12341</li>
+<li>user 服务启动  — 12342</li>
+<li>web 启动  — 8080</li>
+<li>浏览器测试，注册流程。<ul>
+<li>成功：<ul>
+<li>界面跳转。</li>
+<li>查询 MySQL数据库， 多一条用户信息。</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ol>
+<h1 id="获取地域信息"><a href="#获取地域信息" class="headerlink" title="获取地域信息"></a>获取地域信息</h1><h2 id="导入-SQL脚本"><a href="#导入-SQL脚本" class="headerlink" title="导入 SQL脚本"></a>导入 SQL脚本</h2><ol>
+<li>将 home.sql 保存至 Linux 系统。建议放 家目录。</li>
+<li>登录 MySQL数据库。选择数据库： use  search_house;</li>
+<li>执行 source  /home/itcast/home.sql  ——  运行 脚本文件。向表插入数据。</li>
+</ol>
+<h2 id="web端实现"><a href="#web端实现" class="headerlink" title="web端实现"></a>web端实现</h2><ol>
+<li><p>在 web/main.go 中，添加路由， 设置回调。</p>
+ <figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">r1.GET(<span class="string">&quot;/areas&quot;</span>, controller.GetArea)</span><br></pre></td></tr></table></figure></li>
+<li><p>在 web/controller/use.go 中， 添加 GetArea() 函数。</p>
+ <figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">GetArea</span><span class="params">(ctx *gin.Context)</span></span>  &#123;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+<li><p>从数据库获取数据，提高用户感受的常见方法：先查缓存， 缓存没有查MySQL， 写入redis缓存。</p>
+ <figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 测试实现：</span></span><br><span class="line"><span class="comment">// 获取地域信息</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">GetArea</span><span class="params">(ctx *gin.Context)</span></span>  &#123;</span><br><span class="line">	<span class="comment">// 先从MySQL中获取数据.</span></span><br><span class="line">	<span class="keyword">var</span> areas []model.Area</span><br><span class="line"></span><br><span class="line">	model.GlobalConn.Find(&amp;areas)</span><br><span class="line"></span><br><span class="line">	<span class="comment">// 再把数据写入到 redis 中.</span></span><br><span class="line">	conn := model.RedisPool.Get()		<span class="comment">// 获取链接</span></span><br><span class="line">	conn.Do(<span class="string">&quot;set&quot;</span>, <span class="string">&quot;areaData&quot;</span>, areas)</span><br><span class="line"></span><br><span class="line">	resp := <span class="built_in">make</span>(<span class="keyword">map</span>[<span class="keyword">string</span>]<span class="keyword">interface</span>&#123;&#125;)</span><br><span class="line"></span><br><span class="line">	resp[<span class="string">&quot;errno&quot;</span>] = <span class="string">&quot;0&quot;</span></span><br><span class="line">	resp[<span class="string">&quot;errmsg&quot;</span>] = utils.RecodeText(utils.RECODE_OK)</span><br><span class="line">	resp[<span class="string">&quot;data&quot;</span>] = areas</span><br><span class="line"></span><br><span class="line">	ctx.JSON(http.StatusOK, resp)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>测试：登录 redis ，指定 –raw 参数，显示中文。</p>
+ <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">itcast@ubuntu:~$ redis-cli -h 192.168.6.108 -p 6379 --raw</span><br><span class="line">192.168.6.108:6379&gt; keys *</span><br><span class="line">areaData</span><br><span class="line">hello</span><br><span class="line">itcast</span><br><span class="line">192.168.6.108:6379&gt; get areaData</span><br><span class="line">[&#123;1 东城区 []&#125; &#123;2 西城区 []&#125; &#123;3 朝阳区 []&#125; &#123;4 海淀区 []&#125; &#123;5 昌平区 []&#125; &#123;6 丰台区 []&#125; &#123;7 房山区 []&#125; &#123;8 通州区 []&#125; &#123;9 顺义区 []&#125; &#123;10 大兴区 []&#125; &#123;11 怀柔区 []&#125; &#123;12 平谷区 []&#125; &#123;13 密云区 []&#125; &#123;14 延庆区 []&#125; &#123;15 石景山区 []&#125;]</span><br><span class="line">192.168.6.108:6379&gt; </span><br><span class="line"></span><br></pre></td></tr></table></figure></li>
+<li><p>思考：按如上方法存储数据到 Redis 中 <code>conn.Do(&quot;set&quot;, &quot;areaData&quot;, areas)</code>， 将来 使用 Do 获取数据时！不好获取！没有对应的 回复助手函数来完成 “类型断言”。 —— 重新选择 存储 redis 的方法: 将 数据转换成 josn 字节流存储。 </p>
+</li>
+</ol>
+<p><img src="%E8%AF%BE%E5%A0%82%E7%AC%94%E8%AE%B0-07.assets/1582438662615.png" alt="1582438662615"></p>
+<ol start="6">
+<li><p>重新实现获取地域信息， 没数据，读MySQL，写redis；有数据，直接读 redis</p>
+<ul>
+<li>强调：写入 Redis 中的数据 —— 序列化后的字节流数据。</li>
+</ul>
+ <figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 获取地域信息</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">GetArea</span><span class="params">(ctx *gin.Context)</span></span> &#123;</span><br><span class="line">	<span class="comment">// 先从MySQL中获取数据.</span></span><br><span class="line">	<span class="keyword">var</span> areas []model.Area</span><br><span class="line"></span><br><span class="line">	<span class="comment">// 从缓存redis 中, 获取数据</span></span><br><span class="line">	conn := model.RedisPool.Get()</span><br><span class="line">	<span class="comment">// 当初使用 &quot;字节切片&quot; 存入, 现在使用 切片类型接收</span></span><br><span class="line">	areaData, _ := redis.Bytes(conn.Do(<span class="string">&quot;get&quot;</span>, <span class="string">&quot;areaData&quot;</span>))</span><br><span class="line">	<span class="comment">// 没有从 Redis 中获取到数据</span></span><br><span class="line">	<span class="keyword">if</span> <span class="built_in">len</span>(areaData) == <span class="number">0</span> &#123;</span><br><span class="line"></span><br><span class="line">		fmt.Println(<span class="string">&quot;从 MySQL 中 获取数据...&quot;</span>)</span><br><span class="line">		model.GlobalConn.Find(&amp;areas)</span><br><span class="line">		<span class="comment">// 把数据写入到 redis 中. , 存储结构体序列化后的 json 串</span></span><br><span class="line">		areaBuf, _ := json.Marshal(areas)</span><br><span class="line">		conn.Do(<span class="string">&quot;set&quot;</span>, <span class="string">&quot;areaData&quot;</span>, areaBuf)</span><br><span class="line"></span><br><span class="line">	&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">		fmt.Println(<span class="string">&quot;从 redis 中 获取数据...&quot;</span>)</span><br><span class="line">		<span class="comment">// redis 中有数据</span></span><br><span class="line">		json.Unmarshal(areaData, &amp;areas)</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	resp := <span class="built_in">make</span>(<span class="keyword">map</span>[<span class="keyword">string</span>]<span class="keyword">interface</span>&#123;&#125;)</span><br><span class="line"></span><br><span class="line">	resp[<span class="string">&quot;errno&quot;</span>] = <span class="string">&quot;0&quot;</span></span><br><span class="line">	resp[<span class="string">&quot;errmsg&quot;</span>] = utils.RecodeText(utils.RECODE_OK)</span><br><span class="line">	resp[<span class="string">&quot;data&quot;</span>] = areas</span><br><span class="line"></span><br><span class="line">	ctx.JSON(http.StatusOK, resp)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+<li><p>测试：</p>
+<ol>
+<li>GoLand 中 借助输出，看到 展示的数据来源。 </li>
+</ol>
+</li>
+</ol>
+<h1 id="Cookie-和-Session"><a href="#Cookie-和-Session" class="headerlink" title="Cookie 和 Session"></a>Cookie 和 Session</h1><h2 id="Cookie-和-Session简介"><a href="#Cookie-和-Session简介" class="headerlink" title="Cookie 和 Session简介"></a>Cookie 和 Session简介</h2><ul>
+<li>http协议，有 3 个版本：<ul>
+<li>http/1.0 版：无状态，短连接。</li>
+<li>http/1.1 版：可以记录状态。—— 默认支持。</li>
+<li>http/2.0 版：可以支持长连接。 协议头：Connection: keep-alive 。</li>
+</ul>
+</li>
+</ul>
+<h3 id="Cookie"><a href="#Cookie" class="headerlink" title="Cookie"></a>Cookie</h3><ul>
+<li>最早的 http/1.0 版，提供 Cookie 机制， 但是没有 Session。</li>
+<li>Cookie 作用：一定时间内， 存储用户的连接信息。如：用户名、登录时间 … 不敏感信息。</li>
+<li>Cookie 出身：http自带机制。Session不是！</li>
+<li>Cookie 存储：Cookie 存储在 客户端 (浏览器) 中。—— 浏览器可以存储数据。少<ul>
+<li>存储形式：key - value</li>
+<li>可以在浏览器中查看。</li>
+<li>Cookie 不安全。直接将数据存储在浏览器上。</li>
+</ul>
+</li>
+</ul>
+<h3 id="Session"><a href="#Session" class="headerlink" title="Session"></a>Session</h3><ul>
+<li>”会话“：在一次会话交流中，产生的数据。不是http、浏览器自带。</li>
+<li>Session 作用：一定时间内， 存储用户的连接信息。</li>
+<li>Session 存储：在服务器中。一般为 临时 Session。—— 会话结束 (浏览器关闭) ， Session被干掉！</li>
+</ul>
+<h3 id="对比-Cookie-和-Session"><a href="#对比-Cookie-和-Session" class="headerlink" title="对比 Cookie 和 Session"></a>对比 Cookie 和 Session</h3><ol>
+<li> Cookie 存储在 浏览器， 在哪生成呢？</li>
+<li> Session 存储在 服务器，在哪生成呢？</li>
+<li> 什么时候生成Cookie ， 什么时候生成 Session？</li>
+</ol>
+<p><img src="%E8%AF%BE%E5%A0%82%E7%AC%94%E8%AE%B0-07.assets/1582441308868.png" alt="1582441308868"></p>
+<h2 id="Cookie操作"><a href="#Cookie操作" class="headerlink" title="Cookie操作"></a>Cookie操作</h2><h3 id="设置Cookie"><a href="#设置Cookie" class="headerlink" title="设置Cookie"></a>设置Cookie</h3><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(c *Context)</span> <span class="title">SetCookie</span><span class="params">(name, value <span class="keyword">string</span>, maxAge <span class="keyword">int</span>, path, domain <span class="keyword">string</span>, secure, httpOnly <span class="keyword">bool</span>)</span></span> </span><br><span class="line">name: 名称。 相当于 key</span><br><span class="line">value：内容。</span><br><span class="line">maxAge：最大生命周期。</span><br><span class="line">	 = <span class="number">0</span> : 表示没指定该属性。</span><br><span class="line">	 &lt; <span class="number">0</span> ：表示删除。 ---- <span class="comment">// 删除Cookie 的操作， 可以使用 该属性实现。</span></span><br><span class="line">	 &gt; <span class="number">0</span> ：指定生命周期。 单位：s</span><br><span class="line">path：路径。—— 通常传<span class="string">&quot;&quot;</span></span><br><span class="line">domain：域名。 IP地址。</span><br><span class="line">secure：设置是否安全保护。<span class="literal">true</span>：不能在 地址栏前，点击查看。 可以使用 F12 查看。</span><br><span class="line">					   <span class="literal">false</span>：能在 地址栏前，点击查看。</span><br><span class="line">httpOnly：是否只针对http协议。</span><br></pre></td></tr></table></figure>
+
+<p>测试案例：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> <span class="string">&quot;github.com/gin-gonic/gin&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span>  &#123;</span><br><span class="line">	router := gin.Default()</span><br><span class="line"></span><br><span class="line">	router.GET(<span class="string">&quot;/test&quot;</span>, <span class="function"><span class="keyword">func</span><span class="params">(context *gin.Context)</span></span> &#123;</span><br><span class="line">		<span class="comment">// 设置 Cookie</span></span><br><span class="line">		<span class="comment">//context.SetCookie(&quot;mytest&quot;, &quot;chuanzhi&quot;, 60*60, &quot;&quot;, &quot;&quot;, true, true)</span></span><br><span class="line">        <span class="comment">//context.SetCookie(&quot;mytest&quot;, &quot;chuanzhi&quot;, 60*60, &quot;&quot;, &quot;&quot;, false, true)</span></span><br><span class="line">		context.SetCookie(<span class="string">&quot;mytest&quot;</span>, <span class="string">&quot;chuanzhi&quot;</span>, <span class="number">0</span>, <span class="string">&quot;&quot;</span>, <span class="string">&quot;&quot;</span>, <span class="literal">false</span>, <span class="literal">true</span>)</span><br><span class="line">		context.Writer.WriteString(<span class="string">&quot;测试 Cookie ...&quot;</span>)</span><br><span class="line">	&#125;)</span><br><span class="line"></span><br><span class="line">	router.Run(<span class="string">&quot;:9999&quot;</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="获取Cookie"><a href="#获取Cookie" class="headerlink" title="获取Cookie"></a>获取Cookie</h3><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 获取Cookie</span></span><br><span class="line">cookieVal, _ := context.Cookie(<span class="string">&quot;mytest&quot;</span>)</span><br><span class="line"></span><br><span class="line">fmt.Println(<span class="string">&quot;获取的Cookie 为:&quot;</span>, cookieVal)</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="Session-操作"><a href="#Session-操作" class="headerlink" title="Session 操作"></a>Session 操作</h2><ul>
+<li><p>gin 框架， 默认不支持Session功能。要想在 gin 中使用 Session，需要添加插件！</p>
+</li>
+<li><p>gin 框架中的 “插件”  —— 中间件 —— gin MiddleWare</p>
+</li>
+<li><p>去 github 搜索，gin Session 可以得到：<a target="_blank" rel="noopener" href="https://github.com/gin-contrib/sessions">https://github.com/gin-contrib/sessions</a></p>
+</li>
+<li><p>安装 Session 插件。</p>
+</li>
+<li><p>```<br>  $ go get github.com/gin-contrib/sessions</p>
+  <figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">### 设置session</span><br><span class="line"></span><br><span class="line">- 容器的初始化：</span><br><span class="line"></span><br><span class="line">    ```go</span><br><span class="line">    func NewStore(size int, network, address, password string, keyPairs ...[]byte) (Store, error)</span><br><span class="line">    size:容器大小。</span><br><span class="line">    network：协议</span><br><span class="line">    address：IP：port</span><br><span class="line">    password：使用redis做容器使用的密码。 没有特殊设定，传 “”</span><br><span class="line">    []byte(“secret”)： 加密密钥！</span><br></pre></td></tr></table></figure></li>
+<li><p>使用容器：</p>
+  <figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(engine *Engine)</span> <span class="title">Use</span><span class="params">(middleware ...HandlerFunc)</span> <span class="title">IRoutes</span></span> &#123;&#125;</span><br><span class="line">router.Use(sessions.Sessions(<span class="string">&quot;mysession&quot;</span>, store))</span><br></pre></td></tr></table></figure></li>
+</ul>
+<p>测试案例：</p>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">&quot;github.com/gin-gonic/gin&quot;</span></span><br><span class="line"></span><br><span class="line">	<span class="string">&quot;github.com/gin-contrib/sessions/redis&quot;</span></span><br><span class="line">	<span class="string">&quot;github.com/gin-contrib/sessions&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span>  &#123;</span><br><span class="line">	router := gin.Default()</span><br><span class="line"></span><br><span class="line">	<span class="comment">// 初始化容器.</span></span><br><span class="line">	store, _ := redis.NewStore(<span class="number">10</span>, <span class="string">&quot;tcp&quot;</span>, <span class="string">&quot;192.168.6.108:6379&quot;</span>, <span class="string">&quot;&quot;</span>, []<span class="keyword">byte</span>(<span class="string">&quot;bj38&quot;</span>))</span><br><span class="line"></span><br><span class="line">	<span class="comment">// 使用容器</span></span><br><span class="line">	router.Use(sessions.Sessions(<span class="string">&quot;mysession&quot;</span>, store))</span><br><span class="line"></span><br><span class="line">	router.GET(<span class="string">&quot;/test&quot;</span>, <span class="function"><span class="keyword">func</span><span class="params">(context *gin.Context)</span></span> &#123;</span><br><span class="line">		<span class="comment">// 调用session, 设置session数据</span></span><br><span class="line">		s := sessions.Default(context)</span><br><span class="line">		<span class="comment">// 设置session</span></span><br><span class="line">		s.Set(<span class="string">&quot;itcast&quot;</span>, <span class="string">&quot;itheima&quot;</span>)</span><br><span class="line">		<span class="comment">// 修改session时, 需要Save函数配合.否则不生效</span></span><br><span class="line">		s.Save()</span><br><span class="line"></span><br><span class="line">		context.Writer.WriteString(<span class="string">&quot;测试 Session ...&quot;</span>)</span><br><span class="line">	&#125;)</span><br><span class="line"></span><br><span class="line">	router.Run(<span class="string">&quot;:9999&quot;</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h3 id="获取session"><a href="#获取session" class="headerlink" title="获取session"></a>获取session</h3><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 建议：不要修改 session属性，使用默认属性。</span></span><br><span class="line">v := s.Get(<span class="string">&quot;itcast&quot;</span>)</span><br><span class="line">fmt.Println(<span class="string">&quot;获取 Session:&quot;</span>, v.(<span class="keyword">string</span>))</span><br></pre></td></tr></table></figure>
+
+
+
+<h1 id="实现用户登录"><a href="#实现用户登录" class="headerlink" title="实现用户登录"></a>实现用户登录</h1><ol>
+<li><p>浏览器 访问 ： 192.168.6.108:8080/home   点击登录按钮。  跳“登录页面”。 输手机号、输密码，登录</p>
+</li>
+<li><p>在 Name的 General  和  Request Payload 中获取到 路由 和 方法以及数据信息。</p>
+</li>
+<li><p>web/main.go 添加：</p>
+ <figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">r1.POST(<span class="string">&quot;/sessions&quot;</span>, controller.PostLogin)    <span class="comment">// 注意 “s”</span></span><br></pre></td></tr></table></figure></li>
+<li><p>web/controller/user.go 增加函数</p>
+ <figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 处理登录业务</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">PostLogin</span><span class="params">(ctx *gin.Context)</span></span> &#123;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+<li><p>实现 PostLogin 函数</p>
+<ol>
+<li><p>获取数据。 因为数据来自  Request Payload , 所以：需要通过“Bind”来获取输入数据</p>
+ <figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> loginData <span class="keyword">struct</span> &#123;</span><br><span class="line">    Mobile   <span class="keyword">string</span> <span class="string">`json:&quot;mobile&quot;`</span></span><br><span class="line">    PassWord <span class="keyword">string</span> <span class="string">`json:&quot;password&quot;`</span></span><br><span class="line">&#125;</span><br><span class="line">ctx.Bind(&amp;loginData)</span><br></pre></td></tr></table></figure></li>
+<li><p>web/model/modelFunc.go  创建函数, 处理登录业务，根据手机号/密码 获取用户名</p>
+ <figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 处理登录业务,根据手机号/密码 获取用户名</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">Login</span><span class="params">(mobile, pwd <span class="keyword">string</span>)</span> <span class="params">(<span class="keyword">string</span>, error)</span></span> &#123;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">var</span> user User</span><br><span class="line"></span><br><span class="line">	<span class="comment">// 对参数 pwd 做md5 hash</span></span><br><span class="line">	m5 := md5.New()</span><br><span class="line">	m5.Write([]<span class="keyword">byte</span>(pwd))</span><br><span class="line">	pwd_hash := hex.EncodeToString(m5.Sum(<span class="literal">nil</span>))</span><br><span class="line"></span><br><span class="line">	err := GlobalConn.Where(<span class="string">&quot;mobile = ?&quot;</span>, mobile).Select(<span class="string">&quot;name&quot;</span>).</span><br><span class="line">		Where(<span class="string">&quot;password_hash = ?&quot;</span>, pwd_hash).Find(&amp;user).Error</span><br><span class="line"></span><br><span class="line">	<span class="keyword">return</span> user.Name, err</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+</ol>
+</li>
+<li><p>获取数据库数据，查询是否和输入数据匹配    </p>
+ <figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">userName, err  := model.Login(loginData.Mobile, loginData.PassWord)</span><br><span class="line">resp := <span class="built_in">make</span>(<span class="keyword">map</span>[<span class="keyword">string</span>]<span class="keyword">interface</span>&#123;&#125;)</span><br><span class="line"><span class="keyword">if</span> err == <span class="literal">nil</span> &#123;</span><br><span class="line">    <span class="comment">// 登录成功</span></span><br><span class="line">    resp[<span class="string">&quot;errno&quot;</span>] = utils.RECODE_OK</span><br><span class="line">    resp[<span class="string">&quot;errmsg&quot;</span>] = utils.RecodeText(utils.RECODE_OK)</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 将 登录状态保存到 session 中 </span></span><br><span class="line"></span><br><span class="line">&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    <span class="comment">// 登录失败.</span></span><br><span class="line">    resp[<span class="string">&quot;errno&quot;</span>] = utils.RECODE_LOGINERR</span><br><span class="line">    resp[<span class="string">&quot;errmsg&quot;</span>] = utils.RecodeText(utils.RECODE_LOGINERR)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+</li>
+<li><p>在 web/main.go 中 ， 初始化容器， 使用容器</p>
+ <figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 初始化容器</span></span><br><span class="line">store, _ := redis.NewStore(<span class="number">10</span>, <span class="string">&quot;tcp&quot;</span>, <span class="string">&quot;192.168.6.108:6379&quot;</span>, <span class="string">&quot;&quot;</span>, []<span class="keyword">byte</span>(<span class="string">&quot;bj38&quot;</span>))	</span><br><span class="line"></span><br><span class="line"><span class="comment">// 使用容器</span></span><br><span class="line">router.Use(sessions.Sessions(<span class="string">&quot;mysession&quot;</span>, store))</span><br></pre></td></tr></table></figure>
+
+</li>
+<li><p>完整实现 ，处理登录业务  PostLogin() 函数</p>
+ <figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 处理登录业务</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">PostLogin</span><span class="params">(ctx *gin.Context)</span></span> &#123;</span><br><span class="line">	<span class="comment">// 获取前端数据</span></span><br><span class="line">	<span class="keyword">var</span> loginData <span class="keyword">struct</span> &#123;</span><br><span class="line">		Mobile   <span class="keyword">string</span> <span class="string">`json:&quot;mobile&quot;`</span></span><br><span class="line">		PassWord <span class="keyword">string</span> <span class="string">`json:&quot;password&quot;`</span></span><br><span class="line">	&#125;</span><br><span class="line">	ctx.Bind(&amp;loginData)</span><br><span class="line"></span><br><span class="line">	resp := <span class="built_in">make</span>(<span class="keyword">map</span>[<span class="keyword">string</span>]<span class="keyword">interface</span>&#123;&#125;)</span><br><span class="line"></span><br><span class="line">	<span class="comment">//获取 数据库数据, 查询是否和数据的数据匹配</span></span><br><span class="line">	userName, err := model.Login(loginData.Mobile, loginData.PassWord)</span><br><span class="line">	<span class="keyword">if</span> err == <span class="literal">nil</span> &#123;</span><br><span class="line">		<span class="comment">// 登录成功!</span></span><br><span class="line">		resp[<span class="string">&quot;errno&quot;</span>] = utils.RECODE_OK</span><br><span class="line">		resp[<span class="string">&quot;errmsg&quot;</span>] = utils.RecodeText(utils.RECODE_OK)</span><br><span class="line"></span><br><span class="line">		<span class="comment">// 将 登录状态, 保存到Session中</span></span><br><span class="line">		s := sessions.Default(ctx)	  <span class="comment">// 初始化session</span></span><br><span class="line">		s.Set(<span class="string">&quot;userName&quot;</span>, userName)   <span class="comment">// 将用户名设置到session中.</span></span><br><span class="line">		s.Save()</span><br><span class="line"></span><br><span class="line">	&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">		<span class="comment">// 登录失败!</span></span><br><span class="line">		resp[<span class="string">&quot;errno&quot;</span>] = utils.RECODE_LOGINERR</span><br><span class="line">		resp[<span class="string">&quot;errmsg&quot;</span>] = utils.RecodeText(utils.RECODE_LOGINERR)</span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	ctx.JSON(http.StatusOK, resp)</span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure></li>
+<li><p>测试：</p>
+<ol>
+<li>go  run   web/main.go 即可！ 其他的不用启动！</li>
+<li>浏览器， 192.168.6.108:8080/home  ——&gt; 登录 ——&gt; 输入用户名、密码 ——&gt; 登录！</li>
+<li>看不到变化，是因为：我们写的第一个 Session 相关函数 GetSession()，里面 直接发送的假数据，并没有真正获取 Session。现在我们有真正Session了。</li>
+<li>请大家尝试修改实现 GetSession() ！最终能在浏览器中看到 登录变化。</li>
+</ol>
+</li>
+</ol>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/%E5%BE%AE%E6%9C%8D%E5%8A%A1/" rel="tag"># 微服务</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2020/01/04/golang/%E5%BE%AE%E6%9C%8D%E5%8A%A1/09FastDFS%20%E5%92%8C%20Nginx/" rel="prev" title="微服务学习--09FastDFS 和 Nginx">
+                微服务学习--09FastDFS 和 Nginx <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+      <div id="sidebar-dimmer"></div>
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/i.jpeg"
+                alt="" />
+            
+              <p class="site-author-name" itemprop="name"></p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/%7C%7C%20archive">
+              
+                  <span class="site-state-item-count">61</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">9</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">23</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/wangzengming" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:wangzengming@aliyun.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%BE%AE%E6%9C%8D%E5%8A%A1%E5%AE%9E%E7%8E%B0-%E6%B3%A8%E5%86%8C%E7%94%A8%E6%88%B7"><span class="nav-number">1.</span> <span class="nav-text">微服务实现 注册用户</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BE%AE%E6%9C%8D%E5%8A%A1%E7%AB%AF"><span class="nav-number">1.1.</span> <span class="nav-text">微服务端</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#web-%E7%AB%AF"><span class="nav-number">1.2.</span> <span class="nav-text">web 端</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%8E%B7%E5%8F%96%E5%9C%B0%E5%9F%9F%E4%BF%A1%E6%81%AF"><span class="nav-number">2.</span> <span class="nav-text">获取地域信息</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AF%BC%E5%85%A5-SQL%E8%84%9A%E6%9C%AC"><span class="nav-number">2.1.</span> <span class="nav-text">导入 SQL脚本</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#web%E7%AB%AF%E5%AE%9E%E7%8E%B0"><span class="nav-number">2.2.</span> <span class="nav-text">web端实现</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Cookie-%E5%92%8C-Session"><span class="nav-number">3.</span> <span class="nav-text">Cookie 和 Session</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Cookie-%E5%92%8C-Session%E7%AE%80%E4%BB%8B"><span class="nav-number">3.1.</span> <span class="nav-text">Cookie 和 Session简介</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Cookie"><span class="nav-number">3.1.1.</span> <span class="nav-text">Cookie</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Session"><span class="nav-number">3.1.2.</span> <span class="nav-text">Session</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E5%AF%B9%E6%AF%94-Cookie-%E5%92%8C-Session"><span class="nav-number">3.1.3.</span> <span class="nav-text">对比 Cookie 和 Session</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Cookie%E6%93%8D%E4%BD%9C"><span class="nav-number">3.2.</span> <span class="nav-text">Cookie操作</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%AE%BE%E7%BD%AECookie"><span class="nav-number">3.2.1.</span> <span class="nav-text">设置Cookie</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%8E%B7%E5%8F%96Cookie"><span class="nav-number">3.2.2.</span> <span class="nav-text">获取Cookie</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Session-%E6%93%8D%E4%BD%9C"><span class="nav-number">3.3.</span> <span class="nav-text">Session 操作</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E8%8E%B7%E5%8F%96session"><span class="nav-number">3.3.1.</span> <span class="nav-text">获取session</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%AE%9E%E7%8E%B0%E7%94%A8%E6%88%B7%E7%99%BB%E5%BD%95"><span class="nav-number">4.</span> <span class="nav-text">实现用户登录</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+        <div class="back-to-top">
+          <i class="fa fa-arrow-up"></i>
+          
+            <span id="scrollpercent"><span>0</span>%</span>
+          
+        </div>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">王增明</span>
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+  
+  
+
+
+
+
+
+  
+  
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/three/three.min.js"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/three/three-waves.min.js"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/three/canvas_sphere.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

@@ -1,0 +1,1030 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+  
+  
+    
+    
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+  <link href="/lib/pace/pace-theme-minimal.min.css?v=1.0.2" rel="stylesheet">
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="微服务," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="图片验证码获取 注册页面 图片验证码ID  启动 web页面，点击“注册” 按钮。在 NetWork —— Headers 中 看到 错误信息！  从 URL中，提取 图片验证码ID 。 保存 成 uuid  查看 gin 框架 中文文档。—— “获取路径中的参数”  web&#x2F;main.go 中 添加 路由匹配：  1router.GET(&quot;&#x2F;api&#x2F;v1.0&#x2F;imagecode&#x2F;:uu">
+<meta property="og:type" content="article">
+<meta property="og:title" content="微服务学习--04开发者平台与redis">
+<meta property="og:url" content="http://example.com/2020/01/04/golang/%E5%BE%AE%E6%9C%8D%E5%8A%A1/04%E5%BC%80%E5%8F%91%E8%80%85%E5%B9%B3%E5%8F%B0%E4%B8%8Eredis/index.html">
+<meta property="og:site_name" content="极风键客">
+<meta property="og:description" content="图片验证码获取 注册页面 图片验证码ID  启动 web页面，点击“注册” 按钮。在 NetWork —— Headers 中 看到 错误信息！  从 URL中，提取 图片验证码ID 。 保存 成 uuid  查看 gin 框架 中文文档。—— “获取路径中的参数”  web&#x2F;main.go 中 添加 路由匹配：  1router.GET(&quot;&#x2F;api&#x2F;v1.0&#x2F;imagecode&#x2F;:uu">
+<meta property="og:locale">
+<meta property="article:published_time" content="2020-01-04T12:46:25.000Z">
+<meta property="article:modified_time" content="2021-07-15T09:58:16.092Z">
+<meta property="article:author" content="王增明">
+<meta property="article:tag" content="微服务">
+<meta name="twitter:card" content="summary">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":true,"scrollpercent":true,"onmobile":true},
+    fancybox: true,
+    tabs: false,
+    motion: {"enable":true,"async":true,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://example.com/2020/01/04/golang/微服务/04开发者平台与redis/"/>
+
+
+
+
+
+  <title>微服务学习--04开发者平台与redis | 极风键客</title>
+  
+
+
+
+
+
+
+
+
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">极风键客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-schedule">
+          <a href="/schedule/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-calendar"></i> <br />
+            
+            日程表
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2020/01/04/golang/%E5%BE%AE%E6%9C%8D%E5%8A%A1/04%E5%BC%80%E5%8F%91%E8%80%85%E5%B9%B3%E5%8F%B0%E4%B8%8Eredis/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/i.jpeg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="极风键客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">微服务学习--04开发者平台与redis</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-01-04T20:46:25+08:00">
+                2020-01-04
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/golang/" itemprop="url" rel="index">
+                    <span itemprop="name">golang</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="图片验证码"><a href="#图片验证码" class="headerlink" title="图片验证码"></a>图片验证码</h1><h2 id="获取-注册页面-图片验证码ID"><a href="#获取-注册页面-图片验证码ID" class="headerlink" title="获取 注册页面 图片验证码ID"></a>获取 注册页面 图片验证码ID</h2><ol>
+<li><p> 启动 web页面，点击“注册” 按钮。在 NetWork —— Headers 中 看到 错误信息！</p>
+</li>
+<li><p>从 URL中，提取 图片验证码ID 。 保存 成 uuid</p>
+</li>
+<li><p>查看 gin 框架 中文文档。—— “获取路径中的参数”</p>
+</li>
+<li><p>web/main.go 中 添加 路由匹配：</p>
+ <figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">router.GET(<span class="string">&quot;/api/v1.0/imagecode/:uuid&quot;</span>, controller.GetImageCd)</span><br></pre></td></tr></table></figure></li>
+<li><p>web/controller/user.go 中 ，实现回调：</p>
+ <figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 获取图片信息</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">GetImageCd</span><span class="params">(ctx *gin.Context)</span></span> &#123;</span><br><span class="line">	uuid := ctx.Param(<span class="string">&quot;uuid&quot;</span>)</span><br><span class="line">	fmt.Println(<span class="string">&quot;uuid = &quot;</span>, uuid)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+</ol>
+<span id="more"></span>
+
+<h2 id="图片验证码获取"><a href="#图片验证码获取" class="headerlink" title="图片验证码获取"></a>图片验证码获取</h2><ul>
+<li>去 github 中搜索 “captcha” 关键词。 过滤 Go语言。 ——  <a target="_blank" rel="noopener" href="https://github.com/afocus/captcha">afocus/<em>captcha</em></a></li>
+</ul>
+<ul>
+<li><p>使用 go get github.com/afocus/captcha 下载源码包。</p>
+</li>
+<li><p>参照 github 中的示例代码，测试生成 图片验证码：</p>
+  <figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">&quot;github.com/afocus/captcha&quot;</span>   <span class="comment">// 按住 Ctrl ，鼠标左键点击 captcha 看到 examples， 从中可以提取到 “comic.ttf”</span></span><br><span class="line">	<span class="string">&quot;image/color&quot;</span></span><br><span class="line">	<span class="string">&quot;image/png&quot;</span></span><br><span class="line">	<span class="string">&quot;net/http&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span>  &#123;</span><br><span class="line">	<span class="comment">// 初始化对象</span></span><br><span class="line">	<span class="built_in">cap</span> := captcha.New()</span><br><span class="line"></span><br><span class="line">	<span class="comment">// 设置字体</span></span><br><span class="line">	<span class="built_in">cap</span>.SetFont(<span class="string">&quot;comic.ttf&quot;</span>)</span><br><span class="line"></span><br><span class="line">	<span class="comment">// 设置验证码大小</span></span><br><span class="line">	<span class="built_in">cap</span>.SetSize(<span class="number">128</span>, <span class="number">64</span>)</span><br><span class="line"></span><br><span class="line">	<span class="comment">// 设置干扰强度</span></span><br><span class="line">	<span class="built_in">cap</span>.SetDisturbance(captcha.MEDIUM)</span><br><span class="line"></span><br><span class="line">	<span class="comment">// 设置前景色</span></span><br><span class="line">	<span class="built_in">cap</span>.SetFrontColor(color.RGBA&#123;<span class="number">0</span>,<span class="number">0</span>,<span class="number">0</span>, <span class="number">255</span>&#125;)</span><br><span class="line"></span><br><span class="line">	<span class="comment">// 设置背景色</span></span><br><span class="line">	<span class="built_in">cap</span>.SetBkgColor(color.RGBA&#123;<span class="number">100</span>,<span class="number">0</span>,<span class="number">255</span>, <span class="number">255</span>&#125;, color.RGBA&#123;<span class="number">255</span>,<span class="number">0</span>,<span class="number">127</span>, <span class="number">255</span>&#125;, color.RGBA&#123;<span class="number">255</span>,<span class="number">255</span>,<span class="number">10</span>, <span class="number">255</span>&#125;)</span><br><span class="line"></span><br><span class="line">	<span class="comment">// 生成字体 -- 将图片验证码, 展示到页面中.</span></span><br><span class="line">	http.HandleFunc(<span class="string">&quot;/r&quot;</span>, <span class="function"><span class="keyword">func</span><span class="params">(w http.ResponseWriter, r *http.Request)</span></span> &#123;</span><br><span class="line">		img, str := <span class="built_in">cap</span>.Create(<span class="number">4</span>, captcha.NUM)</span><br><span class="line">		png.Encode(w, img)</span><br><span class="line"></span><br><span class="line">		<span class="built_in">println</span>(str)</span><br><span class="line">	&#125;)</span><br><span class="line"></span><br><span class="line">	<span class="comment">// 或者 自定固定的数据,来做图片内容.</span></span><br><span class="line">	http.HandleFunc(<span class="string">&quot;/c&quot;</span>, <span class="function"><span class="keyword">func</span><span class="params">(w http.ResponseWriter, r *http.Request)</span></span> &#123;</span><br><span class="line">		str := <span class="string">&quot;itcast&quot;</span></span><br><span class="line">		img := <span class="built_in">cap</span>.CreateCustom(str)</span><br><span class="line">		png.Encode(w, img)</span><br><span class="line">	&#125;)</span><br><span class="line"></span><br><span class="line">	<span class="comment">// 启动服务</span></span><br><span class="line">	http.ListenAndServe(<span class="string">&quot;:8086&quot;</span>, <span class="literal">nil</span>)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h2 id="图片验证码模块集成到web"><a href="#图片验证码模块集成到web" class="headerlink" title="图片验证码模块集成到web"></a>图片验证码模块集成到web</h2><ol>
+<li>将 ImgTest.go 中的测试代码， 粘贴到 web/controller/user.go 中的 GetImageCd() 函数</li>
+<li> 导入需要的包。 将 “comic.ttf” 文件 存放到 web/conf/ 中。 对应修改访问代码。</li>
+<li>浏览器中，“注册” 页面测试！</li>
+</ol>
+<h2 id="微服务实现-图片验证码"><a href="#微服务实现-图片验证码" class="headerlink" title="微服务实现 图片验证码"></a>微服务实现 图片验证码</h2><ol>
+<li><p>创建 微服务项目：  <code>micro new --type srv bj38web/service/getCaptcha</code></p>
+<p> ​    创建完成，会在项目 bj38web 的 service/ 中，多出 getCaptcha 的微服务项目。</p>
+</li>
+<li><p>修改密码本 —— getCaptcha/proto/getCaptcha.proto</p>
+ <figure class="highlight protobuf"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">syntax = <span class="string">&quot;proto3&quot;</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">package</span> go.micro.srv.getCaptcha;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">service</span> <span class="title">GetCaptcha</span> </span>&#123;</span><br><span class="line">	<span class="function"><span class="keyword">rpc</span> Call(Request) <span class="keyword">returns</span> (Response) </span>&#123;&#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="class"><span class="keyword">message</span> <span class="title">Request</span> </span>&#123;</span><br><span class="line">&#125;</span><br><span class="line"><span class="class"><span class="keyword">message</span> <span class="title">Response</span> </span>&#123;</span><br><span class="line">	<span class="comment">// 使用切片存储图片信息, 用 json 序列化</span></span><br><span class="line">	<span class="built_in">bytes</span> img = <span class="number">1</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+<li><p>编译 proto 文件。 —— make 命令！得到 getCaptcha.micro.go  和 getCaptcha.pb.go</p>
+</li>
+<li><p>修改 service/getCaptcha/main.go </p>
+ <figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">&quot;github.com/micro/go-micro/util/log&quot;</span></span><br><span class="line">	<span class="string">&quot;github.com/micro/go-micro&quot;</span></span><br><span class="line">	<span class="string">&quot;bj38web/service/getCaptcha/handler&quot;</span></span><br><span class="line"></span><br><span class="line">	getCaptcha <span class="string">&quot;bj38web/service/getCaptcha/proto/getCaptcha&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	<span class="comment">// New Service</span></span><br><span class="line">	service := micro.NewService(</span><br><span class="line">		micro.Name(<span class="string">&quot;go.micro.srv.getCaptcha&quot;</span>),</span><br><span class="line">		micro.Version(<span class="string">&quot;latest&quot;</span>),</span><br><span class="line">	)</span><br><span class="line">	<span class="comment">// Register Handler</span></span><br><span class="line">	getCaptcha.RegisterGetCaptchaHandler(service.Server(), <span class="built_in">new</span>(handler.GetCaptcha))</span><br><span class="line"></span><br><span class="line">	<span class="comment">// Run service</span></span><br><span class="line">	<span class="keyword">if</span> err := service.Run(); err != <span class="literal">nil</span> &#123;</span><br><span class="line">		log.Fatal(err)</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+<li><p>修改服务发现 ： mdns ——&gt; consul</p>
+<ol>
+<li><p> 初始化consul</p>
+</li>
+<li><p>添加 consul 到  micro.NewSerive( )</p>
+ <figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">consulReg := consul.NewRegistry()</span><br><span class="line"></span><br><span class="line"><span class="comment">// New Service</span></span><br><span class="line">service := micro.NewService(</span><br><span class="line">    micro.Address(<span class="string">&quot;192.168.6.108:12341&quot;</span>),  <span class="comment">// 防止随机生成 port </span></span><br><span class="line">    micro.Name(<span class="string">&quot;go.micro.srv.getCaptcha&quot;</span>),</span><br><span class="line">    micro.Registry(consulReg),				<span class="comment">// 添加注册</span></span><br><span class="line">    micro.Version(<span class="string">&quot;latest&quot;</span>),</span><br><span class="line">)</span><br></pre></td></tr></table></figure></li>
+<li><p>启动 consul ， consul agent -dev </p>
+</li>
+</ol>
+</li>
+<li><p>修改 handler/getCaptcha.go 文件。</p>
+<ol>
+<li><p> 删除  除  Call 以外的 其他 所有函数。—— 受 .proto 文件制约。</p>
+</li>
+<li><p> 清空 Call 方法。准备添加具体实现代码。</p>
+</li>
+<li><p> 将 之前实现的图片验证码测试模块代码， 剪切到 Call方法中。</p>
+</li>
+<li><p> 在 getCaptcha/ 下 ， 添加 conf/comic.ttf </p>
+</li>
+<li><p>将 生成的图片验证码，写成 json 序列化数据， 通过 rsp 参数传出！</p>
+ <figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(e *GetCaptcha)</span> <span class="title">Call</span><span class="params">(ctx context.Context, req *getCaptcha.Request, rsp *getCaptcha.Response)</span> <span class="title">error</span></span> &#123;</span><br><span class="line">	<span class="comment">// 生成图片验证码</span></span><br><span class="line"></span><br><span class="line">	<span class="comment">// 初始化对象</span></span><br><span class="line">	<span class="built_in">cap</span> := captcha.New()</span><br><span class="line"></span><br><span class="line">	<span class="comment">// 设置字体</span></span><br><span class="line">	<span class="built_in">cap</span>.SetFont(<span class="string">&quot;./conf/comic.ttf&quot;</span>)</span><br><span class="line"></span><br><span class="line">	<span class="comment">// 设置验证码大小</span></span><br><span class="line">	<span class="built_in">cap</span>.SetSize(<span class="number">128</span>, <span class="number">64</span>)</span><br><span class="line"></span><br><span class="line">	<span class="comment">// 设置干扰强度</span></span><br><span class="line">	<span class="built_in">cap</span>.SetDisturbance(captcha.NORMAL)</span><br><span class="line"></span><br><span class="line">	<span class="comment">// 设置前景色</span></span><br><span class="line">	<span class="built_in">cap</span>.SetFrontColor(color.RGBA&#123;<span class="number">0</span>,<span class="number">0</span>,<span class="number">0</span>, <span class="number">255</span>&#125;)</span><br><span class="line"></span><br><span class="line">	<span class="comment">// 设置背景色</span></span><br><span class="line">	<span class="built_in">cap</span>.SetBkgColor(color.RGBA&#123;<span class="number">100</span>,<span class="number">0</span>,<span class="number">255</span>, <span class="number">255</span>&#125;, color.RGBA&#123;<span class="number">255</span>,<span class="number">0</span>,<span class="number">127</span>, <span class="number">255</span>&#125;, color.RGBA&#123;<span class="number">255</span>,<span class="number">255</span>,<span class="number">10</span>, <span class="number">255</span>&#125;)</span><br><span class="line"></span><br><span class="line">	<span class="comment">// 生成字体</span></span><br><span class="line">	img, _ := <span class="built_in">cap</span>.Create(<span class="number">4</span>, captcha.NUM)</span><br><span class="line"></span><br><span class="line">	<span class="comment">// 将 生成成的图片 序列化.</span></span><br><span class="line">	imgBuf, _ := json.Marshal(img)</span><br><span class="line"></span><br><span class="line">	<span class="comment">// 将 imgBuf 使用 参数 rsp 传出</span></span><br><span class="line">	rsp.Img = imgBuf</span><br><span class="line"></span><br><span class="line">	<span class="keyword">return</span> <span class="literal">nil</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+</li>
+</ol>
+</li>
+</ol>
+<h2 id="web端对接微服务实现"><a href="#web端对接微服务实现" class="headerlink" title="web端对接微服务实现"></a>web端对接微服务实现</h2><ol>
+<li><p> 拷贝密码本。 将 service 下的 proto/  拷贝 web/   下</p>
+</li>
+<li><p>在 GetImageCd() 中 导入包，起别名：</p>
+<p> <code>getCaptcha &quot;bj38web/web/proto/getCaptcha&quot; </code></p>
+</li>
+<li><p>指定consul 服务发现：</p>
+ <figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 指定 consul 服务发现</span></span><br><span class="line">consulReg := consul.NewRegistry()</span><br><span class="line"></span><br><span class="line">consulService := micro.NewService(</span><br><span class="line">    micro.Registry(consulReg),</span><br><span class="line">)</span><br></pre></td></tr></table></figure></li>
+<li><p>初始化客户端</p>
+ <figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">microClient := getCaptcha.NewGetCaptchaService(<span class="string">&quot;getCaptcha&quot;</span>, consulService.Client())</span><br><span class="line"></span><br></pre></td></tr></table></figure></li>
+<li><p>调用远程函数</p>
+ <figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">resp, err := microClient.Call(context.TODO(), &amp;getCaptcha.Request&#123;&#125;)</span><br><span class="line"><span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">    fmt.Println(<span class="string">&quot;未找到远程服务...&quot;</span>)</span><br><span class="line">    <span class="keyword">return</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+<li><p>将得到的数据,反序列化,得到图片数据</p>
+ <figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> img captcha.Image</span><br><span class="line">json.Unmarshal(resp.Img, &amp;img)</span><br></pre></td></tr></table></figure></li>
+<li><p>将图片写出到 浏览器.</p>
+ <figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">png.Encode(ctx.Writer, img)</span><br></pre></td></tr></table></figure></li>
+<li><p>测试：</p>
+<ol>
+<li>启动 consul  ，  consul agent -dev</li>
+<li>启动 service/  下的  main.go</li>
+<li>启动 web/ 下的  main.go</li>
+<li>浏览器中 192.168.IP: port/home    点击注册 查看图片验证码！</li>
+</ol>
+</li>
+</ol>
+<h2 id="连接形式"><a href="#连接形式" class="headerlink" title="连接形式"></a>连接形式</h2><ul>
+<li>长连接：<ul>
+<li>TCP。—— 有状态！</li>
+</ul>
+</li>
+<li>短连接：<ul>
+<li>http。—— 无状态！断开后，再发送请求，与上次发送无关！<ul>
+<li>选用带有 “时效性” 的介质，存储。 —— redis数据库。setex — expire。</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h1 id="Redis-数据库"><a href="#Redis-数据库" class="headerlink" title="Redis 数据库"></a>Redis 数据库</h1><h2 id="Redis-基本使用"><a href="#Redis-基本使用" class="headerlink" title="Redis 基本使用"></a>Redis 基本使用</h2><ol>
+<li>修改 配置文件。 /etc/redis/redis.conf . <ul>
+<li>bind 地址。修改成当前主机地址。 —— 192.168.6.108 </li>
+</ul>
+</li>
+<li>port：<ul>
+<li>6379</li>
+</ul>
+</li>
+<li>开启 redis：<ul>
+<li>sudo  redis-server  /etc/redis/redis.conf</li>
+<li>验证 ： ps xua | grep redis  —— iP 和 port</li>
+</ul>
+</li>
+<li>连接 redis ：<ul>
+<li>redis-cli -h 192.168.6.108 -p 6379</li>
+</ul>
+</li>
+<li>查看所有：<ul>
+<li>keys *</li>
+</ul>
+</li>
+<li>删除所有：<ul>
+<li>flushall</li>
+</ul>
+</li>
+<li>添加一条：<ul>
+<li>set key  value  ——   set  hello  world</li>
+</ul>
+</li>
+<li>获取一条：<ul>
+<li>get key </li>
+</ul>
+</li>
+</ol>
+<h2 id="go语言操作-Redis"><a href="#go语言操作-Redis" class="headerlink" title="go语言操作 Redis"></a>go语言操作 Redis</h2><ul>
+<li><p>从 redis.cn —— 客户端 —— go语言 —— 选择 redigo —— <a target="_blank" rel="noopener" href="https://godoc.org/github.com/gomodule/redigo/redis#pkg-examples">https://godoc.org/github.com/gomodule/redigo/redis#pkg-examples</a>  查看 API</p>
+</li>
+<li><p>主要分为 3 类：</p>
+<ol>
+<li>连接数据库。   <ul>
+<li>API文档中，所有以 Dial 开头。</li>
+</ul>
+</li>
+<li>操作数据库。   <ul>
+<li>Do() 函数【推荐】;  Send()函数, 需要配合Flush()、Receive() 3 个函数使用。</li>
+</ul>
+</li>
+<li>回复助手。   <ul>
+<li>相当于 “类型断言”。根据使用的具体数据类型，选择调用。</li>
+</ul>
+</li>
+</ol>
+</li>
+<li><p>添加测试案例：</p>
+  <figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">&quot;github.com/gomodule/redigo/redis&quot;</span></span><br><span class="line">	<span class="string">&quot;fmt&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span>  &#123;</span><br><span class="line">	<span class="comment">// 1. 链接数据库</span></span><br><span class="line">	conn, err := redis.Dial(<span class="string">&quot;tcp&quot;</span>, <span class="string">&quot;192.168.6.108:6379&quot;</span>)</span><br><span class="line">	<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">		fmt.Println(<span class="string">&quot;redis Dial err:&quot;</span>, err)</span><br><span class="line">		<span class="keyword">return</span></span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">defer</span> conn.Close()</span><br><span class="line"></span><br><span class="line">	<span class="comment">// 2. 操作数据库</span></span><br><span class="line">	reply, err := conn.Do(<span class="string">&quot;set&quot;</span>, <span class="string">&quot;itcast&quot;</span>, <span class="string">&quot;itheima&quot;</span>)</span><br><span class="line"></span><br><span class="line">	<span class="comment">// 3. 回复助手类函数. ---- 确定成具体的数据类型</span></span><br><span class="line">	r, e := redis.String(reply, err)</span><br><span class="line"></span><br><span class="line">	fmt.Println(r, e)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<h2 id="redis-存储-图片验证码的uuid-和-码值"><a href="#redis-存储-图片验证码的uuid-和-码值" class="headerlink" title="redis 存储 图片验证码的uuid 和 码值"></a>redis 存储 图片验证码的uuid 和 码值</h2><ul>
+<li><p>微服务端</p>
+<ol>
+<li><p>修改 service/proto 中 getCaptcha.proto 的 Request 消息体，填加 uuid 成员。</p>
+ <figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">message Request &#123;</span><br><span class="line">	<span class="keyword">string</span> uuid = <span class="number">1</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+<li><p> 使用 make 命令，重新生成 getCaptcha.proto 对应的文件。</p>
+</li>
+<li><p> 遵循 MVC 代码组织架构，在 service/getCaptcha/ 中 创建 model 目录</p>
+</li>
+<li><p>创建 modelFunc.go 文件 封装并实现 SaveImgCode() 函数：</p>
+ <figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 存储图片id 到redis 数据库</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">SaveImgCode</span><span class="params">(code, uuid <span class="keyword">string</span>)</span> <span class="title">error</span></span> &#123;</span><br><span class="line">	<span class="comment">// 1. 链接数据库</span></span><br><span class="line">	conn, err := redis.Dial(<span class="string">&quot;tcp&quot;</span>, <span class="string">&quot;192.168.6.108:6379&quot;</span>)</span><br><span class="line">	<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">		fmt.Println(<span class="string">&quot;redis Dial err:&quot;</span>, err)</span><br><span class="line">		<span class="keyword">return</span> err</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">defer</span> conn.Close()</span><br><span class="line"></span><br><span class="line">	<span class="comment">// 2. 写数据库  --- 有效时间 5 分钟</span></span><br><span class="line">	_, err = conn.Do(<span class="string">&quot;setex&quot;</span>, uuid, <span class="number">60</span>*<span class="number">5</span>, code)</span><br><span class="line"></span><br><span class="line">	<span class="keyword">return</span> err  <span class="comment">// 不需要回复助手!</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+<li><p>在 getCaptcha.go 文件的 Call() 方法中， cap.Create() 后， 调用 SaveImgCode() 传参。</p>
+</li>
+</ol>
+</li>
+<li><p>web端</p>
+<ol>
+<li><p> 修改密码本！因为 微服务端 修改了 proto/  , 添加消息体成员。 需要重新拷贝 proto/ 到web</p>
+</li>
+<li><p>  修改 web/controller/user.go 中 Call() 方法传参。给 Request{} 初始化。</p>
+</li>
+</ol>
+<pre><code>  <figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">resp, err := microClient.Call(context.TODO(), &amp;getCaptcha.Request&#123;Uuid:uuid&#125;)</span><br><span class="line"><span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">    fmt.Println(<span class="string">&quot;未找到远程服务...&quot;</span>)</span><br><span class="line">    <span class="keyword">return</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+</code></pre>
+<ol start="3">
+<li>测试验证：<ol>
+<li>确认 consul 已经启动 </li>
+<li>启动 service/    main.go </li>
+<li>启动 web/   main.go</li>
+<li>浏览器：192.168.6.108:8080/home  — 点击“注册”。看到 图片验证码。</li>
+<li>查看 redis 数据库， keys * 能看到 图片验证吗，对应 uuid。 校验！！</li>
+</ol>
+</li>
+</ol>
+</li>
+</ul>
+<h1 id="开发者平台"><a href="#开发者平台" class="headerlink" title="开发者平台"></a>开发者平台</h1><ul>
+<li><p>中国移动 —— 短信验证码 业务 —— 下放到各个大公司（资质）。</p>
+</li>
+<li><p>常用平台：</p>
+<ol>
+<li>聚合数据：</li>
+<li>京东万象：</li>
+<li>腾讯云：</li>
+<li>阿里云（推荐）： 推荐，服务器。—— 生态好！ API接口丰富。 对应开发友好度高！</li>
+</ol>
+</li>
+<li><p>资料搜索。</p>
+<ul>
+<li>免费：—— github </li>
+<li>收费：—— 各种开发者平台。刁钻、生僻领域。</li>
+<li>最后Google。</li>
+</ul>
+</li>
+</ul>
+<h2 id="注册阿里云账号"><a href="#注册阿里云账号" class="headerlink" title="注册阿里云账号"></a>注册阿里云账号</h2><ol>
+<li>通过实名认证</li>
+<li>开通短信验证码功能 —— 充值 2 元左右。</li>
+<li>申请 AccessKey</li>
+<li>申请签名。国内消息 —— 签名管理</li>
+<li>申请模板。国内消息 —— 模板管理</li>
+<li>测试使用  OpenAPI Explorer， 成功发送一条短信验证码！</li>
+</ol>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/%E5%BE%AE%E6%9C%8D%E5%8A%A1/" rel="tag"># 微服务</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/01/04/golang/%E5%BE%AE%E6%9C%8D%E5%8A%A1/03go-Micro%20%E6%A1%86%E6%9E%B6/" rel="next" title="微服务学习--03go-Micro 框架">
+                <i class="fa fa-chevron-left"></i> 微服务学习--03go-Micro 框架
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2020/01/04/golang/%E5%BE%AE%E6%9C%8D%E5%8A%A1/02grpc%20%E8%BF%9C%E7%A8%8B%E8%B0%83%E7%94%A8/" rel="prev" title="微服务学习--02grpc 远程调用">
+                微服务学习--02grpc 远程调用 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+      <div id="sidebar-dimmer"></div>
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/i.jpeg"
+                alt="" />
+            
+              <p class="site-author-name" itemprop="name"></p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/%7C%7C%20archive">
+              
+                  <span class="site-state-item-count">61</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">9</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">23</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/wangzengming" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:wangzengming@aliyun.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%9B%BE%E7%89%87%E9%AA%8C%E8%AF%81%E7%A0%81"><span class="nav-number">1.</span> <span class="nav-text">图片验证码</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%8E%B7%E5%8F%96-%E6%B3%A8%E5%86%8C%E9%A1%B5%E9%9D%A2-%E5%9B%BE%E7%89%87%E9%AA%8C%E8%AF%81%E7%A0%81ID"><span class="nav-number">1.1.</span> <span class="nav-text">获取 注册页面 图片验证码ID</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9B%BE%E7%89%87%E9%AA%8C%E8%AF%81%E7%A0%81%E8%8E%B7%E5%8F%96"><span class="nav-number">1.2.</span> <span class="nav-text">图片验证码获取</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9B%BE%E7%89%87%E9%AA%8C%E8%AF%81%E7%A0%81%E6%A8%A1%E5%9D%97%E9%9B%86%E6%88%90%E5%88%B0web"><span class="nav-number">1.3.</span> <span class="nav-text">图片验证码模块集成到web</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BE%AE%E6%9C%8D%E5%8A%A1%E5%AE%9E%E7%8E%B0-%E5%9B%BE%E7%89%87%E9%AA%8C%E8%AF%81%E7%A0%81"><span class="nav-number">1.4.</span> <span class="nav-text">微服务实现 图片验证码</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#web%E7%AB%AF%E5%AF%B9%E6%8E%A5%E5%BE%AE%E6%9C%8D%E5%8A%A1%E5%AE%9E%E7%8E%B0"><span class="nav-number">1.5.</span> <span class="nav-text">web端对接微服务实现</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%BF%9E%E6%8E%A5%E5%BD%A2%E5%BC%8F"><span class="nav-number">1.6.</span> <span class="nav-text">连接形式</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Redis-%E6%95%B0%E6%8D%AE%E5%BA%93"><span class="nav-number">2.</span> <span class="nav-text">Redis 数据库</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#Redis-%E5%9F%BA%E6%9C%AC%E4%BD%BF%E7%94%A8"><span class="nav-number">2.1.</span> <span class="nav-text">Redis 基本使用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#go%E8%AF%AD%E8%A8%80%E6%93%8D%E4%BD%9C-Redis"><span class="nav-number">2.2.</span> <span class="nav-text">go语言操作 Redis</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#redis-%E5%AD%98%E5%82%A8-%E5%9B%BE%E7%89%87%E9%AA%8C%E8%AF%81%E7%A0%81%E7%9A%84uuid-%E5%92%8C-%E7%A0%81%E5%80%BC"><span class="nav-number">2.3.</span> <span class="nav-text">redis 存储 图片验证码的uuid 和 码值</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%BC%80%E5%8F%91%E8%80%85%E5%B9%B3%E5%8F%B0"><span class="nav-number">3.</span> <span class="nav-text">开发者平台</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B3%A8%E5%86%8C%E9%98%BF%E9%87%8C%E4%BA%91%E8%B4%A6%E5%8F%B7"><span class="nav-number">3.1.</span> <span class="nav-text">注册阿里云账号</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+        <div class="back-to-top">
+          <i class="fa fa-arrow-up"></i>
+          
+            <span id="scrollpercent"><span>0</span>%</span>
+          
+        </div>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">王增明</span>
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+  
+  
+
+
+
+
+
+  
+  
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/three/three.min.js"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/three/three-waves.min.js"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/three/canvas_sphere.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

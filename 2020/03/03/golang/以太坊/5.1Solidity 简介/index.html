@@ -1,0 +1,938 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+  
+  
+    
+    
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+  <link href="/lib/pace/pace-theme-minimal.min.css?v=1.0.2" rel="stylesheet">
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="以太坊," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="Solidity是什么 Solidity 是一门面向合约的、为实现智能合约而创建的高级编程语言。这门语言受到了C++，Python 和Javascript 语言的影响，设计的目的是能在以太坊虚拟机（EVM）上运行。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="5.1 Solidity简介">
+<meta property="og:url" content="http://example.com/2020/03/03/golang/%E4%BB%A5%E5%A4%AA%E5%9D%8A/5.1Solidity%20%E7%AE%80%E4%BB%8B/index.html">
+<meta property="og:site_name" content="极风键客">
+<meta property="og:description" content="Solidity是什么 Solidity 是一门面向合约的、为实现智能合约而创建的高级编程语言。这门语言受到了C++，Python 和Javascript 语言的影响，设计的目的是能在以太坊虚拟机（EVM）上运行。">
+<meta property="og:locale">
+<meta property="article:published_time" content="2020-03-03T12:46:25.000Z">
+<meta property="article:modified_time" content="2021-04-21T23:54:35.536Z">
+<meta property="article:author" content="王增明">
+<meta property="article:tag" content="以太坊">
+<meta name="twitter:card" content="summary">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":true,"scrollpercent":true,"onmobile":true},
+    fancybox: true,
+    tabs: false,
+    motion: {"enable":true,"async":true,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://example.com/2020/03/03/golang/以太坊/5.1Solidity 简介/"/>
+
+
+
+
+
+  <title>5.1 Solidity简介 | 极风键客</title>
+  
+
+
+
+
+
+
+
+
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">极风键客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-schedule">
+          <a href="/schedule/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-calendar"></i> <br />
+            
+            日程表
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2020/03/03/golang/%E4%BB%A5%E5%A4%AA%E5%9D%8A/5.1Solidity%20%E7%AE%80%E4%BB%8B/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/i.jpeg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="极风键客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">5.1 Solidity简介</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-03-03T20:46:25+08:00">
+                2020-03-03
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/golang/" itemprop="url" rel="index">
+                    <span itemprop="name">golang</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="Solidity是什么"><a href="#Solidity是什么" class="headerlink" title="Solidity是什么"></a>Solidity是什么</h1><ul>
+<li>Solidity 是一门面向合约的、为实现智能合约而创建的高级编程语言。这门语言受到了C++，Python 和Javascript 语言的影响，设计的目的是能在以太坊虚拟机（EVM）上运行。</li>
+</ul>
+<span id="more"></span>
+
+<ul>
+<li><p>Solidity 是静态类型语言，支持继承、库和复杂的用户定义类型等特性。</p>
+</li>
+<li><p>内含的类型除了常见编程语言中的标准类型，还包括address 等以太坊独有的类型，Solidity 源码文件通常以.sol 作为扩展名</p>
+</li>
+<li><p>目前尝试Solidity 编程的最好的方式是使用Remix。Remix 是一个基于Web 浏览器的IDE，它可以让你编写Solidity 智能合约，然后部署并运行该智能合约。</p>
+</li>
+</ul>
+<h1 id="Solidity语言特性"><a href="#Solidity语言特性" class="headerlink" title="Solidity语言特性"></a>Solidity语言特性</h1><p>Solidity的语法接近于JavaScript，是一种面向对象的语言。但作为一种真正意义上运行在网络上的去中心合约，它又有很多的不同：</p>
+<ul>
+<li><p>以太坊底层基于帐户，而不是UTXO，所以增加了一个特殊的address 的数据类型用于定位用户和合约账户。</p>
+</li>
+<li><p>语言内嵌框架支持支付。提供了payable 等关键字，可以在语言层面直接支持支付。</p>
+</li>
+<li><p>使用区块链进行数据存储。数据的每一个状态都可以永久存储，所以在使用时需要确定变量使用内存，还是区块链存储。</p>
+</li>
+<li><p>运行环境是在去中心化的网络上，所以需要强调合约或函数执行的调用的方式。</p>
+</li>
+<li><p>不同的异常机制。一旦出现异常，所有的执行都将会被回撤，这主要是为了保证合约执行的原子性，以避免中间状态出现的数据不一致。</p>
+</li>
+</ul>
+<h1 id="Solidity源码和智能合约"><a href="#Solidity源码和智能合约" class="headerlink" title="Solidity源码和智能合约"></a>Solidity源码和智能合约</h1><ul>
+<li>Solidity 源代码要成为可以运行在以太坊上的智能合约需要经历如下的步骤：</li>
+</ul>
+<ol>
+<li><p>用Solidity 编写的智能合约源代码需要先使用编译器编译为字节码（Bytecode），编译过程中会同时产生智能合约的二进制接口规范（Application Binary Interface，简称为ABI）；</p>
+</li>
+<li><p>通过交易（Transaction）的方式将字节码部署到以太坊网络，每次成功部署都会产生一个新的智能合约账户；</p>
+</li>
+<li><p>使用Javascript 编写的DApp 通常通过web3.js + ABI去调用智能合约中的函数来实现数据的读取和修改。</p>
+</li>
+</ol>
+<h1 id="Solidity编译器"><a href="#Solidity编译器" class="headerlink" title="Solidity编译器"></a>Solidity编译器</h1><p><strong>Remix</strong></p>
+<ul>
+<li><p>Remix是一个基于Web 浏览器的SolidityIDE；可在线使用而无需安装任何东西</p>
+</li>
+<li><p><a target="_blank" rel="noopener" href="http://remix.ethereum.org/">http://remix.ethereum.org</a></p>
+</li>
+</ul>
+<p><strong>solcjs</strong></p>
+<ul>
+<li><p>solc是Solidity 源码库的构建目标之一，它是Solidity 的命令行编译器</p>
+</li>
+<li><p>使用<em>npm</em>可以便捷地安装Solidity 编译器solcjs</p>
+</li>
+<li><p><em>npm install -g solc</em></p>
+</li>
+</ul>
+<h1 id="一个简单的智能合约"><a href="#一个简单的智能合约" class="headerlink" title="一个简单的智能合约"></a>一个简单的智能合约</h1><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">pragma solidity ^<span class="number">0.4</span><span class="number">.0</span>;</span><br><span class="line">contract SimpleStorage &#123; </span><br><span class="line">	uint storedData; </span><br><span class="line">	<span class="function"><span class="keyword">function</span> <span class="title">set</span>(<span class="params"> uint x</span>)  <span class="title">public</span> </span>&#123; </span><br><span class="line">		storedData = x; </span><br><span class="line">	&#125; </span><br><span class="line">	<span class="function"><span class="keyword">function</span> <span class="title">get</span>(<span class="params"></span>) <span class="title">publicviewreturns</span>(<span class="params"> uint </span>) </span>&#123; </span><br><span class="line">		<span class="keyword">return</span> storedData; </span><br><span class="line">	&#125; </span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h1 id="智能合约概述"><a href="#智能合约概述" class="headerlink" title="智能合约概述"></a>智能合约概述</h1><p>Solidity中合约</p>
+<ul>
+<li>一组代码（合约的函数)和数据（合约的状态），它们位于以太坊区块链的一个特定地址上</li>
+<li>代码行uintstoredData;声明一个类型为uint(256位无符号整数）的状态变量，叫做storedData</li>
+<li>函数set和get可以用来变更或取出变量的值</li>
+</ul>
+<h1 id="合约结构"><a href="#合约结构" class="headerlink" title="合约结构"></a>合约结构</h1><ul>
+<li><p>状态变量（State Variables）</p>
+<p>作为合约状态的一部分，值会永久保存在存储空间内。</p>
+</li>
+<li><p>函数（Functions）</p>
+<p>合约中可执行的代码块。</p>
+</li>
+<li><p>函数修饰器（Function Modifiers）</p>
+<p>用在函数声明中，用来补充修饰函数的语义。</p>
+</li>
+<li><p>事件（Events）</p>
+<p>非常方便的EVM 日志工具接口。</p>
+</li>
+</ul>
+<h1 id="智能合约练习"><a href="#智能合约练习" class="headerlink" title="智能合约练习"></a>智能合约练习</h1><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">pragma</span><br><span class="line">solidity &gt;<span class="number">0.4</span><span class="number">.22</span>;</span><br><span class="line">contract Car &#123;</span><br><span class="line">	string public brand;</span><br><span class="line">	uint public price;</span><br><span class="line">	<span class="function"><span class="title">constructor</span>(<span class="params"> string initBrand, uint initPrice</span>)</span>&#123;</span><br><span class="line">		brand = initBrand;</span><br><span class="line">		price = initPrice;</span><br><span class="line">	&#125;;</span><br><span class="line">	<span class="function"><span class="keyword">function</span> <span class="title">setBrand</span>(<span class="params"> string newBrand</span>) <span class="title">public</span> </span>&#123;</span><br><span class="line">		brand = newBrand;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="function"><span class="keyword">function</span> <span class="title">setPrice</span>(<span class="params"> uint newPrice</span>)(<span class="params"> uint </span>) </span>&#123;</span><br><span class="line">		price = newPrice;</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>另一个例子——子货币</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">pragma solidity &gt;<span class="number">0.4</span><span class="number">.22</span> &lt;<span class="number">0.6</span><span class="number">.0</span>;</span><br><span class="line">contract Coin &#123;</span><br><span class="line">	address public minter;</span><br><span class="line">	mapping (<span class="function"><span class="params">address</span> =&gt;</span> uint ) public balances;</span><br><span class="line">	event Sent( address <span class="keyword">from</span>, address to, uint amount);</span><br><span class="line">	<span class="title">constructor</span> <span class="title">public</span> &#123; minter = msg.sender; &#125;</span><br><span class="line">	<span class="function"><span class="keyword">function</span> <span class="title">mint</span>(<span class="params"> address receiver, uint amount</span>) <span class="title">public</span> </span>&#123;</span><br><span class="line">		<span class="built_in">require</span>(msg.sender == minter);</span><br><span class="line">		balances[receiver] += amount;</span><br><span class="line">	&#125;</span><br><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">send</span>(<span class="params"> address receiver, uint amount</span>) <span class="title">public</span> </span>&#123;</span><br><span class="line">	<span class="built_in">require</span>(amount &lt;= balances[msg.sender]);</span><br><span class="line">	balances[msg.sender]</span><br><span class="line">	--= amount;</span><br><span class="line">	balances[receiver] += amount;</span><br><span class="line">	emit Sent(msg.sender, receiver, amount);</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line">pragma solidity &gt;<span class="number">0.4</span><span class="number">.22</span>;</span><br><span class="line">contract Coin&#123;</span><br><span class="line">    address public minter;</span><br><span class="line">    mapping(<span class="function"><span class="params">address</span>=&gt;</span>uint) balances;</span><br><span class="line">    event Sent(address <span class="keyword">from</span> ,address to,uint amout);</span><br><span class="line">    <span class="function"><span class="title">constructor</span>(<span class="params"></span>)</span>&#123;</span><br><span class="line">        minter = msg.sender;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">function</span> <span class="title">mint</span>(<span class="params">address receiver,uint amount</span>)<span class="title">public</span></span>&#123;</span><br><span class="line">        <span class="built_in">require</span>(msg.sender == minter);</span><br><span class="line">        balances[receiver]+=amount;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">function</span> <span class="title">send</span>(<span class="params">address receiver,uint amount</span>)<span class="title">public</span></span>&#123;</span><br><span class="line">        <span class="built_in">require</span>(balances[msg.sender]&gt;=amount);</span><br><span class="line">        balances[msg.sender]-=amount;</span><br><span class="line">        balances[receiver]+=amount;</span><br><span class="line">        </span><br><span class="line">        emit Sent(msg.sender,receiver,amount);</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">pragma solidity &gt;<span class="number">0.4</span><span class="number">.20</span>;</span><br><span class="line">contract MyToken &#123;</span><br><span class="line">    mapping (<span class="function"><span class="params">address</span> =&gt;</span>uint256 )public balanceOf;</span><br><span class="line">    <span class="function"><span class="title">constructor</span>(<span class="params">uint256 intitialSupply</span>)</span>&#123;</span><br><span class="line">        balanceOf[msg.sender] = intitialSupply;</span><br><span class="line">    &#125;</span><br><span class="line">    <span class="function"><span class="keyword">function</span> <span class="title">transfer</span>(<span class="params">address _to,uint256 _value</span>)<span class="title">public</span> <span class="title">returns</span> (<span class="params">bool success</span>)</span>&#123;</span><br><span class="line">        <span class="built_in">require</span>(balanceOf[msg.sender] &gt;= _value);</span><br><span class="line">        <span class="built_in">require</span>(balanceOf[_to] +_value &gt;=balanceOf[_to]);</span><br><span class="line">        balanceOf[msg.sender] -= _value;</span><br><span class="line">        balanceOf[_to]+=_value;</span><br><span class="line">        <span class="keyword">return</span> <span class="literal">true</span>;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+<h1 id="合约代码解读"><a href="#合约代码解读" class="headerlink" title="合约代码解读"></a>合约代码解读</h1><p><em>address</em><strong>public</strong>minter;</p>
+<ul>
+<li><p>这一行声明了一个可以被公开访问的address类型的状态变量。</p>
+</li>
+<li><p>关键字public自动生成一个函数，允许你在这个合约之外访问这个状态变量的当前值。</p>
+</li>
+</ul>
+<p><em>mapping(address =&gt; uint) public balances;</em></p>
+<ul>
+<li><p>也创建一个公共状态变量，但它是一个更复杂的数据类型，该类型将<em>address</em>映射为无符号整数。</p>
+</li>
+<li><p><em>mappings</em>可以看作是一个<strong>哈希表</strong>，它会执行虚拟初始化，把所有可能存在的键都映射到一个字节表示为全零的值。</p>
+</li>
+</ul>
+<h1 id="合约代码解读-1"><a href="#合约代码解读-1" class="headerlink" title="合约代码解读"></a>合约代码解读</h1><p><strong>event</strong>Sent(<em>address</em> from,<em>address</em> to,<em>uint</em> amount);</p>
+<ul>
+<li><p>声明了一个“事件”（event），它会在send函数的最后一行触发</p>
+</li>
+<li><p>用户可以监听区块链上正在发送的事件，而不会花费太多成本。一旦它被发出，监听该事件的listener都将收到通知</p>
+</li>
+<li><p>所有的事件都包含了from，to和amount三个参数，可方便追踪事务</p>
+</li>
+</ul>
+<p><strong>emit</strong>Sent(msg.sender, receiver, amount);</p>
+<ul>
+<li>触发Sent事件，并将参数传入</li>
+</ul>
+<h1 id="事件的监听"><a href="#事件的监听" class="headerlink" title="事件的监听"></a>事件的监听</h1><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">Coin.Sent().watch(&#123;&#125;, <span class="string">&#x27;&#x27;</span>,<span class="function"><span class="keyword">function</span> (<span class="params">error, result</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">if</span>(!error) &#123;</span><br><span class="line">		<span class="built_in">console</span>.log(<span class="string">&quot;Coin transfer: &quot;</span> + result.args.amount + <span class="string">&quot;coins were sent from&quot;</span> + result.args.from +<span class="string">&quot; to &quot;</span> + result.args.to + <span class="string">&quot;.&quot;</span>);</span><br><span class="line">		<span class="built_in">console</span>.log(<span class="string">&quot;Balances now:n &quot;</span> +<span class="string">&quot;Sender: &quot;</span> + Coin.balances.call(result.args. <span class="keyword">from</span> ) +<span class="string">&quot;Receiver: &quot;</span> + Coin.balances.call(result.args.to));</span><br><span class="line">  &#125;</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">pragma solidity &gt;<span class="number">0.4</span><span class="number">.22</span> &lt;<span class="number">0.6</span><span class="number">.0</span>;</span><br><span class="line">contract Coin &#123;</span><br><span class="line">	address public minter;</span><br><span class="line">	mapping address =&gt; uint ) public balances;</span><br><span class="line">	event Sent( address <span class="keyword">from</span>, address to, uint amount);</span><br><span class="line">	<span class="title">constructor</span> <span class="title">public</span> &#123; minter = msg.sender; &#125;</span><br><span class="line">	<span class="function"><span class="keyword">function</span> <span class="title">mint</span>(<span class="params"> address receiver, uint amount</span>) <span class="title">public</span> </span>&#123;</span><br><span class="line">		<span class="built_in">require</span>(msg.sender == minter);</span><br><span class="line">		balances[receiver] += amount;</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="function"><span class="keyword">function</span> <span class="title">send</span>(<span class="params"> address receiver, uint amount</span>) <span class="title">public</span> </span>&#123;</span><br><span class="line">		<span class="built_in">require</span>(amount &lt;= balances[msg.sender]);</span><br><span class="line">		balances[msg.sender]--= amount;</span><br><span class="line">		balances[receiver] += amount;</span><br><span class="line">		emit Sent(msg.sender, receiver, amount);</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+
+
+
+<h1 id="Ballot-–一个简单的投票合约"><a href="#Ballot-–一个简单的投票合约" class="headerlink" title="Ballot –一个简单的投票合约"></a>Ballot –一个简单的投票合约</h1><ul>
+<li><p>电子投票的主要问题是如何将投票权分配给正确的人员以及如何防止被操纵。这个合约展示了如何进行委托投票，同时，计票又是<strong>自动和完全透明的</strong></p>
+</li>
+<li><p>为每个（投票）表决创建一份合约，然后作为合约的创造者——即主席，将给予每个独立的地址以投票权</p>
+</li>
+<li><p>地址后面的人可以选择自己投票，或者委托给他们信任的人来投票</p>
+</li>
+<li><p>在投票时间结束时，winningProposal()将返回获得最多投票的提案</p>
+</li>
+</ul>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/%E4%BB%A5%E5%A4%AA%E5%9D%8A/" rel="tag"># 以太坊</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/03/03/golang/%E4%BB%A5%E5%A4%AA%E5%9D%8A/5.4_Ballot/" rel="next" title="5.4 Ballot( 投票合约 )">
+                <i class="fa fa-chevron-left"></i> 5.4 Ballot( 投票合约 )
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2020/03/03/golang/%E4%BB%A5%E5%A4%AA%E5%9D%8A/4.3%E4%BB%A5%E5%A4%AA%E5%9D%8A%E8%99%9A%E6%8B%9F%E6%9C%BA%EF%BC%88%20EVM)/" rel="prev" title="4.3 以太坊虚拟机">
+                4.3 以太坊虚拟机 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+      <div id="sidebar-dimmer"></div>
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/i.jpeg"
+                alt="" />
+            
+              <p class="site-author-name" itemprop="name"></p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/%7C%7C%20archive">
+              
+                  <span class="site-state-item-count">61</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">9</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">23</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/wangzengming" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:wangzengming@aliyun.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#Solidity%E6%98%AF%E4%BB%80%E4%B9%88"><span class="nav-number">1.</span> <span class="nav-text">Solidity是什么</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Solidity%E8%AF%AD%E8%A8%80%E7%89%B9%E6%80%A7"><span class="nav-number">2.</span> <span class="nav-text">Solidity语言特性</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Solidity%E6%BA%90%E7%A0%81%E5%92%8C%E6%99%BA%E8%83%BD%E5%90%88%E7%BA%A6"><span class="nav-number">3.</span> <span class="nav-text">Solidity源码和智能合约</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Solidity%E7%BC%96%E8%AF%91%E5%99%A8"><span class="nav-number">4.</span> <span class="nav-text">Solidity编译器</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%B8%80%E4%B8%AA%E7%AE%80%E5%8D%95%E7%9A%84%E6%99%BA%E8%83%BD%E5%90%88%E7%BA%A6"><span class="nav-number">5.</span> <span class="nav-text">一个简单的智能合约</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%99%BA%E8%83%BD%E5%90%88%E7%BA%A6%E6%A6%82%E8%BF%B0"><span class="nav-number">6.</span> <span class="nav-text">智能合约概述</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%90%88%E7%BA%A6%E7%BB%93%E6%9E%84"><span class="nav-number">7.</span> <span class="nav-text">合约结构</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%99%BA%E8%83%BD%E5%90%88%E7%BA%A6%E7%BB%83%E4%B9%A0"><span class="nav-number">8.</span> <span class="nav-text">智能合约练习</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%90%88%E7%BA%A6%E4%BB%A3%E7%A0%81%E8%A7%A3%E8%AF%BB"><span class="nav-number">9.</span> <span class="nav-text">合约代码解读</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%90%88%E7%BA%A6%E4%BB%A3%E7%A0%81%E8%A7%A3%E8%AF%BB-1"><span class="nav-number">10.</span> <span class="nav-text">合约代码解读</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BA%8B%E4%BB%B6%E7%9A%84%E7%9B%91%E5%90%AC"><span class="nav-number">11.</span> <span class="nav-text">事件的监听</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Ballot-%E2%80%93%E4%B8%80%E4%B8%AA%E7%AE%80%E5%8D%95%E7%9A%84%E6%8A%95%E7%A5%A8%E5%90%88%E7%BA%A6"><span class="nav-number">12.</span> <span class="nav-text">Ballot –一个简单的投票合约</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+        <div class="back-to-top">
+          <i class="fa fa-arrow-up"></i>
+          
+            <span id="scrollpercent"><span>0</span>%</span>
+          
+        </div>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">王增明</span>
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+  
+  
+
+
+
+
+
+  
+  
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/three/three.min.js"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/three/three-waves.min.js"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/three/canvas_sphere.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

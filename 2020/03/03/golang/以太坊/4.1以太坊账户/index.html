@@ -1,0 +1,935 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+  
+  
+    
+    
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+  <link href="/lib/pace/pace-theme-minimal.min.css?v=1.0.2" rel="stylesheet">
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="以太坊," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="从UTXO谈起 比特币在基于UTXO的结构中存储有关用户余额的数据：系统的整个状态就是一组UTXO的集合，每个UTXO都有一个所有者和一个面值（就像不同的硬币），而交易会花费若干个输入的UTXO，并根据规则创建若干个新的UTXO： 每个引用的输入必须有效且尚未花费；对于一个交易，必须包含有与每个输入的所有者匹配的签名；总输入必须大于等于总输出值 所以，系统中用户的余额（balance）是用户具有私">
+<meta property="og:type" content="article">
+<meta property="og:title" content="4.1 以太坊账户">
+<meta property="og:url" content="http://example.com/2020/03/03/golang/%E4%BB%A5%E5%A4%AA%E5%9D%8A/4.1%E4%BB%A5%E5%A4%AA%E5%9D%8A%E8%B4%A6%E6%88%B7/index.html">
+<meta property="og:site_name" content="极风键客">
+<meta property="og:description" content="从UTXO谈起 比特币在基于UTXO的结构中存储有关用户余额的数据：系统的整个状态就是一组UTXO的集合，每个UTXO都有一个所有者和一个面值（就像不同的硬币），而交易会花费若干个输入的UTXO，并根据规则创建若干个新的UTXO： 每个引用的输入必须有效且尚未花费；对于一个交易，必须包含有与每个输入的所有者匹配的签名；总输入必须大于等于总输出值 所以，系统中用户的余额（balance）是用户具有私">
+<meta property="og:locale">
+<meta property="article:published_time" content="2020-03-03T12:46:25.000Z">
+<meta property="article:modified_time" content="2021-07-15T09:58:16.092Z">
+<meta property="article:author" content="王增明">
+<meta property="article:tag" content="以太坊">
+<meta name="twitter:card" content="summary">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":true,"scrollpercent":true,"onmobile":true},
+    fancybox: true,
+    tabs: false,
+    motion: {"enable":true,"async":true,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://example.com/2020/03/03/golang/以太坊/4.1以太坊账户/"/>
+
+
+
+
+
+  <title>4.1 以太坊账户 | 极风键客</title>
+  
+
+
+
+
+
+
+
+
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">极风键客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-schedule">
+          <a href="/schedule/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-calendar"></i> <br />
+            
+            日程表
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2020/03/03/golang/%E4%BB%A5%E5%A4%AA%E5%9D%8A/4.1%E4%BB%A5%E5%A4%AA%E5%9D%8A%E8%B4%A6%E6%88%B7/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/i.jpeg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="极风键客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">4.1 以太坊账户</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-03-03T20:46:25+08:00">
+                2020-03-03
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/golang/" itemprop="url" rel="index">
+                    <span itemprop="name">golang</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="从UTXO谈起"><a href="#从UTXO谈起" class="headerlink" title="从UTXO谈起"></a>从UTXO谈起</h1><ul>
+<li>比特币在基于UTXO的结构中存储有关用户余额的数据：系统的整个状态就是一组UTXO的集合，每个UTXO都有一个所有者和一个面值（就像不同的硬币），而交易会花费若干个输入的UTXO，并根据规则创建若干个新的UTXO：</li>
+<li>每个引用的输入必须有效且尚未花费；对于一个交易，必须包含有与每个输入的所有者匹配的签名；总输入必须大于等于总输出值</li>
+<li>所以，系统中用户的余额（balance）是用户具有私钥的UTXO 的总值</li>
+</ul>
+<span id="more"></span>
+
+<h1 id="以太坊的做法"><a href="#以太坊的做法" class="headerlink" title="以太坊的做法"></a>以太坊的做法</h1><ul>
+<li><p>以太坊的“状态”，就是系统中所有帐户的列表</p>
+</li>
+<li><p>每个账户都包括了一个余额（balance），和以太坊特殊定义的数据（代码和内部存储）</p>
+</li>
+<li><p>如果发送帐户有足够的余额来支付，则交易有效；在这种情况下发送帐户先扣款，而收款帐户将记入这笔收入</p>
+</li>
+<li><p>如果接收帐户有相关代码，则代码会自动运行，并且它的内部存储也可能被更改，或者代码还可能向其他帐户发送额外的消息，这就会导致进一步的借贷资金关系</p>
+</li>
+</ul>
+<h1 id="优缺点比较"><a href="#优缺点比较" class="headerlink" title="优缺点比较"></a>优缺点比较</h1><p>比特币UTXO 模式优点：</p>
+<ul>
+<li><p>更高程度的隐私：如果用户为他们收到的每笔交易使用新地址，那么通常很难将帐户相互链接。这很大程度上适用于货币，但不太适用于任意dapps，因为dapps通常涉及跟踪和用户绑定的复杂状态，可能不存在像货币那样简单的用户状态划分方案。</p>
+</li>
+<li><p>潜在的可扩展性：UTXO在理论上更符合可扩展性要求。因为我们只需要依赖拥有UTXO 的那些人去维护基于Merkle树的所有权证明就够了，即使包括所有者在内的每个人都决定忘记该数据，那么也只有所有者受到对应UTXO的损失，不影响接下来的交易。而在帐户模式中，如果每个人都丢失了与帐户相对应的Merkle树的部分，那将会使得和该帐户有关的消息完全无法处理，包括发币给它。</p>
+</li>
+</ul>
+<p>以太坊账户模式优点：</p>
+<ul>
+<li><p>可以节省大量空间：不将UTXOs 分开存储，而是合为一个账户；每个交易只需要一个输入、一个签名并产生一个输出。</p>
+</li>
+<li><p>更好的可替代性：货币本质上都是同质化、可替代的；UTXO的设计使得货币从来源分成了“可花费”和“不可花费”两类，这在实际应用中很难有对应的模型。</p>
+</li>
+<li><p>更加简单：更容易编码和理解，特别是设计复杂脚本的时候。UTXO在脚本逻辑复杂时更令人费解。</p>
+</li>
+<li><p>便于维护持久轻节点：只要沿着特定方向扫描状态树，轻节点可以很容易地随时访问账户相关的所有数据。而UTXO的每个交易都会使得状态引用发生改变，这对轻节点来说长时间运行Dapp会有很大压力。</p>
+</li>
+</ul>
+<p>比特币和以太坊的对比</p>
+<table>
+<thead>
+<tr>
+<th></th>
+<th>BitCoin</th>
+<th>Ethereum</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>设计定位</td>
+<td>现金系统</td>
+<td>去中心化应用平台</td>
+</tr>
+<tr>
+<td>数据组成</td>
+<td>交易列表(账本)</td>
+<td>交易和账户状态</td>
+</tr>
+<tr>
+<td>交易对象</td>
+<td>UTXO</td>
+<td>Accouts</td>
+</tr>
+<tr>
+<td>代码控制</td>
+<td>脚本</td>
+<td>智能合约</td>
+</tr>
+</tbody></table>
+<h1 id="以太坊账户类型"><a href="#以太坊账户类型" class="headerlink" title="以太坊账户类型"></a>以太坊账户类型</h1><ul>
+<li><p>外部账户(Externally owned account, EOA )</p>
+</li>
+<li><p>合约账户(Contract accounts)</p>
+</li>
+</ul>
+<h1 id="EOA"><a href="#EOA" class="headerlink" title="EOA"></a>EOA</h1><p>外部账户（用户账户/普通账户）</p>
+<ul>
+<li><p>有对应的以太币余额</p>
+</li>
+<li><p>可发送交易（转币或触发合约代码）</p>
+</li>
+<li><p>由用户私钥控制</p>
+</li>
+<li><p>没有关联代码</p>
+</li>
+</ul>
+<h1 id="合约账户"><a href="#合约账户" class="headerlink" title="合约账户"></a>合约账户</h1><p>外部账户</p>
+<ul>
+<li><p>有对应的以太币余额</p>
+</li>
+<li><p>有关联代码</p>
+</li>
+<li><p>由代码控制</p>
+</li>
+<li><p>可通过交易或来自其它合约的调用消息来触发代码执行</p>
+</li>
+<li><p>执行代码时可以操作自己的存储空间，也可以调用其它合约</p>
+</li>
+</ul>
+<h1 id="以太坊交易（Transaction）"><a href="#以太坊交易（Transaction）" class="headerlink" title="以太坊交易（Transaction）"></a>以太坊交易（Transaction）</h1><p>签名的数据包，由EOA发送到另一个账户</p>
+<ul>
+<li><p>消息的接收方地址</p>
+</li>
+<li><p>发送方签名</p>
+</li>
+<li><p>金额（VALUE）</p>
+</li>
+<li><p>数据（DATA，可选）</p>
+</li>
+<li><p>START GAS </p>
+</li>
+<li><p>GAS PRICE</p>
+</li>
+</ul>
+<h1 id="消息（Message）"><a href="#消息（Message）" class="headerlink" title="消息（Message）"></a>消息（Message）</h1><ol>
+<li><p>合约可以向其它合约发送“消息”</p>
+</li>
+<li><p>消息是不会被序列化的虚拟对象，只存在于以太坊执行环境（EVM）中</p>
+</li>
+<li><p>可以看作函数调用</p>
+</li>
+</ol>
+<ul>
+<li><p>消息发送方</p>
+</li>
+<li><p>消息接收方</p>
+</li>
+<li><p>金额（VALUE）</p>
+</li>
+<li><p>数据（DATA，可选）</p>
+</li>
+<li><p>START GAS</p>
+</li>
+</ul>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/%E4%BB%A5%E5%A4%AA%E5%9D%8A/" rel="tag"># 以太坊</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/03/03/golang/%E4%BB%A5%E5%A4%AA%E5%9D%8A/5.3ERC20%20%E4%BB%A3%E5%B8%81%E5%90%88%E7%BA%A6/" rel="next" title="3.3 ERC20 代币合约">
+                <i class="fa fa-chevron-left"></i> 3.3 ERC20 代币合约
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2020/03/03/java/Java-JDBC%E6%95%B0%E6%8D%AE%E5%BA%93%E8%BF%9E%E6%8E%A5/" rel="prev" title="Java-IO操作">
+                Java-IO操作 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+      <div id="sidebar-dimmer"></div>
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/i.jpeg"
+                alt="" />
+            
+              <p class="site-author-name" itemprop="name"></p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/%7C%7C%20archive">
+              
+                  <span class="site-state-item-count">61</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">9</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">23</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/wangzengming" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:wangzengming@aliyun.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BB%8EUTXO%E8%B0%88%E8%B5%B7"><span class="nav-number">1.</span> <span class="nav-text">从UTXO谈起</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BB%A5%E5%A4%AA%E5%9D%8A%E7%9A%84%E5%81%9A%E6%B3%95"><span class="nav-number">2.</span> <span class="nav-text">以太坊的做法</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BC%98%E7%BC%BA%E7%82%B9%E6%AF%94%E8%BE%83"><span class="nav-number">3.</span> <span class="nav-text">优缺点比较</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BB%A5%E5%A4%AA%E5%9D%8A%E8%B4%A6%E6%88%B7%E7%B1%BB%E5%9E%8B"><span class="nav-number">4.</span> <span class="nav-text">以太坊账户类型</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#EOA"><span class="nav-number">5.</span> <span class="nav-text">EOA</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%90%88%E7%BA%A6%E8%B4%A6%E6%88%B7"><span class="nav-number">6.</span> <span class="nav-text">合约账户</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BB%A5%E5%A4%AA%E5%9D%8A%E4%BA%A4%E6%98%93%EF%BC%88Transaction%EF%BC%89"><span class="nav-number">7.</span> <span class="nav-text">以太坊交易（Transaction）</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%B6%88%E6%81%AF%EF%BC%88Message%EF%BC%89"><span class="nav-number">8.</span> <span class="nav-text">消息（Message）</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+        <div class="back-to-top">
+          <i class="fa fa-arrow-up"></i>
+          
+            <span id="scrollpercent"><span>0</span>%</span>
+          
+        </div>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">王增明</span>
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+  
+  
+
+
+
+
+
+  
+  
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/three/three.min.js"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/three/three-waves.min.js"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/three/canvas_sphere.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

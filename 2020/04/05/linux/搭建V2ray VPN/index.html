@@ -1,0 +1,856 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+  
+  
+    
+    
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+  <link href="/lib/pace/pace-theme-minimal.min.css?v=1.0.2" rel="stylesheet">
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="linux,centos," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="V2Ray是一个优秀的开源网络代理工具，可以帮助你畅爽体验互联网，目前已经全平台支持Windows、Mac、Android、IOS、Linux等操作系统的使用。相对起Shadowsocks来说属于后起之秀，在混淆能力、兼容性、速度上有着独到的优点。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="搭建V2ray VPN">
+<meta property="og:url" content="http://example.com/2020/04/05/linux/%E6%90%AD%E5%BB%BAV2ray%20VPN/index.html">
+<meta property="og:site_name" content="极风键客">
+<meta property="og:description" content="V2Ray是一个优秀的开源网络代理工具，可以帮助你畅爽体验互联网，目前已经全平台支持Windows、Mac、Android、IOS、Linux等操作系统的使用。相对起Shadowsocks来说属于后起之秀，在混淆能力、兼容性、速度上有着独到的优点。">
+<meta property="og:locale">
+<meta property="article:published_time" content="2020-04-05T12:46:25.000Z">
+<meta property="article:modified_time" content="2021-07-15T09:59:46.095Z">
+<meta property="article:author" content="王增明">
+<meta property="article:tag" content="linux">
+<meta property="article:tag" content="centos">
+<meta name="twitter:card" content="summary">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":true,"scrollpercent":true,"onmobile":true},
+    fancybox: true,
+    tabs: false,
+    motion: {"enable":true,"async":true,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://example.com/2020/04/05/linux/搭建V2ray VPN/"/>
+
+
+
+
+
+  <title>搭建V2ray VPN | 极风键客</title>
+  
+
+
+
+
+
+
+
+
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">极风键客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-schedule">
+          <a href="/schedule/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-calendar"></i> <br />
+            
+            日程表
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2020/04/05/linux/%E6%90%AD%E5%BB%BAV2ray%20VPN/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/i.jpeg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="极风键客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">搭建V2ray VPN</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-04-05T20:46:25+08:00">
+                2020-04-05
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/linux/" itemprop="url" rel="index">
+                    <span itemprop="name">linux</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>V2Ray是一个优秀的开源网络代理工具，可以帮助你畅爽体验互联网，目前已经全平台支持Windows、Mac、Android、IOS、Linux等操作系统的使用。相对起Shadowsocks来说属于后起之秀，在混淆能力、兼容性、速度上有着独到的优点。</p>
+<span id="more"></span>
+
+<h3 id="1-服务器安装"><a href="#1-服务器安装" class="headerlink" title="1.服务器安装"></a>1.服务器安装</h3><p>连接远程服务器</p>
+<p>进入root账户</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">sudo -i</span><br></pre></td></tr></table></figure>
+
+<p>运行脚本,进行安装便可</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">[root@wzm-pc ~]# bash &lt;(curl -s -L https://git.io/v2ray.sh)</span><br><span class="line">........... V2Ray 一键安装脚本 &amp; 管理脚本 by 233v2.com ..........</span><br><span class="line">帮助说明: https://233v2.com/post/1/</span><br><span class="line">搭建教程: https://233v2.com/post/2/</span><br><span class="line"></span><br><span class="line"> 1. 安装</span><br><span class="line"> 2. 卸载</span><br><span class="line"></span><br><span class="line">请选择 [1-2]:</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p>快速管理命令：<br><code>v2ray info</code> 查看 V2Ray 配置信息</p>
+<p><code>v2ray config</code> 修改 V2Ray 配置</p>
+<p><code>v2ray link</code> 生成 V2Ray 配置文件链接</p>
+<p><code>v2ray infolink</code> 生成 V2Ray 配置信息链接</p>
+<p><code>v2ray qr</code> 生成 V2Ray 配置二维码链接</p>
+<p><code>v2ray ss</code> 修改 Shadowsocks 配置</p>
+<p><code>v2ray ssinfo</code> 查看 Shadowsocks 配置信息</p>
+<p><code>v2ray ssqr</code> 生成 Shadowsocks 配置二维码链接</p>
+<p><code>v2ray status</code> 查看 V2Ray 运行状态</p>
+<p><code>v2ray start</code> 启动 V2Ray</p>
+<p><code>v2ray stop</code> 停止 V2Ray</p>
+<p><code>v2ray restart</code> 重启 V2Ray</p>
+<p><code>v2ray log</code> 查看 V2Ray 运行日志</p>
+<p><code>v2ray update</code> 更新 V2Ray</p>
+<p><code>v2ray update.sh</code> 更新 V2Ray 管理脚本</p>
+<p><code>v2ray uninstall</code> 卸载 V2Ray</p>
+<h3 id="2-客户端配置"><a href="#2-客户端配置" class="headerlink" title="2. 客户端配置"></a>2. 客户端配置</h3><p><strong>V2RayW Win</strong><br><a target="_blank" rel="noopener" href="https://mianao.info/go/aHR0cHM6Ly9naXRodWIuY29tL0Nlbm1yZXYvVjJSYXlX">下载：https://github.com/Cenmrev/V2RayW</a></p>
+<p><strong>V2RayN Win</strong><br><a target="_blank" rel="noopener" href="https://mianao.info/go/aHR0cHM6Ly9naXRodWIuY29tLzJkdXN0L3YycmF5Tg">下载：https://github.com/2dust/v2rayN</a></p>
+<p><strong>V2RayX MAC</strong><br><a target="_blank" rel="noopener" href="https://mianao.info/go/aHR0cHM6Ly9naXRodWIuY29tL0Nlbm1yZXYvVjJSYXlY">下载：https://github.com/Cenmrev/V2RayX</a></p>
+<p>考虑到部分电脑软件只支持http协议，本地监测的端口有socks和http这俩。</p>
+<ul>
+<li>127.0.1.1+1081是socks。</li>
+<li>127.0.2.1+1082是http。</li>
+</ul>
+<p>使用方法：</p>
+<p>手机配置更简单，我用的 v2rayNG 直接扫描生成的二维码就好了。</p>
+<p>一般协议的安装配置到此就结束了，可以直接去使用了。</p>
+<h3 id="3-使用-Cloudflare-中转-V2Ray-WebSocket-的流量"><a href="#3-使用-Cloudflare-中转-V2Ray-WebSocket-的流量" class="headerlink" title="3.使用 Cloudflare 中转 V2Ray WebSocket 的流量"></a>3.使用 Cloudflare 中转 V2Ray WebSocket 的流量</h3><p>首先你得有域名，免费的可以到这里申请 <a target="_blank" rel="noopener" href="https://mianao.info/go/aHR0cDovL3d3dy5mcmVlbm9tLmNvbS96aC9pbmRleC5odG1s">http://www.freenom.com/zh/index.html</a> 会更改DNS，设置A记录就好了</p>
+<p>安装时传输协议选择 WebSocket (即选择 3 )，V2Ray 端口选择 80，其他就默认。等待安装完成之后生成二维码或者配置参数。</p>
+<p>输入 v2ray status 看看 V2Ray 有没有在运行，如果没有，使用 netstat -lp 看看是什么程序占用了 80 / http ，解决占用程序，然后使用 v2ray start 启动 V2Ray。</p>
+<p>在 Cloudflare 注册登录加入域名解析，Crypto 那里设置 SSL 为 Flexible，DNS 那里添加一个 A 记录指向服务器 IP ，Status 那里的图标务必为橙色状态，即是 DNS and HTTP proxy(CDN)。</p>
+<p>V2Ray 配置信息</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">地址 (Address) = 域名</span><br><span class="line">端口 (Port) = 443</span><br><span class="line">用户ID (User ID) = 用户ID</span><br><span class="line">额外ID (Alter Id) = 233</span><br><span class="line">传输协议 (Network) = ws (WebSocket)</span><br><span class="line">伪装类型 (header type) = none</span><br><span class="line">TLS = 打开</span><br></pre></td></tr></table></figure>
+
+<p>Linux</p>
+<p>Copy</p>
+<p><strong>备注：</strong><br>\1. 以上使用 Cloudflare 中转 V2Ray 的 WebSocket 流量，由于 Cloudflare 实现了 TLS ，所以 V2Ray 配置信息请以上面的内容为准。<br>这种方式比较简单的利用了 Cloudflare 的 TLS，服务器和客户端两端的配置也相对很简单，而且，可以用多个域名来指向一个服务器，那就不怕封了。<br>\2. 在服务器端也可以实现 TLS。先在 DNS 那里修改之前添加的 IP 记录，将 Status 那里的图标点一下让它变成灰色状态，即是 DNS only. 然后在 Crypto 那里设置 SSL 为 Full。<br>如果当前 V2Ray 端口为 80，输入 v2ray config 回车，选择修改端口即可，修改的端口随便输入，只要不是 80 或者 443 即可。<br>再次输入 v2ray config 回车，选择修改传输协议，选择 WebSocket + TLS ，即是选择 4。按提示输入域名，域名解析 Y ，自动配置 TLS 也是 Y ，后面还会安装 Caddy 按回车继续，等待配置自动完成，生成配置二维码。<br>等配置完成后，Cloudflare 的 DNS，将 Status 那里的图标点一下让它变成橙色状态，即是 DNS and HTTP proxy(CDN)。<br>这样全部实现 TLS 配置就结束了，可以打开客户端试试。这种方式是两端都是 TLS ，但域名只能绑定一个。<br>如有问题可以先用命令: <code>systemctl status caddy</code> 或者 <code>service caddy status</code>，检查一下 Caddy 的运行状态。</p>
+<p><strong>以上两种方法各有优缺点，我选择的是第一种。</strong><br>\3. 这两种方法因为都是在 cloudflare 解析，所以不同地区速度不一样，像我用的美国 vps，最高下载速度也就 1.5M 左右。可以根据自己的情况更换 dns 商家。</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/linux/" rel="tag"># linux</a>
+          
+            <a href="/tags/centos/" rel="tag"># centos</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/04/05/linux/%E6%96%B0linux%E9%85%8D%E7%BD%AE/" rel="next" title="新linux配置">
+                <i class="fa fa-chevron-left"></i> 新linux配置
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2020/12/05/%E6%B5%81%E5%AA%92%E4%BD%93%E6%9C%8D%E5%8A%A1%E5%99%A8/nfinx-remp%E6%90%AD%E5%BB%BA/" rel="prev" title="流媒体服务器搭建">
+                流媒体服务器搭建 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+      <div id="sidebar-dimmer"></div>
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/i.jpeg"
+                alt="" />
+            
+              <p class="site-author-name" itemprop="name"></p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/%7C%7C%20archive">
+              
+                  <span class="site-state-item-count">61</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">9</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">23</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/wangzengming" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:wangzengming@aliyun.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-%E6%9C%8D%E5%8A%A1%E5%99%A8%E5%AE%89%E8%A3%85"><span class="nav-number">1.</span> <span class="nav-text">1.服务器安装</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-%E5%AE%A2%E6%88%B7%E7%AB%AF%E9%85%8D%E7%BD%AE"><span class="nav-number">2.</span> <span class="nav-text">2. 客户端配置</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-%E4%BD%BF%E7%94%A8-Cloudflare-%E4%B8%AD%E8%BD%AC-V2Ray-WebSocket-%E7%9A%84%E6%B5%81%E9%87%8F"><span class="nav-number">3.</span> <span class="nav-text">3.使用 Cloudflare 中转 V2Ray WebSocket 的流量</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+        <div class="back-to-top">
+          <i class="fa fa-arrow-up"></i>
+          
+            <span id="scrollpercent"><span>0</span>%</span>
+          
+        </div>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">王增明</span>
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+  
+  
+
+
+
+
+
+  
+  
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/three/three.min.js"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/three/three-waves.min.js"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/three/canvas_sphere.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

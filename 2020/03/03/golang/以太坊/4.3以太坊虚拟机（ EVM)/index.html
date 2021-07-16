@@ -1,0 +1,889 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+  
+  
+    
+    
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+  <link href="/lib/pace/pace-theme-minimal.min.css?v=1.0.2" rel="stylesheet">
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="以太坊," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="以太坊虚拟机（EVM） 以太坊虚拟机EVM 是智能合约的运行环境  作为区块验证协议的一部分，参与网络的每个节点都会运行EVM。他们会检查正在验证的块中列出的交易，并运行由EVM中的交易触发的代码  EVM不仅是沙盒封装的，而且是完全隔离的，也就是说在EVM 中运行的代码是无法访问网络、文件系统和其他进程的，甚至智能合约之间的访问也是受限的  合约以字节码的格式（EVM bytecode）存在于区">
+<meta property="og:type" content="article">
+<meta property="og:title" content="4.3 以太坊虚拟机">
+<meta property="og:url" content="http://example.com/2020/03/03/golang/%E4%BB%A5%E5%A4%AA%E5%9D%8A/4.3%E4%BB%A5%E5%A4%AA%E5%9D%8A%E8%99%9A%E6%8B%9F%E6%9C%BA%EF%BC%88%20EVM)/index.html">
+<meta property="og:site_name" content="极风键客">
+<meta property="og:description" content="以太坊虚拟机（EVM） 以太坊虚拟机EVM 是智能合约的运行环境  作为区块验证协议的一部分，参与网络的每个节点都会运行EVM。他们会检查正在验证的块中列出的交易，并运行由EVM中的交易触发的代码  EVM不仅是沙盒封装的，而且是完全隔离的，也就是说在EVM 中运行的代码是无法访问网络、文件系统和其他进程的，甚至智能合约之间的访问也是受限的  合约以字节码的格式（EVM bytecode）存在于区">
+<meta property="og:locale">
+<meta property="article:published_time" content="2020-03-03T12:46:25.000Z">
+<meta property="article:modified_time" content="2021-04-21T23:54:35.535Z">
+<meta property="article:author" content="王增明">
+<meta property="article:tag" content="以太坊">
+<meta name="twitter:card" content="summary">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":true,"scrollpercent":true,"onmobile":true},
+    fancybox: true,
+    tabs: false,
+    motion: {"enable":true,"async":true,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://example.com/2020/03/03/golang/以太坊/4.3以太坊虚拟机（ EVM)/"/>
+
+
+
+
+
+  <title>4.3 以太坊虚拟机 | 极风键客</title>
+  
+
+
+
+
+
+
+
+
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">极风键客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-schedule">
+          <a href="/schedule/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-calendar"></i> <br />
+            
+            日程表
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2020/03/03/golang/%E4%BB%A5%E5%A4%AA%E5%9D%8A/4.3%E4%BB%A5%E5%A4%AA%E5%9D%8A%E8%99%9A%E6%8B%9F%E6%9C%BA%EF%BC%88%20EVM)/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/i.jpeg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="极风键客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">4.3 以太坊虚拟机</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-03-03T20:46:25+08:00">
+                2020-03-03
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/golang/" itemprop="url" rel="index">
+                    <span itemprop="name">golang</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="以太坊虚拟机（EVM）"><a href="#以太坊虚拟机（EVM）" class="headerlink" title="以太坊虚拟机（EVM）"></a>以太坊虚拟机（EVM）</h1><ul>
+<li><p>以太坊虚拟机EVM 是智能合约的运行环境</p>
+</li>
+<li><p>作为区块验证协议的一部分，参与网络的每个节点都会运行EVM。他们会检查正在验证的块中列出的交易，并运行由EVM中的交易触发的代码</p>
+</li>
+<li><p>EVM不仅是沙盒封装的，而且是完全隔离的，也就是说在EVM 中运行的代码是无法访问网络、文件系统和其他进程的，甚至智能合约之间的访问也是受限的</p>
+</li>
+<li><p>合约以字节码的格式（EVM bytecode）存在于区块链上</p>
+</li>
+<li><p>合约通常以高级语言（solidity）编写，通过EVM编译器编译为字节码，最终通过客户端上载部署到区块链网络中</p>
+</li>
+</ul>
+<span id="more"></span>
+
+<h1 id="EVM和账户"><a href="#EVM和账户" class="headerlink" title="EVM和账户"></a>EVM和账户</h1><ul>
+<li><p>以太坊中有两类账户：<strong>外部账户</strong>和<strong>合约账户</strong>，它们共用EVM中同一个地址空间</p>
+</li>
+<li><p>无论帐户是否存储代码，这两类账户对EVM 来说处理方式是完全一样的</p>
+</li>
+<li><p>每个账户在EVM中都有一个键值对形式的持久化存储。其中key 和value 的长度都是256位，称之为<strong>存储空间</strong>（storage）</p>
+</li>
+</ul>
+<h1 id="EVM和交易"><a href="#EVM和交易" class="headerlink" title="EVM和交易"></a>EVM和交易</h1><ul>
+<li><p>交易可以看作是从一个帐户发送到另一个帐户的消息，它可以包含二进制数据（payload）和以太币</p>
+</li>
+<li><p>如果目标账户含有代码，此代码会在EVM中执行，并以payload 作为入参，这就是合约的调用</p>
+</li>
+<li><p>如果目标账户是零账户（账户地址为0)，此交易就将创建一个<strong>新合约</strong>，这个用来创建合约的交易的payload 会被转换为EVM 字节码并执行，执行的输出作为合约代码永久存储</p>
+</li>
+</ul>
+<h1 id="EVM和gas"><a href="#EVM和gas" class="headerlink" title="EVM和gas"></a>EVM和gas</h1><ul>
+<li><p>合约被交易触发调用时，指令会在全网的每个节点上执行：这需要消耗算力成本；每一个指令的执行都有特定的消耗，<strong>gas</strong>就用来量化表示这个成本消耗</p>
+</li>
+<li><p>一经创建，每笔交易都按照一定数量的gas预付一笔费用，目的是限制执行交易所需要的工作量和为交易支付手续费</p>
+</li>
+<li><p>EVM 执行交易时，gas 将按特定规则逐渐耗尽</p>
+</li>
+<li><p><strong>gas price</strong>是交易发送者设置的一个值，作为发送者预付手续费的单价。如果交易执行后还有剩余，gas 会原路返还</p>
+</li>
+<li><p>无论执行到什么位置，一旦gas 被耗尽（比如降为负值），将会触发一个out-of-gas 异常。当前调用帧（call frame）所做的所有状态修改都将被回滚</p>
+</li>
+</ul>
+<h1 id="EVM数据存储"><a href="#EVM数据存储" class="headerlink" title="EVM数据存储"></a>EVM数据存储</h1><ul>
+<li><p><strong>Storage</strong></p>
+<ul>
+<li>每个账户都有一块持久化的存储空间，称为storage，这是一个将256位字映射到256位字的key-value 存储区，可以理解为合约的数据库</li>
+<li>永久储存在区块链中，由于会永久保存合约状态变量，所以读写的gas开销也最大</li>
+</ul>
+</li>
+<li><p><strong>Memory</strong>（内存）</p>
+<ul>
+<li>每一次消息调用，合约会临时获取一块干净的内存空间</li>
+<li>生命周期仅为整个方法执行期间，函数调用后回收，因为仅保存临时变量，故读写gas开销较小</li>
+</ul>
+</li>
+<li><p><strong>Stack</strong>（栈）</p>
+<ul>
+<li>EVM 不是基于寄存器的，而是基于栈的，因此所有的计算都在一个被称为栈（stack）的区域执行</li>
+<li>存放部分局部值类型变量，几乎免费使用的内存，但有数量限制</li>
+</ul>
+</li>
+</ul>
+<h1 id="EVM指令集"><a href="#EVM指令集" class="headerlink" title="EVM指令集"></a>EVM指令集</h1><ul>
+<li><p>所有的指令都是针对”256位的字（word）”这个基本的数据类型来进行操作</p>
+</li>
+<li><p>具备常用的算术、位、逻辑和比较操作，也可以做到有条件和无条件跳转</p>
+</li>
+<li><p>合约可以访问当前区块的相关属性，比如它的块高度和时间戳</p>
+</li>
+</ul>
+<h1 id="消息调用（Message-Calls-）"><a href="#消息调用（Message-Calls-）" class="headerlink" title="消息调用（Message Calls ）"></a>消息调用（Message Calls ）</h1><ul>
+<li>合约可以通过消息调用的方式来调用其它合约或者发送以太币到非合约账户</li>
+<li>合约可以决定在其内部的消息调用中，对于剩余的gas，应发送和保留多少</li>
+<li>如果在内部消息调用时发生了out-of-gas 异常（或其他任何异常），这将由一个被压入栈顶的错误值所指明；此时只有与该内部消息调用一起发送的gas 会被消耗掉</li>
+</ul>
+<h1 id="委托调用（Delegatecall）"><a href="#委托调用（Delegatecall）" class="headerlink" title="委托调用（Delegatecall）"></a>委托调用（Delegatecall）</h1><ul>
+<li>一种特殊类型的消息调用</li>
+<li>目标地址的代码将在发起调用的合约的上下文中执行，并且msg.sender和msg.value不变</li>
+<li>可以由此实现“库”（library）：可复用的代码库可以放在一个合约的存储上，通过委托调用引入相应代码</li>
+</ul>
+<h1 id="合约的创建和自毁"><a href="#合约的创建和自毁" class="headerlink" title="合约的创建和自毁"></a>合约的创建和自毁</h1><ul>
+<li>通过一个特殊的消息调用<strong>create calls</strong>，合约可以创建其他合约（不是简单的调用零地址）</li>
+<li>合约代码从区块链上移除的唯一方式是合约在合约地址上的执行自毁操作<strong>selfdestruct</strong>；合约账户上剩余的以太币会发送给指定的目标，然后其存储和代码从状态中被移除</li>
+</ul>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/%E4%BB%A5%E5%A4%AA%E5%9D%8A/" rel="tag"># 以太坊</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/03/03/golang/%E4%BB%A5%E5%A4%AA%E5%9D%8A/5.1Solidity%20%E7%AE%80%E4%BB%8B/" rel="next" title="5.1 Solidity简介">
+                <i class="fa fa-chevron-left"></i> 5.1 Solidity简介
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2020/03/03/golang/%E4%BB%A5%E5%A4%AA%E5%9D%8A/4.2%E4%BB%A5%E5%A4%AA%E5%9D%8A%E4%BA%A4%E6%98%93%E8%AF%A6%E8%A7%A3/" rel="prev" title="4.2 以太坊交易">
+                4.2 以太坊交易 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+      <div id="sidebar-dimmer"></div>
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/i.jpeg"
+                alt="" />
+            
+              <p class="site-author-name" itemprop="name"></p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/%7C%7C%20archive">
+              
+                  <span class="site-state-item-count">61</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">9</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">23</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/wangzengming" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:wangzengming@aliyun.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BB%A5%E5%A4%AA%E5%9D%8A%E8%99%9A%E6%8B%9F%E6%9C%BA%EF%BC%88EVM%EF%BC%89"><span class="nav-number">1.</span> <span class="nav-text">以太坊虚拟机（EVM）</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#EVM%E5%92%8C%E8%B4%A6%E6%88%B7"><span class="nav-number">2.</span> <span class="nav-text">EVM和账户</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#EVM%E5%92%8C%E4%BA%A4%E6%98%93"><span class="nav-number">3.</span> <span class="nav-text">EVM和交易</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#EVM%E5%92%8Cgas"><span class="nav-number">4.</span> <span class="nav-text">EVM和gas</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#EVM%E6%95%B0%E6%8D%AE%E5%AD%98%E5%82%A8"><span class="nav-number">5.</span> <span class="nav-text">EVM数据存储</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#EVM%E6%8C%87%E4%BB%A4%E9%9B%86"><span class="nav-number">6.</span> <span class="nav-text">EVM指令集</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E6%B6%88%E6%81%AF%E8%B0%83%E7%94%A8%EF%BC%88Message-Calls-%EF%BC%89"><span class="nav-number">7.</span> <span class="nav-text">消息调用（Message Calls ）</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%A7%94%E6%89%98%E8%B0%83%E7%94%A8%EF%BC%88Delegatecall%EF%BC%89"><span class="nav-number">8.</span> <span class="nav-text">委托调用（Delegatecall）</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%90%88%E7%BA%A6%E7%9A%84%E5%88%9B%E5%BB%BA%E5%92%8C%E8%87%AA%E6%AF%81"><span class="nav-number">9.</span> <span class="nav-text">合约的创建和自毁</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+        <div class="back-to-top">
+          <i class="fa fa-arrow-up"></i>
+          
+            <span id="scrollpercent"><span>0</span>%</span>
+          
+        </div>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">王增明</span>
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+  
+  
+
+
+
+
+
+  
+  
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/three/three.min.js"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/three/three-waves.min.js"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/three/canvas_sphere.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

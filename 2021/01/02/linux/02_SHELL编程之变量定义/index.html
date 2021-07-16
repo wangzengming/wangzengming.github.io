@@ -1,0 +1,1244 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+  
+  
+    
+    
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+  <link href="/lib/pace/pace-theme-minimal.min.css?v=1.0.2" rel="stylesheet">
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="linux,shell," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="SHELL编程模块课程目标 ① Shell的基本语法结构 如：变量定义、条件判断、循环语句(for、until、while)、分支语句、函数和数组等；  ② 基本正则表达式的运用; ③ 文件处理三剑客：grep、sed、awk工具的使用； ④ 使用shell脚本完成一些较复杂的任务，如：服务搭建、批量处理等。 说明：以上内容仅仅是基本要求，还有很多更深更难的语法需要扩充学习。  本节目标  &#x3D;&#x3D;熟">
+<meta property="og:type" content="article">
+<meta property="og:title" content="02_SHELL编程之变量定义">
+<meta property="og:url" content="http://example.com/2021/01/02/linux/02_SHELL%E7%BC%96%E7%A8%8B%E4%B9%8B%E5%8F%98%E9%87%8F%E5%AE%9A%E4%B9%89/index.html">
+<meta property="og:site_name" content="极风键客">
+<meta property="og:description" content="SHELL编程模块课程目标 ① Shell的基本语法结构 如：变量定义、条件判断、循环语句(for、until、while)、分支语句、函数和数组等；  ② 基本正则表达式的运用; ③ 文件处理三剑客：grep、sed、awk工具的使用； ④ 使用shell脚本完成一些较复杂的任务，如：服务搭建、批量处理等。 说明：以上内容仅仅是基本要求，还有很多更深更难的语法需要扩充学习。  本节目标  &#x3D;&#x3D;熟">
+<meta property="og:locale">
+<meta property="og:image" content="http://example.com/%E7%BC%96%E8%AF%91%E5%92%8C%E8%A7%A3%E9%87%8A%E5%9E%8B%E8%AF%AD%E8%A8%80%E5%8C%BA%E5%88%AB.png">
+<meta property="og:image" content="http://example.com/2021/01/02/linux/02_SHELL%E7%BC%96%E7%A8%8B%E4%B9%8B%E5%8F%98%E9%87%8F%E5%AE%9A%E4%B9%89/pictures/%E8%AF%AD%E8%A8%80%E5%88%86%E7%B1%BB.png">
+<meta property="og:image" content="http://example.com/00_shell%E4%BB%8B%E7%BB%8D.png">
+<meta property="og:image" content="http://example.com/2021/01/02/linux/02_SHELL%E7%BC%96%E7%A8%8B%E4%B9%8B%E5%8F%98%E9%87%8F%E5%AE%9A%E4%B9%89/01_shell%E4%BB%8B%E7%BB%8D.png">
+<meta property="article:published_time" content="2021-01-02T12:46:25.000Z">
+<meta property="article:modified_time" content="2021-07-15T10:00:16.094Z">
+<meta property="article:author" content="王增明">
+<meta property="article:tag" content="linux">
+<meta property="article:tag" content="shell">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/%E7%BC%96%E8%AF%91%E5%92%8C%E8%A7%A3%E9%87%8A%E5%9E%8B%E8%AF%AD%E8%A8%80%E5%8C%BA%E5%88%AB.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":true,"scrollpercent":true,"onmobile":true},
+    fancybox: true,
+    tabs: false,
+    motion: {"enable":true,"async":true,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://example.com/2021/01/02/linux/02_SHELL编程之变量定义/"/>
+
+
+
+
+
+  <title>02_SHELL编程之变量定义 | 极风键客</title>
+  
+
+
+
+
+
+
+
+
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">极风键客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-schedule">
+          <a href="/schedule/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-calendar"></i> <br />
+            
+            日程表
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/01/02/linux/02_SHELL%E7%BC%96%E7%A8%8B%E4%B9%8B%E5%8F%98%E9%87%8F%E5%AE%9A%E4%B9%89/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/i.jpeg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="极风键客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">02_SHELL编程之变量定义</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2021-01-02T20:46:25+08:00">
+                2021-01-02
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/linux/" itemprop="url" rel="index">
+                    <span itemprop="name">linux</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="SHELL编程模块课程目标"><a href="#SHELL编程模块课程目标" class="headerlink" title="SHELL编程模块课程目标"></a>SHELL编程模块课程目标</h1><ul>
+<li><p>① Shell的基本语法结构</p>
+<p>如：变量定义、条件判断、循环语句(for、until、while)、分支语句、函数和数组等； </p>
+<p>② 基本正则表达式的运用;</p>
+<p>③ 文件处理三剑客：grep、sed、awk工具的使用；</p>
+<p>④ 使用shell脚本完成一些较复杂的任务，如：服务搭建、批量处理等。</p>
+<p><em><strong>说明：以上内容仅仅是基本要求，还有很多更深更难的语法需要扩充学习。</strong></em></p>
+</li>
+<li><p><strong>本节目标</strong></p>
+<ul>
+<li>==熟练掌握shell变量的定义和获取（重点）==</li>
+<li>==能够进行shell简单的四则运算==</li>
+</ul>
+</li>
+</ul>
+<span id="more"></span>
+
+<h1 id="一、SHELL介绍"><a href="#一、SHELL介绍" class="headerlink" title="一、SHELL介绍"></a>一、SHELL介绍</h1><p><strong>前言：</strong></p>
+<p>计算机只能认识（识别）机器语言(0和1)，如（11000000 这种）。但是，我们的程序猿们不能直接去写01这样的代码，所以，要想将程序猿所开发的代码在计算机上运行，就必须找”人”（工具）来==翻译成机器语言==，这个”人”(工具)就是我们常常所说的**==编译器==<strong>或者</strong>==解释器==**。</p>
+<p><img src="/%E7%BC%96%E8%AF%91%E5%92%8C%E8%A7%A3%E9%87%8A%E5%9E%8B%E8%AF%AD%E8%A8%80%E5%8C%BA%E5%88%AB.png" alt="编译和解释型语言区别"></p>
+<p>##1. 编程语言分类</p>
+<ul>
+<li><strong>编译型语言：</strong></li>
+</ul>
+<p>​    ==程序在执行之前需要一个专门的编译过程==，把程序编译成为机器语言文件，运行时不需要重新翻译，直接使用编译的结果就行了。程序执行效率高，依赖编译器，跨平台性差些。如C、C++</p>
+<ul>
+<li><strong>解释型语言：</strong></li>
+</ul>
+<p>​    程序不需要编译，程序在运行时由**==解释器==**翻译成机器语言，每执行一次都要翻译一次。因此效率比较低。比如Python/JavaScript/ Perl /ruby/==Shell==等都是解释型语言。</p>
+<p><img src="./pictures/%E8%AF%AD%E8%A8%80%E5%88%86%E7%B1%BB.png" alt="语言分类.png"></p>
+<ul>
+<li><strong>总结</strong></li>
+</ul>
+<p>编译型语言比解释型语言==速度较快==，但是不如解释型语言==跨平台性好==。如果做底层开发或者大型应用程序或者操作系开发一==般都用编译型语言==；如果是一些服务器脚本及一些辅助的接口，对速度要求不高、对各个平台的==兼容性有要求==的话则一般都用==解释型语言==。</p>
+<p>##2. shell简介</p>
+<p><img src="/00_shell%E4%BB%8B%E7%BB%8D.png" alt="00_shell介绍"></p>
+<p><strong>总结：</strong></p>
+<ul>
+<li>==shell就是人机交互的一个桥梁==</li>
+<li>shell的种类</li>
+</ul>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">[<span class="type">root</span>@<span class="type">MissHou</span> ~]<span class="comment"># cat /etc/shells </span></span><br><span class="line">/bin/sh				<span class="comment">#是bash的一个快捷方式</span></span><br><span class="line">/bin/bash			<span class="comment">#bash是大多数Linux默认的shell，包含的功能几乎可以涵盖shell所有的功能</span></span><br><span class="line">/sbin/nologin		<span class="comment">#表示非交互，不能登录操作系统</span></span><br><span class="line">/bin/dash			<span class="comment">#小巧，高效，功能相比少一些</span></span><br><span class="line"></span><br><span class="line">/bin/csh				<span class="comment">#具有C语言风格的一种shell，具有许多特性，但也有一些缺陷</span></span><br><span class="line">/bin/tcsh			<span class="comment">#是csh的增强版，完全兼容csh</span></span><br></pre></td></tr></table></figure>
+
+<p><strong>思考：终端和shell有什么关系？</strong></p>
+<p><img src="./01_shell%E4%BB%8B%E7%BB%8D.png" alt="01_shell介绍"></p>
+<p>##3. shell脚本</p>
+<h3 id="㈠-什么是shell脚本？"><a href="#㈠-什么是shell脚本？" class="headerlink" title="㈠ 什么是shell脚本？"></a>㈠ 什么是shell脚本？</h3><ul>
+<li>一句话概括</li>
+</ul>
+<p>简单来说就是将==需要执行的命令==保存到文本中，==按照顺序执行==。它是解释型的，意味着不需要编译。</p>
+<ul>
+<li>准确叙述</li>
+</ul>
+<p><strong>若干命令 + 脚本的基本格式 + 脚本特定语法 + 思想= shell脚本</strong></p>
+<h3 id="㈡-什么时候用到脚本"><a href="#㈡-什么时候用到脚本" class="headerlink" title="㈡ 什么时候用到脚本?"></a>㈡ 什么时候用到脚本?</h3><p><strong>重复化</strong>、复杂化的工作，通过把工作的命令写成脚本，以后仅仅需要执行脚本就能完成这些工作。</p>
+<h3 id="㈢-shell脚本能干啥"><a href="#㈢-shell脚本能干啥" class="headerlink" title="㈢ shell脚本能干啥?"></a>㈢ shell脚本能干啥?</h3><p> ①自动化软件部署    LAMP/LNMP/Tomcat…    </p>
+<p> ②自动化管理        系统初始化脚本、批量更改主机密码、推送公钥…</p>
+<p> ③==自动化分析处理==     统计网站访问量</p>
+<p> ④==自动化备份==        数据库备份、日志转储…</p>
+<p> ⑤自动化监控脚本</p>
+<h3 id="㈣-如何学习shell脚本？"><a href="#㈣-如何学习shell脚本？" class="headerlink" title="㈣ 如何学习shell脚本？"></a>㈣ 如何学习shell脚本？</h3><ol>
+<li>尽可能记忆更多的命令(记忆命令使用功能和场景)</li>
+<li>掌握脚本的标准的格式（指定魔法字节、使用标准的执行方式运行脚本）</li>
+<li>必须==<strong>熟悉掌握</strong>==脚本的基本语法（重点)</li>
+</ol>
+<h3 id="㈤-学习shell脚本的秘诀"><a href="#㈤-学习shell脚本的秘诀" class="headerlink" title="㈤ 学习shell脚本的秘诀"></a>㈤ 学习shell脚本的秘诀</h3><p>多看（看懂）——&gt;模仿（多练）——&gt;多思考（多写）</p>
+<h3 id="㈥-shell脚本的基本写法"><a href="#㈥-shell脚本的基本写法" class="headerlink" title="㈥ shell脚本的基本写法"></a>㈥ shell脚本的基本写法</h3><p>1）<strong>脚本第一行</strong>，魔法字符==<strong>#!</strong>==指定解释器【==必写==】</p>
+<p><code>#!/bin/bash</code>  表示以下内容使用bash解释器解析</p>
+<p><strong>==注意：==</strong><br>如果直接将解释器路径写死在脚本里，可能在某些系统就会存在找不到解释器的兼容性问题，所以可以使用:<code>#!/bin/env 解释器</code></p>
+<p>2）<strong>脚本第二部分</strong>，注释(#号)说明，对脚本的基本信息进行描述【可选】</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#!/bin/env bash</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 以下内容是对脚本的基本信息的描述</span></span><br><span class="line"><span class="comment"># Name: 名字</span></span><br><span class="line"><span class="comment"># Desc:描述describe</span></span><br><span class="line"><span class="comment"># Path:存放路径</span></span><br><span class="line"><span class="comment"># Usage:用法</span></span><br><span class="line"><span class="comment"># Update:更新时间</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#下面就是脚本的具体内容</span></span><br><span class="line">commands</span><br><span class="line">...</span><br></pre></td></tr></table></figure>
+
+<p>3）<strong>脚本第三部分</strong>，脚本要实现的具体代码内容</p>
+<h3 id="㈦-shell脚本的执行方法"><a href="#㈦-shell脚本的执行方法" class="headerlink" title="㈦ shell脚本的执行方法"></a>㈦ shell脚本的执行方法</h3><ul>
+<li>标准脚本执行方法（建议）</li>
+</ul>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">1</span>) 编写人生第一个shell脚本</span><br><span class="line">[<span class="type">root</span>@<span class="type">MissHou</span> <span class="type">shell01</span>]<span class="comment"># cat first_shell.sh</span></span><br><span class="line"><span class="comment">#!/bin/env bash</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 以下内容是对脚本的基本信息的描述</span></span><br><span class="line"><span class="comment"># Name: first_shell.sh</span></span><br><span class="line"><span class="comment"># Desc: num1</span></span><br><span class="line"><span class="comment"># Path: /shell01/first_shell.sh</span></span><br><span class="line"><span class="comment"># Usage:/shell01/first_shell.sh</span></span><br><span class="line"><span class="comment"># Update:2019-05-05</span></span><br><span class="line"></span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;hello world&quot;</span></span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;hello world&quot;</span></span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;hello world&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="number">2</span>) 脚本增加可执行权限</span><br><span class="line">[<span class="type">root</span>@<span class="type">MissHou</span> <span class="type">shell01</span>]<span class="comment"># chmod +x first_shell.sh</span></span><br><span class="line"></span><br><span class="line"><span class="number">3</span>) 标准方式执行脚本</span><br><span class="line">[<span class="type">root</span>@<span class="type">MissHou</span> <span class="type">shell01</span>]<span class="comment"># pwd</span></span><br><span class="line">/shell01</span><br><span class="line">[<span class="type">root</span>@<span class="type">MissHou</span> <span class="type">shell01</span>]<span class="comment"># /shell01/first_shell.sh</span></span><br><span class="line">或者</span><br><span class="line">[<span class="type">root</span>@<span class="type">MissHou</span> <span class="type">shell01</span>]<span class="comment"># ./first_shell.sh</span></span><br><span class="line"></span><br><span class="line">注意：标准执行方式脚本必须要有可执行权限。</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>非标准的执行方法（不建议）</li>
+</ul>
+<ol>
+<li>直接在命令行指定解释器执行</li>
+</ol>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">[<span class="type">root</span>@<span class="type">MissHou</span> <span class="type">shell01</span>]<span class="comment"># bash first_shell.sh</span></span><br><span class="line">[<span class="type">root</span>@<span class="type">MissHou</span> <span class="type">shell01</span>]<span class="comment"># sh first_shell.sh</span></span><br><span class="line">[<span class="type">root</span>@<span class="type">MissHou</span> <span class="type">shell01</span>]<span class="comment"># bash -x first_shell.sh</span></span><br><span class="line">+ <span class="built_in">echo</span> <span class="string">&#x27;hello world&#x27;</span></span><br><span class="line">hello world</span><br><span class="line">+ <span class="built_in">echo</span> <span class="string">&#x27;hello world&#x27;</span></span><br><span class="line">hello world</span><br><span class="line">+ <span class="built_in">echo</span> <span class="string">&#x27;hello world&#x27;</span></span><br><span class="line">hello world</span><br><span class="line"></span><br><span class="line"><span class="literal">-x</span>:一般用于排错，查看脚本的执行过程</span><br><span class="line"><span class="literal">-n</span>:用来查看脚本的语法是否有问题</span><br></pre></td></tr></table></figure>
+
+<ol start="2">
+<li>使用<code>source</code>命令读取脚本文件,执行文件里的代码</li>
+</ol>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">[<span class="type">root</span>@<span class="type">MissHou</span> <span class="type">shell01</span>]<span class="comment"># source first_shell.sh</span></span><br><span class="line">hello world</span><br><span class="line">hello world</span><br><span class="line">hello world</span><br></pre></td></tr></table></figure>
+
+<p><strong>小试牛刀：</strong>写一个木有灵魂的脚本，要求如下：</p>
+<ol>
+<li><p>删除/tmp/目录下的所有文件</p>
+</li>
+<li><p>然后在/tmp目录里创建3个目录，分别是dir1~dir3     </p>
+</li>
+<li><p>拷贝/etc/hosts文件到刚创建的dir1目录里       </p>
+</li>
+<li><p>最后打印”==报告首长，任务已于2019-05-05 10:10:10时间完成==”内容   </p>
+<p><code>echo &quot;报告首长，任务已于$(date +&#39;%F %T&#39;)&quot;</code></p>
+</li>
+</ol>
+<h1 id="二、变量的定义"><a href="#二、变量的定义" class="headerlink" title="二、变量的定义"></a>二、变量的定义</h1><h2 id="1-变量是什么？"><a href="#1-变量是什么？" class="headerlink" title="1. 变量是什么？"></a>1. 变量是什么？</h2><p>一句话概括：变量是用来临时保存数据的，该数据是可以变化的数据。</p>
+<h2 id="2-什么时候需要定义变量？"><a href="#2-什么时候需要定义变量？" class="headerlink" title="2. 什么时候需要定义变量？"></a>2. 什么时候需要定义变量？</h2><ul>
+<li>如果某个内容需要多次使用，并且在代码中<strong>重复出现</strong>，那么可以用变量代表该内容。这样在修改内容的时候，仅仅需要修改变量的值。</li>
+<li>在代码运作的过程中，可能会把某些命令的执行结果保存起来，后续代码需要使用这些结果，就可以直接使用这个变量。</li>
+</ul>
+<h2 id="3-变量如何定义？"><a href="#3-变量如何定义？" class="headerlink" title="3.变量如何定义？"></a>3.变量如何定义？</h2><p><strong>变量名=====变量值</strong></p>
+<p>变量名：用来临时保存数据的</p>
+<p>变量值：就是临时的可变化的数据</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">[<span class="type">root</span>@<span class="type">MissHou</span> ~]<span class="comment"># A=hello			定义变量A</span></span><br><span class="line">[<span class="type">root</span>@<span class="type">MissHou</span> ~]<span class="comment"># echo $A			调用变量A，要给钱的，不是人民币是美元&quot;$&quot;</span></span><br><span class="line">hello</span><br><span class="line">[<span class="type">root</span>@<span class="type">MissHou</span> ~]<span class="comment"># echo $&#123;A&#125;		还可以这样调用，不管你的姿势多优雅，总之要给钱</span></span><br><span class="line">hello</span><br><span class="line">[<span class="type">root</span>@<span class="type">MissHou</span> ~]<span class="comment"># A=world			因为是变量所以可以变，移情别恋是常事</span></span><br><span class="line">[<span class="type">root</span>@<span class="type">MissHou</span> ~]<span class="comment"># echo $A			不管你是谁，只要调用就要给钱</span></span><br><span class="line">world</span><br><span class="line">[<span class="type">root</span>@<span class="type">MissHou</span> ~]<span class="comment"># unset A			不跟你玩了，取消变量</span></span><br><span class="line">[<span class="type">root</span>@<span class="type">MissHou</span> ~]<span class="comment"># echo $A			从此，我单身了，你可以给我介绍任何人</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h2 id="4-变量的定义规则"><a href="#4-变量的定义规则" class="headerlink" title="4. 变量的定义规则"></a>4. 变量的定义规则</h2><p>虽然可以给变量（变量名）赋予任何值；但是，对于==变量名==也是要求的！:unamused:</p>
+<h3 id="㈠-变量名区分大小写"><a href="#㈠-变量名区分大小写" class="headerlink" title="㈠ 变量名区分大小写"></a>㈠ 变量名区分大小写</h3><figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">[<span class="type">root</span>@<span class="type">MissHou</span> ~]<span class="comment"># A=hello</span></span><br><span class="line">[<span class="type">root</span>@<span class="type">MissHou</span> ~]<span class="comment"># a=world</span></span><br><span class="line">[<span class="type">root</span>@<span class="type">MissHou</span> ~]<span class="comment"># echo $A</span></span><br><span class="line">hello</span><br><span class="line">[<span class="type">root</span>@<span class="type">MissHou</span> ~]<span class="comment"># echo $a</span></span><br><span class="line">world</span><br></pre></td></tr></table></figure>
+
+<h3 id="㈡-变量名不能有特殊符号"><a href="#㈡-变量名不能有特殊符号" class="headerlink" title="㈡ 变量名不能有特殊符号"></a>㈡ 变量名不能有特殊符号</h3><figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">[<span class="type">root</span>@<span class="type">MissHou</span> ~]<span class="comment"># *A=hello</span></span><br><span class="line"><span class="literal">-bash</span>: *A=hello: command not found</span><br><span class="line">[<span class="type">root</span>@<span class="type">MissHou</span> ~]<span class="comment"># ?A=hello</span></span><br><span class="line"><span class="literal">-bash</span>: ?A=hello: command not found</span><br><span class="line">[<span class="type">root</span>@<span class="type">MissHou</span> ~]<span class="comment"># @A=hello</span></span><br><span class="line"><span class="literal">-bash</span>: @A=hello: command not found</span><br><span class="line"></span><br><span class="line">特别说明：对于有空格的字符串给变量赋值时，要用引号引起来</span><br><span class="line">[<span class="type">root</span>@<span class="type">MissHou</span> ~]<span class="comment"># A=hello world</span></span><br><span class="line"><span class="literal">-bash</span>: world: command not found</span><br><span class="line">[<span class="type">root</span>@<span class="type">MissHou</span> ~]<span class="comment"># A=&quot;hello world&quot;</span></span><br><span class="line">[<span class="type">root</span>@<span class="type">MissHou</span> ~]<span class="comment"># A=&#x27;hello world&#x27;</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="㈢-变量名不能以数字开头"><a href="#㈢-变量名不能以数字开头" class="headerlink" title="㈢ 变量名不能以数字开头"></a>㈢ 变量名不能以数字开头</h3><figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">[<span class="type">root</span>@<span class="type">MissHou</span> ~]<span class="comment"># 1A=hello</span></span><br><span class="line"><span class="literal">-bash</span>: <span class="number">1</span>A=hello: command not found</span><br><span class="line">[<span class="type">root</span>@<span class="type">MissHou</span> ~]<span class="comment"># A1=hello</span></span><br><span class="line">注意：不能以数字开头并不代表变量名中不能包含数字呦。</span><br></pre></td></tr></table></figure>
+
+<h3 id="㈣-等号两边不能有任何空格"><a href="#㈣-等号两边不能有任何空格" class="headerlink" title="㈣ 等号两边不能有任何空格"></a>㈣ 等号两边不能有任何空格</h3><figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">[<span class="type">root</span>@<span class="type">MissHou</span> ~]<span class="comment"># A =123</span></span><br><span class="line"><span class="literal">-bash</span>: A: command not found</span><br><span class="line">[<span class="type">root</span>@<span class="type">MissHou</span> ~]<span class="comment"># A= 123</span></span><br><span class="line"><span class="literal">-bash</span>: <span class="number">123</span>: command not found</span><br><span class="line">[<span class="type">root</span>@<span class="type">MissHou</span> ~]<span class="comment"># A = 123</span></span><br><span class="line"><span class="literal">-bash</span>: A: command not found</span><br><span class="line">[<span class="type">root</span>@<span class="type">MissHou</span> ~]<span class="comment"># A=123</span></span><br><span class="line">[<span class="type">root</span>@<span class="type">MissHou</span> ~]<span class="comment"># echo $A</span></span><br><span class="line"><span class="number">123</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="㈤-变量名尽量做到见名知意"><a href="#㈤-变量名尽量做到见名知意" class="headerlink" title="㈤ 变量名尽量做到见名知意"></a>㈤ 变量名尽量做到见名知意</h3><figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">NTP_IP=<span class="number">10.1</span>.<span class="number">1.1</span></span><br><span class="line"><span class="built_in">DIR</span>=/u01/app1</span><br><span class="line">TMP_FILE=/var/log/<span class="number">1</span>.log</span><br><span class="line">...</span><br><span class="line"></span><br><span class="line">说明：一般变量名使用大写（小写也可以），不要同一个脚本中变量全是a,b,c等不容易阅读</span><br></pre></td></tr></table></figure>
+
+<h2 id="5-变量的定义方式有哪些？"><a href="#5-变量的定义方式有哪些？" class="headerlink" title="5. 变量的定义方式有哪些？"></a>5. 变量的定义方式有哪些？</h2><h3 id="㈠-基本方式"><a href="#㈠-基本方式" class="headerlink" title="㈠ 基本方式"></a>㈠ 基本方式</h3><blockquote>
+<p>直接赋值给一个变量</p>
+</blockquote>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">[<span class="type">root</span>@<span class="type">MissHou</span> ~]<span class="comment"># A=1234567</span></span><br><span class="line">[<span class="type">root</span>@<span class="type">MissHou</span> ~]<span class="comment"># echo $A</span></span><br><span class="line"><span class="number">1234567</span></span><br><span class="line">[<span class="type">root</span>@<span class="type">MissHou</span> ~]<span class="comment"># echo $&#123;A:2:4&#125;		表示从A变量中第3个字符开始截取，截取4个字符</span></span><br><span class="line"><span class="number">3456</span></span><br><span class="line"></span><br><span class="line">说明：</span><br><span class="line"><span class="variable">$</span>变量名 和 <span class="variable">$</span>&#123;变量名&#125;的异同</span><br><span class="line">相同点：都可以调用变量</span><br><span class="line">不同点：<span class="variable">$</span>&#123;变量名&#125;可以只截取变量的一部分，而<span class="variable">$</span>变量名不可以</span><br></pre></td></tr></table></figure>
+
+<h3 id="㈡-命令执行结果赋值给变量"><a href="#㈡-命令执行结果赋值给变量" class="headerlink" title="㈡ 命令执行结果赋值给变量"></a>㈡ 命令执行结果赋值给变量</h3><figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">[<span class="type">root</span>@<span class="type">MissHou</span> ~]<span class="comment"># B=`date +%F`</span></span><br><span class="line">[<span class="type">root</span>@<span class="type">MissHou</span> ~]<span class="comment"># echo $B</span></span><br><span class="line"><span class="number">2019</span><span class="literal">-04</span><span class="literal">-16</span></span><br><span class="line">[<span class="type">root</span>@<span class="type">MissHou</span> ~]<span class="comment"># C=$(uname -r)</span></span><br><span class="line">[<span class="type">root</span>@<span class="type">MissHou</span> ~]<span class="comment"># echo $C</span></span><br><span class="line"><span class="number">2.6</span>.<span class="number">32</span><span class="literal">-696</span>.el6.x86_64</span><br></pre></td></tr></table></figure>
+
+<h3 id="㈢-交互式定义变量-read"><a href="#㈢-交互式定义变量-read" class="headerlink" title="㈢ ==交互式定义变量(read)=="></a>㈢ ==交互式定义变量(read)==</h3><p><strong>目的：</strong>让==用户自己==给变量赋值，比较灵活。</p>
+<p><strong>语法：</strong><code>read [选项] 变量名</code></p>
+<p><strong>常见选项：</strong></p>
+<table>
+<thead>
+<tr>
+<th>选项</th>
+<th>释义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>-p</td>
+<td>定义提示用户的信息</td>
+</tr>
+<tr>
+<td>-n</td>
+<td>定义字符数（限制变量值的长度）</td>
+</tr>
+<tr>
+<td>-s</td>
+<td>不显示（不显示用户输入的内容）</td>
+</tr>
+<tr>
+<td>-t</td>
+<td>定义超时时间，默认单位为秒（限制用户输入变量值的超时时间）</td>
+</tr>
+</tbody></table>
+<p><strong>举例说明：</strong></p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">用法<span class="number">1</span>：用户自己定义变量值</span><br><span class="line">[<span class="type">root</span>@<span class="type">MissHou</span> ~]<span class="comment"># read name</span></span><br><span class="line">harry</span><br><span class="line">[<span class="type">root</span>@<span class="type">MissHou</span> ~]<span class="comment"># echo $name</span></span><br><span class="line">harry</span><br><span class="line">[<span class="type">root</span>@<span class="type">MissHou</span> ~]<span class="comment"># read -p &quot;Input your name:&quot; name</span></span><br><span class="line">Input your name:tom</span><br><span class="line">[<span class="type">root</span>@<span class="type">MissHou</span> ~]<span class="comment"># echo $name</span></span><br><span class="line">tom</span><br><span class="line"></span><br><span class="line">用法<span class="number">2</span>：变量值来自文件</span><br><span class="line">[<span class="type">root</span>@<span class="type">MissHou</span> ~]<span class="comment"># cat 1.txt </span></span><br><span class="line"><span class="number">10.1</span>.<span class="number">1.1</span> <span class="number">255.255</span>.<span class="number">255.0</span></span><br><span class="line"></span><br><span class="line">[<span class="type">root</span>@<span class="type">MissHou</span> ~]<span class="comment"># read ip mask &lt; 1.txt </span></span><br><span class="line">[<span class="type">root</span>@<span class="type">MissHou</span> ~]<span class="comment"># echo $ip</span></span><br><span class="line"><span class="number">10.1</span>.<span class="number">1.1</span></span><br><span class="line">[<span class="type">root</span>@<span class="type">MissHou</span> ~]<span class="comment"># echo $mask</span></span><br><span class="line"><span class="number">255.255</span>.<span class="number">255.0</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="㈣-定义有类型的变量-declare"><a href="#㈣-定义有类型的变量-declare" class="headerlink" title="㈣ 定义有类型的变量(==declare==)"></a>㈣ 定义有类型的变量(==declare==)</h3><p><strong>目的：</strong>给变量做一些限制，固定变量的类型，比如：整型、只读</p>
+<p><strong>用法：</strong><code>declare 选项 变量名=变量值</code></p>
+<p><strong>常用选项：</strong></p>
+<table>
+<thead>
+<tr>
+<th>选项</th>
+<th>释义</th>
+<th>举例</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>==-i==</td>
+<td>将变量看成整数</td>
+<td>declare -i A=123</td>
+</tr>
+<tr>
+<td>==-r==</td>
+<td>定义只读变量</td>
+<td>declare -r B=hello</td>
+</tr>
+<tr>
+<td>-a</td>
+<td>定义普通数组；查看普通数组</td>
+<td></td>
+</tr>
+<tr>
+<td>-A</td>
+<td>定义关联数组；查看关联数组</td>
+<td></td>
+</tr>
+<tr>
+<td>-x</td>
+<td>将变量通过环境导出</td>
+<td>declare -x AAA=123456 等于 export AAA=123456</td>
+</tr>
+</tbody></table>
+<p><strong>举例说明：</strong></p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line">[<span class="type">root</span>@<span class="type">MissHou</span> ~]<span class="comment"># declare -i A=123</span></span><br><span class="line">[<span class="type">root</span>@<span class="type">MissHou</span> ~]<span class="comment"># echo $A</span></span><br><span class="line"><span class="number">123</span></span><br><span class="line">[<span class="type">root</span>@<span class="type">MissHou</span> ~]<span class="comment"># A=hello</span></span><br><span class="line">[<span class="type">root</span>@<span class="type">MissHou</span> ~]<span class="comment"># echo $A</span></span><br><span class="line"><span class="number">0</span></span><br><span class="line"></span><br><span class="line">[<span class="type">root</span>@<span class="type">MissHou</span> ~]<span class="comment"># declare -r B=hello</span></span><br><span class="line">[<span class="type">root</span>@<span class="type">MissHou</span> ~]<span class="comment"># echo $B</span></span><br><span class="line">hello</span><br><span class="line">[<span class="type">root</span>@<span class="type">MissHou</span> ~]<span class="comment"># B=world</span></span><br><span class="line"><span class="literal">-bash</span>: B: readonly variable</span><br><span class="line">[<span class="type">root</span>@<span class="type">MissHou</span> ~]<span class="comment"># unset B</span></span><br><span class="line"><span class="literal">-bash</span>: unset: B: cannot unset: readonly variable</span><br></pre></td></tr></table></figure>
+
+<h2 id="6-变量的分类"><a href="#6-变量的分类" class="headerlink" title="6. 变量的分类"></a>6. 变量的分类</h2><h3 id="㈠-本地变量"><a href="#㈠-本地变量" class="headerlink" title="㈠ 本地变量"></a>㈠ 本地变量</h3><ul>
+<li>**==本地变量==**：当前用户自定义的变量。当前进程中有效，其他进程及当前进程的子进程无效。</li>
+</ul>
+<h3 id="㈡-环境变量"><a href="#㈡-环境变量" class="headerlink" title="㈡ 环境变量"></a>㈡ 环境变量</h3><ul>
+<li><strong>环境变量</strong>：当前进程有效，并且能够被<strong>子进程</strong>调用。<ul>
+<li><code>env</code>查看当前用户的环境变量</li>
+<li><code>set</code>查询当前用户的所有变量(临时变量与环境变量) </li>
+<li><code>export 变量名=变量值</code>    或者  <code>变量名=变量值；export 变量名</code></li>
+</ul>
+</li>
+</ul>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">[<span class="type">root</span>@<span class="type">MissHou</span> ~]<span class="comment"># export A=hello		临时将一个本地变量（临时变量）变成环境变量</span></span><br><span class="line">[<span class="type">root</span>@<span class="type">MissHou</span> ~]<span class="comment"># env|grep ^A</span></span><br><span class="line">A=hello</span><br><span class="line"></span><br><span class="line">永久生效：</span><br><span class="line">vim /etc/profile 或者 ~/.bashrc</span><br><span class="line">export A=hello</span><br><span class="line">或者</span><br><span class="line">A=hello</span><br><span class="line">export A</span><br><span class="line"></span><br><span class="line">说明：系统中有一个变量PATH，环境变量</span><br><span class="line">export PATH=/usr/local/mysql/bin:<span class="variable">$PATH</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="㈢-全局变量"><a href="#㈢-全局变量" class="headerlink" title="㈢ 全局变量"></a>㈢ 全局变量</h3><ul>
+<li><p><strong>全局变量</strong>：全局所有的用户和程序都能调用，且继承，新建的用户也默认能调用.</p>
+</li>
+<li><p><strong>解读相关配置文件</strong></p>
+</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>文件名</th>
+<th>说明</th>
+<th>备注</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>$HOME/.bashrc</td>
+<td>当前用户的bash信息,用户==登录==时读取</td>
+<td>定义别名、umask、函数等</td>
+</tr>
+<tr>
+<td>$HOME/.bash_profile</td>
+<td>当前用户的环境变量，用户==登录==时读取</td>
+<td></td>
+</tr>
+<tr>
+<td>$HOME/.bash_logout</td>
+<td>当前用户==退出==当前shell时最后读取</td>
+<td>定义用户退出时执行的程序等</td>
+</tr>
+<tr>
+<td>/etc/bashrc</td>
+<td>全局的bash信息，所有用户都生效</td>
+<td></td>
+</tr>
+<tr>
+<td>/etc/profile</td>
+<td>全局环境变量信息</td>
+<td>系统和所有用户都生效</td>
+</tr>
+<tr>
+<td>$HOME/.bash_history</td>
+<td>用户的历史命令</td>
+<td>history -w   保存历史记录         history -c  清空历史记录</td>
+</tr>
+</tbody></table>
+<p><strong>说明：</strong>以上文件修改后，都需要重新==source==让其生效或者退出重新登录。</p>
+<ul>
+<li><strong>用户登录</strong>系统<strong>读取</strong>相关==文件的顺序==<ol>
+<li><code>/etc/profile</code></li>
+<li><code>$HOME/.bash_profile</code></li>
+<li><code>$HOME/.bashrc</code></li>
+<li><code>/etc/bashrc</code></li>
+<li><code>$HOME/.bash_logout</code></li>
+</ol>
+</li>
+</ul>
+<h3 id="㈣-系统变量"><a href="#㈣-系统变量" class="headerlink" title="㈣ ==系统变量=="></a>㈣ ==系统变量==</h3><ul>
+<li><strong>系统变量(内置bash中变量)</strong> ： shell本身已经固定好了它的名字和作用.</li>
+</ul>
+<table>
+<thead>
+<tr>
+<th>内置变量</th>
+<th>含义</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>==$?==</td>
+<td>上一条命令执行后返回的状态；状态值为0表示执行正常，==非0==表示执行异常或错误</td>
+</tr>
+<tr>
+<td>$0</td>
+<td>当前执行的程序或脚本名</td>
+</tr>
+<tr>
+<td>==$#==</td>
+<td>脚本后面接的参数的==个数==</td>
+</tr>
+<tr>
+<td>==$*==</td>
+<td>脚本后面==所有参数==，参数当成一个整体输出，每一个变量参数之间以空格隔开</td>
+</tr>
+<tr>
+<td>==$@==</td>
+<td>脚本后面==所有参数==，参数是独立的，也是全部输出</td>
+</tr>
+<tr>
+<td>==$1~$9==</td>
+<td>脚本后面的==位置参数==，$1表示第1个位置参数，依次类推</td>
+</tr>
+<tr>
+<td>${10}~${n}</td>
+<td>扩展位置参数,第10个位置变量必须用{}大括号括起来(2位数字以上扩起来)</td>
+</tr>
+<tr>
+<td>==$$==</td>
+<td>当前所在进程的进程号，如<code>echo $$</code></td>
+</tr>
+<tr>
+<td>$！</td>
+<td>后台运行的最后一个进程号 (当前终端）</td>
+</tr>
+<tr>
+<td>!$</td>
+<td>调用最后一条命令历史中的==参数==</td>
+</tr>
+</tbody></table>
+<ul>
+<li>进一步了解位置参数<code>$1~$&#123;n&#125;</code></li>
+</ul>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#!/bin/bash</span></span><br><span class="line"><span class="comment">#了解shell内置变量中的位置参数含义</span></span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;\<span class="variable">$0</span> = <span class="variable">$0</span>&quot;</span></span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;\<span class="variable">$</span># = <span class="variable">$</span>#&quot;</span></span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;\<span class="variable">$</span>* = <span class="variable">$</span>*&quot;</span></span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;\<span class="variable">$</span>@ = <span class="variable">$</span>@&quot;</span></span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;\<span class="variable">$1</span> = <span class="variable">$1</span>&quot;</span> </span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;\<span class="variable">$2</span> = <span class="variable">$2</span>&quot;</span> </span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;\<span class="variable">$3</span> = <span class="variable">$3</span>&quot;</span> </span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;\<span class="variable">$11</span> = <span class="variable">$</span>&#123;11&#125;&quot;</span> </span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;\<span class="variable">$12</span> = <span class="variable">$</span>&#123;12&#125;&quot;</span> </span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>进一步了解$*和​$@的区别</li>
+</ul>
+<p><code>$*</code>：表示将变量看成一个整体<br><code>$@</code>：表示变量是独立的</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#!/bin/bash</span></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="string">&quot;<span class="variable">$</span>@&quot;</span></span><br><span class="line"><span class="keyword">do</span></span><br><span class="line"><span class="built_in">echo</span> <span class="variable">$i</span></span><br><span class="line">done</span><br><span class="line"></span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;======我是分割线=======&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> <span class="string">&quot;<span class="variable">$</span>*&quot;</span></span><br><span class="line"><span class="keyword">do</span></span><br><span class="line"><span class="built_in">echo</span> <span class="variable">$i</span></span><br><span class="line">done</span><br><span class="line"></span><br><span class="line">[<span class="type">root</span>@<span class="type">MissHou</span> ~]<span class="comment"># bash 3.sh a b c</span></span><br><span class="line">a</span><br><span class="line">b</span><br><span class="line">c</span><br><span class="line">======我是分割线=======</span><br><span class="line">a b c</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+
+<h1 id="三、简单四则运算"><a href="#三、简单四则运算" class="headerlink" title="三、简单四则运算"></a>三、简单四则运算</h1><p>算术运算：默认情况下，shell就只能支持简单的==整数==运算</p>
+<p>运算内容：加(+)、减(-)、乘(*)、除(/)、求余数（%）</p>
+<h2 id="1-四则运算符号"><a href="#1-四则运算符号" class="headerlink" title="1. 四则运算符号"></a>1. 四则运算符号</h2><table>
+<thead>
+<tr>
+<th>表达式</th>
+<th>举例</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>$((  ))</td>
+<td>echo $((1+1))</td>
+</tr>
+<tr>
+<td>$[ ]</td>
+<td>echo $[10-5]</td>
+</tr>
+<tr>
+<td>expr</td>
+<td>expr 10 / 5</td>
+</tr>
+<tr>
+<td>let</td>
+<td>n=1;let n+=1  等价于  let n=n+1</td>
+</tr>
+</tbody></table>
+<h2 id="2-了解i-和-i"><a href="#2-了解i-和-i" class="headerlink" title="2.了解i++和++i"></a>2.了解i++和++i</h2><ul>
+<li>对变量的值的影响</li>
+</ul>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">[<span class="type">root</span>@<span class="type">MissHou</span> ~]<span class="comment"># i=1</span></span><br><span class="line">[<span class="type">root</span>@<span class="type">MissHou</span> ~]<span class="comment"># let i++</span></span><br><span class="line">[<span class="type">root</span>@<span class="type">MissHou</span> ~]<span class="comment"># echo $i</span></span><br><span class="line"><span class="number">2</span></span><br><span class="line">[<span class="type">root</span>@<span class="type">MissHou</span> ~]<span class="comment"># j=1</span></span><br><span class="line">[<span class="type">root</span>@<span class="type">MissHou</span> ~]<span class="comment"># let ++j</span></span><br><span class="line">[<span class="type">root</span>@<span class="type">MissHou</span> ~]<span class="comment"># echo $j</span></span><br><span class="line"><span class="number">2</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>对==表达式==的值的影响</li>
+</ul>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">[<span class="type">root</span>@<span class="type">MissHou</span> ~]<span class="comment"># unset i j</span></span><br><span class="line">[<span class="type">root</span>@<span class="type">MissHou</span> ~]<span class="comment"># i=1;j=1</span></span><br><span class="line">[<span class="type">root</span>@<span class="type">MissHou</span> ~]<span class="comment"># let x=i++         先赋值，再运算</span></span><br><span class="line">[<span class="type">root</span>@<span class="type">MissHou</span> ~]<span class="comment"># let y=++j         先运算，再赋值</span></span><br><span class="line">[<span class="type">root</span>@<span class="type">MissHou</span> ~]<span class="comment"># echo $i</span></span><br><span class="line"><span class="number">2</span></span><br><span class="line">[<span class="type">root</span>@<span class="type">MissHou</span> ~]<span class="comment"># echo $j</span></span><br><span class="line"><span class="number">2</span></span><br><span class="line">[<span class="type">root</span>@<span class="type">MissHou</span> ~]<span class="comment"># echo $x</span></span><br><span class="line"><span class="number">1</span></span><br><span class="line">[<span class="type">root</span>@<span class="type">MissHou</span> ~]<span class="comment"># echo $y</span></span><br><span class="line"><span class="number">2</span></span><br></pre></td></tr></table></figure>
+
+
+
+<h1 id="四、扩展补充"><a href="#四、扩展补充" class="headerlink" title="四、扩展补充"></a>四、扩展补充</h1><h2 id="1-数组定义"><a href="#1-数组定义" class="headerlink" title="1. 数组定义"></a>1. 数组定义</h2><h3 id="㈠-数组分类"><a href="#㈠-数组分类" class="headerlink" title="㈠ 数组分类"></a>㈠ 数组分类</h3><ul>
+<li>普通数组：只能使用整数作为数组索引(元素的下标)</li>
+<li>关联数组：可以使用字符串作为数组索引(元素的下标)</li>
+</ul>
+<h3 id="㈡-普通数组定义"><a href="#㈡-普通数组定义" class="headerlink" title="㈡ 普通数组定义"></a>㈡ 普通数组定义</h3><ul>
+<li>一次赋予一个值</li>
+</ul>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">数组名[索引下标]=值</span><br><span class="line">array[<span class="number">0</span>]=v1</span><br><span class="line">array[<span class="number">1</span>]=v2</span><br><span class="line">array[<span class="number">2</span>]=v3</span><br><span class="line">array[<span class="number">3</span>]=v4</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>一次赋予多个值</li>
+</ul>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">数组名=(值<span class="number">1</span> 值<span class="number">2</span> 值<span class="number">3</span> ...)</span><br><span class="line">array=(var1 var2 var3 var4)</span><br><span class="line"></span><br><span class="line">array1=(`cat /etc/passwd`)			将文件中每一行赋值给array1数组</span><br><span class="line">array2=(`ls /root`)</span><br><span class="line">array3=(harry amy jack <span class="string">&quot;Miss Hou&quot;</span>)</span><br><span class="line">array4=(<span class="number">1</span> <span class="number">2</span> <span class="number">3</span> <span class="number">4</span> <span class="string">&quot;hello world&quot;</span> [<span class="number">10</span>]=linux)</span><br></pre></td></tr></table></figure>
+
+<h3 id="㈢-数组的读取"><a href="#㈢-数组的读取" class="headerlink" title="㈢ 数组的读取"></a>㈢ 数组的读取</h3><figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="variable">$</span>&#123;数组名[元素下标]&#125;</span><br><span class="line"></span><br><span class="line"><span class="built_in">echo</span> <span class="variable">$</span>&#123;array[<span class="number">0</span>]&#125;			获取数组里第一个元素</span><br><span class="line"><span class="built_in">echo</span> <span class="variable">$</span>&#123;array[*]&#125;			获取数组里的所有元素</span><br><span class="line"><span class="built_in">echo</span> <span class="variable">$</span>&#123;<span class="comment">#array[*]&#125;			获取数组里所有元素个数</span></span><br><span class="line"><span class="built_in">echo</span> <span class="variable">$</span>&#123;!array[<span class="selector-tag">@</span>]&#125;    	获取数组元素的索引下标</span><br><span class="line"><span class="built_in">echo</span> <span class="variable">$</span>&#123;array[<span class="selector-tag">@</span>]:<span class="number">1</span>:<span class="number">2</span>&#125;    访问指定的元素；<span class="number">1</span>代表从下标为<span class="number">1</span>的元素开始获取；<span class="number">2</span>代表获取后面几个元素</span><br><span class="line"></span><br><span class="line">查看普通数组信息：</span><br><span class="line">[<span class="type">root</span>@<span class="type">MissHou</span> ~]<span class="comment"># declare -a</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="㈣-关联数组定义"><a href="#㈣-关联数组定义" class="headerlink" title="㈣ 关联数组定义"></a>㈣ 关联数组定义</h3><h4 id="①首先声明关联数组"><a href="#①首先声明关联数组" class="headerlink" title="①首先声明关联数组"></a>①首先声明关联数组</h4><figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">declare <span class="literal">-A</span> asso_array1</span><br><span class="line">declare <span class="literal">-A</span> asso_array2</span><br><span class="line">declare <span class="literal">-A</span> asso_array3</span><br></pre></td></tr></table></figure>
+
+<h4 id="②-数组赋值"><a href="#②-数组赋值" class="headerlink" title="② 数组赋值"></a>② 数组赋值</h4><ul>
+<li>一次赋一个值</li>
+</ul>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">数组名[索引<span class="type">or</span>下标]=变量值</span><br><span class="line"><span class="comment"># asso_array1[linux]=one</span></span><br><span class="line"><span class="comment"># asso_array1[java]=two</span></span><br><span class="line"><span class="comment"># asso_array1[php]=three</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>一次赋多个值</li>
+</ul>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># asso_array2=([name1]=harry [name2]=jack [name3]=amy [name4]=&quot;Miss Hou&quot;)</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>查看关联数组</li>
+</ul>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># declare -A</span></span><br><span class="line">declare <span class="literal">-A</span> asso_array1=<span class="string">&#x27;([php]=&quot;three&quot; [java]=&quot;two&quot; [linux]=&quot;one&quot; )&#x27;</span></span><br><span class="line">declare <span class="literal">-A</span> asso_array2=<span class="string">&#x27;([name3]=&quot;amy&quot; [name2]=&quot;jack&quot; [name1]=&quot;harry&quot; [name4]=&quot;Miss Hou&quot; )&#x27;</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>获取关联数组值</li>
+</ul>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># echo $&#123;asso_array1[linux]&#125;</span></span><br><span class="line">one</span><br><span class="line"><span class="comment"># echo $&#123;asso_array1[php]&#125;</span></span><br><span class="line">three</span><br><span class="line"><span class="comment"># echo $&#123;asso_array1[*]&#125;</span></span><br><span class="line">three two one</span><br><span class="line"><span class="comment"># echo $&#123;!asso_array1[*]&#125;</span></span><br><span class="line">php java linux</span><br><span class="line"><span class="comment"># echo $&#123;#asso_array1[*]&#125;</span></span><br><span class="line"><span class="number">3</span></span><br><span class="line"><span class="comment"># echo $&#123;#asso_array2[*]&#125;</span></span><br><span class="line"><span class="number">4</span></span><br><span class="line"><span class="comment"># echo $&#123;!asso_array2[*]&#125;</span></span><br><span class="line">name3 name2 name1 name4</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>其他定义方式</li>
+</ul>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">[<span class="type">root</span>@<span class="type">MissHou</span> <span class="type">shell05</span>]<span class="comment"># declare -A books</span></span><br><span class="line">[<span class="type">root</span>@<span class="type">MissHou</span> <span class="type">shell05</span>]<span class="comment"># let books[linux]++</span></span><br><span class="line">[<span class="type">root</span>@<span class="type">MissHou</span> <span class="type">shell05</span>]<span class="comment"># declare -A|grep books</span></span><br><span class="line">declare <span class="literal">-A</span> books=<span class="string">&#x27;([linux]=&quot;1&quot; )&#x27;</span></span><br><span class="line">[<span class="type">root</span>@<span class="type">MissHou</span> <span class="type">shell05</span>]<span class="comment"># let books[linux]++</span></span><br><span class="line">[<span class="type">root</span>@<span class="type">MissHou</span> <span class="type">shell05</span>]<span class="comment"># declare -A|grep books</span></span><br><span class="line">declare <span class="literal">-A</span> books=<span class="string">&#x27;([linux]=&quot;2&quot; )&#x27;</span></span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="2-其他变量定义"><a href="#2-其他变量定义" class="headerlink" title="2. 其他变量定义"></a>2. 其他变量定义</h2><ul>
+<li>取出一个目录下的目录和文件：<code>dirname</code>和 <code>basename</code> </li>
+</ul>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># A=/root/Desktop/shell/mem.txt </span></span><br><span class="line"><span class="comment"># echo $A</span></span><br><span class="line">/root/Desktop/shell/mem.txt</span><br><span class="line"><span class="comment"># dirname $A   取出目录</span></span><br><span class="line">/root/Desktop/shell</span><br><span class="line"><span class="comment"># basename $A  取出文件</span></span><br><span class="line">mem.txt</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>变量”内容”的删除和替换</li>
+</ul>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">一个“%”代表从右往左去掉一个/key/</span><br><span class="line">两个“%%”代表从右往左最大去掉/key/</span><br><span class="line">一个“<span class="comment">#”代表从左往右去掉一个/key/</span></span><br><span class="line">两个“<span class="comment">##”代表从左往右最大去掉/key/</span></span><br><span class="line"></span><br><span class="line">举例说明：</span><br><span class="line"><span class="comment"># url=www.taobao.com</span></span><br><span class="line"><span class="comment"># echo $&#123;#url&#125;		     获取变量的长度</span></span><br><span class="line"><span class="comment"># echo $&#123;url#*.&#125;</span></span><br><span class="line"><span class="comment"># echo $&#123;url##*.&#125;</span></span><br><span class="line"><span class="comment"># echo $&#123;url%.*&#125;</span></span><br><span class="line"><span class="comment"># echo $&#123;url%%.*&#125;</span></span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>以下了解，自己完成</li>
+</ul>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br></pre></td><td class="code"><pre><span class="line">替换：/ 和 //</span><br><span class="line"> <span class="number">1015</span>  <span class="built_in">echo</span> <span class="variable">$</span>&#123;url/ao/AO&#125;</span><br><span class="line"> <span class="number">1017</span>  <span class="built_in">echo</span> <span class="variable">$</span>&#123;url//ao/AO&#125;   贪婪替换</span><br><span class="line"> </span><br><span class="line">替代： - 和 :-  +和:+</span><br><span class="line"> <span class="number">1019</span>  <span class="built_in">echo</span> <span class="variable">$</span>&#123;abc<span class="literal">-123</span>&#125;</span><br><span class="line"> <span class="number">1020</span>  abc=hello</span><br><span class="line"> <span class="number">1021</span>  <span class="built_in">echo</span> <span class="variable">$</span>&#123;abc<span class="literal">-444</span>&#125;</span><br><span class="line"> <span class="number">1022</span>  <span class="built_in">echo</span> <span class="variable">$abc</span></span><br><span class="line"> <span class="number">1024</span>  abc=</span><br><span class="line"> <span class="number">1025</span>  <span class="built_in">echo</span> <span class="variable">$</span>&#123;abc<span class="literal">-222</span>&#125;</span><br><span class="line"></span><br><span class="line"><span class="variable">$</span>&#123;变量名-新的变量值&#125; 或者 <span class="variable">$</span>&#123;变量名=新的变量值&#125;</span><br><span class="line">变量没有被赋值：会使用“新的变量值“ 替代</span><br><span class="line">变量有被赋值（包括空值）： 不会被替代</span><br><span class="line"></span><br><span class="line"> <span class="number">1062</span>  <span class="built_in">echo</span> <span class="variable">$</span>&#123;ABC:<span class="literal">-123</span>&#125;</span><br><span class="line"> <span class="number">1063</span>  ABC=HELLO</span><br><span class="line"> <span class="number">1064</span>  <span class="built_in">echo</span> <span class="variable">$</span>&#123;ABC:<span class="literal">-123</span>&#125;</span><br><span class="line"> <span class="number">1065</span>  ABC=</span><br><span class="line"> <span class="number">1066</span>  <span class="built_in">echo</span> <span class="variable">$</span>&#123;ABC:<span class="literal">-123</span>&#125;</span><br><span class="line"></span><br><span class="line"><span class="variable">$</span>&#123;变量名:-新的变量值&#125; 或者 <span class="variable">$</span>&#123;变量名:=新的变量值&#125;</span><br><span class="line">变量没有被赋值或者赋空值：会使用“新的变量值“ 替代</span><br><span class="line">变量有被赋值： 不会被替代</span><br><span class="line"></span><br><span class="line"> <span class="number">1116</span>  <span class="built_in">echo</span> <span class="variable">$</span>&#123;abc=<span class="number">123</span>&#125;</span><br><span class="line"> <span class="number">1118</span>  <span class="built_in">echo</span> <span class="variable">$</span>&#123;abc:=<span class="number">123</span>&#125;</span><br><span class="line"></span><br><span class="line">[<span class="type">root</span>@<span class="type">MissHou</span> ~]<span class="comment"># unset abc</span></span><br><span class="line">[<span class="type">root</span>@<span class="type">MissHou</span> ~]<span class="comment"># echo $&#123;abc:+123&#125;</span></span><br><span class="line"></span><br><span class="line">[<span class="type">root</span>@<span class="type">MissHou</span> ~]<span class="comment"># abc=hello</span></span><br><span class="line">[<span class="type">root</span>@<span class="type">MissHou</span> ~]<span class="comment"># echo $&#123;abc:+123&#125;</span></span><br><span class="line"><span class="number">123</span></span><br><span class="line">[<span class="type">root</span>@<span class="type">MissHou</span> ~]<span class="comment"># abc=</span></span><br><span class="line">[<span class="type">root</span>@<span class="type">MissHou</span> ~]<span class="comment"># echo $&#123;abc:+123&#125;</span></span><br><span class="line"></span><br><span class="line"><span class="variable">$</span>&#123;变量名+新的变量值&#125;</span><br><span class="line">变量没有被赋值或者赋空值：不会使用“新的变量值“ 替代</span><br><span class="line">变量有被赋值： 会被替代</span><br><span class="line">[<span class="type">root</span>@<span class="type">MissHou</span> ~]<span class="comment"># unset abc</span></span><br><span class="line">[<span class="type">root</span>@<span class="type">MissHou</span> ~]<span class="comment"># echo $&#123;abc+123&#125;</span></span><br><span class="line"></span><br><span class="line">[<span class="type">root</span>@<span class="type">MissHou</span> ~]<span class="comment"># abc=hello</span></span><br><span class="line">[<span class="type">root</span>@<span class="type">MissHou</span> ~]<span class="comment"># echo $&#123;abc+123&#125;</span></span><br><span class="line"><span class="number">123</span></span><br><span class="line">[<span class="type">root</span>@<span class="type">MissHou</span> ~]<span class="comment"># abc=</span></span><br><span class="line">[<span class="type">root</span>@<span class="type">MissHou</span> ~]<span class="comment"># echo $&#123;abc+123&#125;</span></span><br><span class="line"><span class="number">123</span></span><br><span class="line"><span class="variable">$</span>&#123;变量名:+新的变量值&#125;</span><br><span class="line">变量没有被赋值：不会使用“新的变量值“ 替代</span><br><span class="line">变量有被赋值（包括空值）： 会被替代</span><br><span class="line"></span><br><span class="line">[<span class="type">root</span>@<span class="type">MissHou</span> ~]<span class="comment"># unset abc</span></span><br><span class="line">[<span class="type">root</span>@<span class="type">MissHou</span> ~]<span class="comment"># echo $&#123;abc?123&#125;</span></span><br><span class="line"><span class="literal">-bash</span>: abc: <span class="number">123</span></span><br><span class="line"></span><br><span class="line">[<span class="type">root</span>@<span class="type">MissHou</span> ~]<span class="comment"># abc=hello</span></span><br><span class="line">[<span class="type">root</span>@<span class="type">MissHou</span> ~]<span class="comment"># echo $&#123;abc?123&#125;</span></span><br><span class="line">hello</span><br><span class="line">[<span class="type">root</span>@<span class="type">MissHou</span> ~]<span class="comment"># abc=</span></span><br><span class="line">[<span class="type">root</span>@<span class="type">MissHou</span> ~]<span class="comment"># echo $&#123;abc?123&#125;</span></span><br><span class="line"></span><br><span class="line"><span class="variable">$</span>&#123;变量名?新的变量值&#125;</span><br><span class="line">变量没有被赋值:提示错误信息</span><br><span class="line">变量被赋值（包括空值）：不会使用“新的变量值“ 替代</span><br><span class="line"></span><br><span class="line">[<span class="type">root</span>@<span class="type">MissHou</span> ~]<span class="comment"># unset abc</span></span><br><span class="line">[<span class="type">root</span>@<span class="type">MissHou</span> ~]<span class="comment"># echo $&#123;abc:?123&#125;</span></span><br><span class="line"><span class="literal">-bash</span>: abc: <span class="number">123</span></span><br><span class="line">[<span class="type">root</span>@<span class="type">MissHou</span> ~]<span class="comment"># abc=hello</span></span><br><span class="line">[<span class="type">root</span>@<span class="type">MissHou</span> ~]<span class="comment"># echo $&#123;abc:?123&#125;</span></span><br><span class="line">hello</span><br><span class="line">[<span class="type">root</span>@<span class="type">MissHou</span> ~]<span class="comment"># abc=</span></span><br><span class="line">[<span class="type">root</span>@<span class="type">MissHou</span> ~]<span class="comment"># echo $&#123;abc:?123&#125;</span></span><br><span class="line"><span class="literal">-bash</span>: abc: <span class="number">123</span></span><br><span class="line"></span><br><span class="line"><span class="variable">$</span>&#123;变量名:?新的变量值&#125;</span><br><span class="line">变量没有被赋值或者赋空值时:提示错误信息</span><br><span class="line">变量被赋值：不会使用“新的变量值“ 替代</span><br><span class="line"></span><br><span class="line">说明：?主要是当变量没有赋值提示错误信息的，没有赋值功能</span><br></pre></td></tr></table></figure>
+
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/linux/" rel="tag"># linux</a>
+          
+            <a href="/tags/shell/" rel="tag"># shell</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2021/01/02/HCNA/01%E5%8D%8E%E4%B8%BAHCNA%E5%9F%BA%E6%9C%AC%E5%91%BD%E4%BB%A4/" rel="next" title="华为HCNP基本命令">
+                <i class="fa fa-chevron-left"></i> 华为HCNP基本命令
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2021/01/03/java/Spring%20Boot%E7%AC%94%E8%AE%B0/" rel="prev" title="springboot入门">
+                springboot入门 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+      <div id="sidebar-dimmer"></div>
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/i.jpeg"
+                alt="" />
+            
+              <p class="site-author-name" itemprop="name"></p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/%7C%7C%20archive">
+              
+                  <span class="site-state-item-count">61</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">9</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">23</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/wangzengming" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:wangzengming@aliyun.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#SHELL%E7%BC%96%E7%A8%8B%E6%A8%A1%E5%9D%97%E8%AF%BE%E7%A8%8B%E7%9B%AE%E6%A0%87"><span class="nav-number">1.</span> <span class="nav-text">SHELL编程模块课程目标</span></a></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%B8%80%E3%80%81SHELL%E4%BB%8B%E7%BB%8D"><span class="nav-number">2.</span> <span class="nav-text">一、SHELL介绍</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E3%88%A0-%E4%BB%80%E4%B9%88%E6%98%AFshell%E8%84%9A%E6%9C%AC%EF%BC%9F"><span class="nav-number">2.0.1.</span> <span class="nav-text">㈠ 什么是shell脚本？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E3%88%A1-%E4%BB%80%E4%B9%88%E6%97%B6%E5%80%99%E7%94%A8%E5%88%B0%E8%84%9A%E6%9C%AC"><span class="nav-number">2.0.2.</span> <span class="nav-text">㈡ 什么时候用到脚本?</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E3%88%A2-shell%E8%84%9A%E6%9C%AC%E8%83%BD%E5%B9%B2%E5%95%A5"><span class="nav-number">2.0.3.</span> <span class="nav-text">㈢ shell脚本能干啥?</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E3%88%A3-%E5%A6%82%E4%BD%95%E5%AD%A6%E4%B9%A0shell%E8%84%9A%E6%9C%AC%EF%BC%9F"><span class="nav-number">2.0.4.</span> <span class="nav-text">㈣ 如何学习shell脚本？</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E3%88%A4-%E5%AD%A6%E4%B9%A0shell%E8%84%9A%E6%9C%AC%E7%9A%84%E7%A7%98%E8%AF%80"><span class="nav-number">2.0.5.</span> <span class="nav-text">㈤ 学习shell脚本的秘诀</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E3%88%A5-shell%E8%84%9A%E6%9C%AC%E7%9A%84%E5%9F%BA%E6%9C%AC%E5%86%99%E6%B3%95"><span class="nav-number">2.0.6.</span> <span class="nav-text">㈥ shell脚本的基本写法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E3%88%A6-shell%E8%84%9A%E6%9C%AC%E7%9A%84%E6%89%A7%E8%A1%8C%E6%96%B9%E6%B3%95"><span class="nav-number">2.0.7.</span> <span class="nav-text">㈦ shell脚本的执行方法</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BA%8C%E3%80%81%E5%8F%98%E9%87%8F%E7%9A%84%E5%AE%9A%E4%B9%89"><span class="nav-number">3.</span> <span class="nav-text">二、变量的定义</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E5%8F%98%E9%87%8F%E6%98%AF%E4%BB%80%E4%B9%88%EF%BC%9F"><span class="nav-number">3.1.</span> <span class="nav-text">1. 变量是什么？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E4%BB%80%E4%B9%88%E6%97%B6%E5%80%99%E9%9C%80%E8%A6%81%E5%AE%9A%E4%B9%89%E5%8F%98%E9%87%8F%EF%BC%9F"><span class="nav-number">3.2.</span> <span class="nav-text">2. 什么时候需要定义变量？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-%E5%8F%98%E9%87%8F%E5%A6%82%E4%BD%95%E5%AE%9A%E4%B9%89%EF%BC%9F"><span class="nav-number">3.3.</span> <span class="nav-text">3.变量如何定义？</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#4-%E5%8F%98%E9%87%8F%E7%9A%84%E5%AE%9A%E4%B9%89%E8%A7%84%E5%88%99"><span class="nav-number">3.4.</span> <span class="nav-text">4. 变量的定义规则</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E3%88%A0-%E5%8F%98%E9%87%8F%E5%90%8D%E5%8C%BA%E5%88%86%E5%A4%A7%E5%B0%8F%E5%86%99"><span class="nav-number">3.4.1.</span> <span class="nav-text">㈠ 变量名区分大小写</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E3%88%A1-%E5%8F%98%E9%87%8F%E5%90%8D%E4%B8%8D%E8%83%BD%E6%9C%89%E7%89%B9%E6%AE%8A%E7%AC%A6%E5%8F%B7"><span class="nav-number">3.4.2.</span> <span class="nav-text">㈡ 变量名不能有特殊符号</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E3%88%A2-%E5%8F%98%E9%87%8F%E5%90%8D%E4%B8%8D%E8%83%BD%E4%BB%A5%E6%95%B0%E5%AD%97%E5%BC%80%E5%A4%B4"><span class="nav-number">3.4.3.</span> <span class="nav-text">㈢ 变量名不能以数字开头</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E3%88%A3-%E7%AD%89%E5%8F%B7%E4%B8%A4%E8%BE%B9%E4%B8%8D%E8%83%BD%E6%9C%89%E4%BB%BB%E4%BD%95%E7%A9%BA%E6%A0%BC"><span class="nav-number">3.4.4.</span> <span class="nav-text">㈣ 等号两边不能有任何空格</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E3%88%A4-%E5%8F%98%E9%87%8F%E5%90%8D%E5%B0%BD%E9%87%8F%E5%81%9A%E5%88%B0%E8%A7%81%E5%90%8D%E7%9F%A5%E6%84%8F"><span class="nav-number">3.4.5.</span> <span class="nav-text">㈤ 变量名尽量做到见名知意</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#5-%E5%8F%98%E9%87%8F%E7%9A%84%E5%AE%9A%E4%B9%89%E6%96%B9%E5%BC%8F%E6%9C%89%E5%93%AA%E4%BA%9B%EF%BC%9F"><span class="nav-number">3.5.</span> <span class="nav-text">5. 变量的定义方式有哪些？</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E3%88%A0-%E5%9F%BA%E6%9C%AC%E6%96%B9%E5%BC%8F"><span class="nav-number">3.5.1.</span> <span class="nav-text">㈠ 基本方式</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E3%88%A1-%E5%91%BD%E4%BB%A4%E6%89%A7%E8%A1%8C%E7%BB%93%E6%9E%9C%E8%B5%8B%E5%80%BC%E7%BB%99%E5%8F%98%E9%87%8F"><span class="nav-number">3.5.2.</span> <span class="nav-text">㈡ 命令执行结果赋值给变量</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E3%88%A2-%E4%BA%A4%E4%BA%92%E5%BC%8F%E5%AE%9A%E4%B9%89%E5%8F%98%E9%87%8F-read"><span class="nav-number">3.5.3.</span> <span class="nav-text">㈢ &#x3D;&#x3D;交互式定义变量(read)&#x3D;&#x3D;</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E3%88%A3-%E5%AE%9A%E4%B9%89%E6%9C%89%E7%B1%BB%E5%9E%8B%E7%9A%84%E5%8F%98%E9%87%8F-declare"><span class="nav-number">3.5.4.</span> <span class="nav-text">㈣ 定义有类型的变量(&#x3D;&#x3D;declare&#x3D;&#x3D;)</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#6-%E5%8F%98%E9%87%8F%E7%9A%84%E5%88%86%E7%B1%BB"><span class="nav-number">3.6.</span> <span class="nav-text">6. 变量的分类</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E3%88%A0-%E6%9C%AC%E5%9C%B0%E5%8F%98%E9%87%8F"><span class="nav-number">3.6.1.</span> <span class="nav-text">㈠ 本地变量</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E3%88%A1-%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F"><span class="nav-number">3.6.2.</span> <span class="nav-text">㈡ 环境变量</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E3%88%A2-%E5%85%A8%E5%B1%80%E5%8F%98%E9%87%8F"><span class="nav-number">3.6.3.</span> <span class="nav-text">㈢ 全局变量</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E3%88%A3-%E7%B3%BB%E7%BB%9F%E5%8F%98%E9%87%8F"><span class="nav-number">3.6.4.</span> <span class="nav-text">㈣ &#x3D;&#x3D;系统变量&#x3D;&#x3D;</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%B8%89%E3%80%81%E7%AE%80%E5%8D%95%E5%9B%9B%E5%88%99%E8%BF%90%E7%AE%97"><span class="nav-number">4.</span> <span class="nav-text">三、简单四则运算</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E5%9B%9B%E5%88%99%E8%BF%90%E7%AE%97%E7%AC%A6%E5%8F%B7"><span class="nav-number">4.1.</span> <span class="nav-text">1. 四则运算符号</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E4%BA%86%E8%A7%A3i-%E5%92%8C-i"><span class="nav-number">4.2.</span> <span class="nav-text">2.了解i++和++i</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%9B%9B%E3%80%81%E6%89%A9%E5%B1%95%E8%A1%A5%E5%85%85"><span class="nav-number">5.</span> <span class="nav-text">四、扩展补充</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-%E6%95%B0%E7%BB%84%E5%AE%9A%E4%B9%89"><span class="nav-number">5.1.</span> <span class="nav-text">1. 数组定义</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E3%88%A0-%E6%95%B0%E7%BB%84%E5%88%86%E7%B1%BB"><span class="nav-number">5.1.1.</span> <span class="nav-text">㈠ 数组分类</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E3%88%A1-%E6%99%AE%E9%80%9A%E6%95%B0%E7%BB%84%E5%AE%9A%E4%B9%89"><span class="nav-number">5.1.2.</span> <span class="nav-text">㈡ 普通数组定义</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E3%88%A2-%E6%95%B0%E7%BB%84%E7%9A%84%E8%AF%BB%E5%8F%96"><span class="nav-number">5.1.3.</span> <span class="nav-text">㈢ 数组的读取</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E3%88%A3-%E5%85%B3%E8%81%94%E6%95%B0%E7%BB%84%E5%AE%9A%E4%B9%89"><span class="nav-number">5.1.4.</span> <span class="nav-text">㈣ 关联数组定义</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E2%91%A0%E9%A6%96%E5%85%88%E5%A3%B0%E6%98%8E%E5%85%B3%E8%81%94%E6%95%B0%E7%BB%84"><span class="nav-number">5.1.4.1.</span> <span class="nav-text">①首先声明关联数组</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E2%91%A1-%E6%95%B0%E7%BB%84%E8%B5%8B%E5%80%BC"><span class="nav-number">5.1.4.2.</span> <span class="nav-text">② 数组赋值</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E5%85%B6%E4%BB%96%E5%8F%98%E9%87%8F%E5%AE%9A%E4%B9%89"><span class="nav-number">5.2.</span> <span class="nav-text">2. 其他变量定义</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+        <div class="back-to-top">
+          <i class="fa fa-arrow-up"></i>
+          
+            <span id="scrollpercent"><span>0</span>%</span>
+          
+        </div>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">王增明</span>
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+  
+  
+
+
+
+
+
+  
+  
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/three/three.min.js"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/three/three-waves.min.js"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/three/canvas_sphere.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

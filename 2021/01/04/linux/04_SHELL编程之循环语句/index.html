@@ -1,0 +1,967 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+  
+  
+    
+    
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+  <link href="/lib/pace/pace-theme-minimal.min.css?v=1.0.2" rel="stylesheet">
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="linux,shell," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="#本机课程目标  掌握for循环语句的基本语法结构 掌握while和until循环语句的基本语法结构">
+<meta property="og:type" content="article">
+<meta property="og:title" content="04_SHELL编程之循环语句">
+<meta property="og:url" content="http://example.com/2021/01/04/linux/04_SHELL%E7%BC%96%E7%A8%8B%E4%B9%8B%E5%BE%AA%E7%8E%AF%E8%AF%AD%E5%8F%A5/index.html">
+<meta property="og:site_name" content="极风键客">
+<meta property="og:description" content="#本机课程目标  掌握for循环语句的基本语法结构 掌握while和until循环语句的基本语法结构">
+<meta property="og:locale">
+<meta property="article:published_time" content="2021-01-04T12:46:25.000Z">
+<meta property="article:modified_time" content="2021-07-15T10:00:16.094Z">
+<meta property="article:author" content="王增明">
+<meta property="article:tag" content="linux">
+<meta property="article:tag" content="shell">
+<meta name="twitter:card" content="summary">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":true,"scrollpercent":true,"onmobile":true},
+    fancybox: true,
+    tabs: false,
+    motion: {"enable":true,"async":true,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://example.com/2021/01/04/linux/04_SHELL编程之循环语句/"/>
+
+
+
+
+
+  <title>04_SHELL编程之循环语句 | 极风键客</title>
+  
+
+
+
+
+
+
+
+
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">极风键客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-schedule">
+          <a href="/schedule/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-calendar"></i> <br />
+            
+            日程表
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2021/01/04/linux/04_SHELL%E7%BC%96%E7%A8%8B%E4%B9%8B%E5%BE%AA%E7%8E%AF%E8%AF%AD%E5%8F%A5/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/i.jpeg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="极风键客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">04_SHELL编程之循环语句</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2021-01-04T20:46:25+08:00">
+                2021-01-04
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/linux/" itemprop="url" rel="index">
+                    <span itemprop="name">linux</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>#本机课程目标</p>
+<ul>
+<li>掌握for循环语句的基本语法结构</li>
+<li>掌握while和until循环语句的基本语法结构</li>
+</ul>
+<span id="more"></span>
+
+<h1 id="一、-for循环语句"><a href="#一、-for循环语句" class="headerlink" title="一、==for循环语句=="></a>一、==for循环语句==</h1><p><strong>关键词：爱的魔力转圈圈</strong>:innocent:</p>
+<h2 id="1-for循环语法结构"><a href="#1-for循环语法结构" class="headerlink" title="1. for循环语法结构"></a>1. for循环语法结构</h2><h3 id="㈠-列表-循环"><a href="#㈠-列表-循环" class="headerlink" title="㈠ ==列表==循环"></a>㈠ ==列表==循环</h3><blockquote>
+<p>列表for循环：用于将一组命令执行**==已知的次数==**</p>
+</blockquote>
+<ul>
+<li><strong>基本语法格式</strong></li>
+</ul>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> variable <span class="keyword">in</span> &#123;list&#125;</span><br><span class="line">     <span class="keyword">do</span></span><br><span class="line">          command </span><br><span class="line">          command</span><br><span class="line">          …</span><br><span class="line">     done</span><br><span class="line">或者</span><br><span class="line"><span class="keyword">for</span> variable <span class="keyword">in</span> a b c</span><br><span class="line">     <span class="keyword">do</span></span><br><span class="line">         command</span><br><span class="line">         command</span><br><span class="line">     done</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><strong>举例说明</strong></li>
+</ul>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># for var in &#123;1..10&#125;;do echo $var;done</span></span><br><span class="line"><span class="comment"># for var in 1 2 3 4 5;do echo $var;done</span></span><br><span class="line"><span class="comment"># for var in `seq 10`;do echo $var;done</span></span><br><span class="line"><span class="comment"># for var in $(seq 10);do echo $var;done</span></span><br><span class="line"><span class="comment"># for var in &#123;0..10..2&#125;;do echo $var;done</span></span><br><span class="line"><span class="comment"># for var in &#123;2..10..2&#125;;do echo $var;done</span></span><br><span class="line"><span class="comment"># for var in &#123;10..1&#125;;do echo $var;done</span></span><br><span class="line"><span class="comment"># for var in &#123;10..1..-2&#125;;do echo $var;done</span></span><br><span class="line"><span class="comment"># for var in `seq 10 -2 1`;do echo $var;done</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="㈡-不带列表循环"><a href="#㈡-不带列表循环" class="headerlink" title="㈡ 不带列表循环"></a>㈡ 不带列表循环</h3><blockquote>
+<p> 不带列表的for循环执行时由<strong>用户指定参数和参数的个数</strong></p>
+</blockquote>
+<ul>
+<li><strong>基本语法格式</strong></li>
+</ul>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> variable</span><br><span class="line">    <span class="keyword">do</span></span><br><span class="line">        command </span><br><span class="line">        command</span><br><span class="line">        …</span><br><span class="line">   done</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><strong>举例说明</strong></li>
+</ul>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#!/bin/bash</span></span><br><span class="line"><span class="keyword">for</span> var</span><br><span class="line"><span class="keyword">do</span></span><br><span class="line"><span class="built_in">echo</span> <span class="variable">$var</span></span><br><span class="line">done</span><br><span class="line"></span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;脚本后面有<span class="variable">$</span>#个参数&quot;</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="㈢-类C风格的for循环"><a href="#㈢-类C风格的for循环" class="headerlink" title="㈢ 类C风格的for循环"></a>㈢ 类C风格的for循环</h3><ul>
+<li><strong>基本语法结构</strong></li>
+</ul>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span>(( expr1;expr2;expr3 ))</span><br><span class="line">	<span class="keyword">do</span></span><br><span class="line">		command</span><br><span class="line">		command</span><br><span class="line">		…</span><br><span class="line">	done</span><br><span class="line"><span class="keyword">for</span> (( i=<span class="number">1</span>;i&lt;=<span class="number">5</span>;i++))</span><br><span class="line">	<span class="keyword">do</span></span><br><span class="line">		<span class="built_in">echo</span> <span class="variable">$i</span></span><br><span class="line">	done</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">expr1：定义变量并赋初值</span><br><span class="line">expr2：决定是否进行循环（条件）</span><br><span class="line">expr3：决定循环变量如何改变，决定循环什么时候退出</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><strong>举例说明</strong></li>
+</ul>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># for ((i=1;i&lt;=5;i++));do echo $i;done</span></span><br><span class="line"><span class="comment"># for ((i=1;i&lt;=10;i+=2));do echo $i;done</span></span><br><span class="line"><span class="comment"># for ((i=2;i&lt;=10;i+=2));do echo $i;done</span></span><br></pre></td></tr></table></figure>
+
+<h2 id="2-应用案例"><a href="#2-应用案例" class="headerlink" title="2. 应用案例"></a>2. 应用案例</h2><h3 id="㈠-脚本-计算-1-100奇数和"><a href="#㈠-脚本-计算-1-100奇数和" class="headerlink" title="㈠ 脚本==计算==1-100奇数和"></a>㈠ 脚本==计算==1-100奇数和</h3><h4 id="①-思路"><a href="#①-思路" class="headerlink" title="① 思路"></a>① 思路</h4><ol>
+<li>定义一个变量来保存奇数的和   ==sum===0</li>
+<li>找出1-100的奇数，保存到另一个变量里  ==i===遍历出来的奇数</li>
+<li>从1-100中找出奇数后，再相加，然后将和赋值给变量  循环变量  for</li>
+<li>遍历完毕后，将sum的值打印出来</li>
+</ol>
+<h4 id="②-落地实现（条条大路通罗马）"><a href="#②-落地实现（条条大路通罗马）" class="headerlink" title="② 落地实现（条条大路通罗马）"></a>② 落地实现（条条大路通罗马）</h4><figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#!/bin/env bash</span></span><br><span class="line"><span class="comment"># 计算1-100的奇数和</span></span><br><span class="line"><span class="comment"># 定义变量来保存奇数和</span></span><br><span class="line">sum=<span class="number">0</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#for循环遍历1-100的奇数，并且相加，把结果重新赋值给sum</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> &#123;<span class="number">1</span>..<span class="number">100</span>..<span class="number">2</span>&#125;</span><br><span class="line"><span class="keyword">do</span></span><br><span class="line">	let sum=<span class="variable">$sum</span>+<span class="variable">$i</span></span><br><span class="line">done</span><br><span class="line"><span class="comment">#打印所有奇数的和</span></span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;1-100的奇数和是:<span class="variable">$sum</span>&quot;</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">方法<span class="number">1</span>：</span><br><span class="line"><span class="comment">#!/bin/bash</span></span><br><span class="line">sum=<span class="number">0</span></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> &#123;<span class="number">1</span>..<span class="number">100</span>..<span class="number">2</span>&#125;</span><br><span class="line"><span class="keyword">do</span></span><br><span class="line">	sum=<span class="variable">$</span>[<span class="variable">$i</span>+<span class="variable">$sum</span>]</span><br><span class="line">done</span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;1-100的奇数和为:<span class="variable">$sum</span>&quot;</span></span><br><span class="line"></span><br><span class="line">方法<span class="number">2</span>：</span><br><span class="line"><span class="comment">#!/bin/bash</span></span><br><span class="line">sum=<span class="number">0</span></span><br><span class="line"><span class="keyword">for</span> ((i=<span class="number">1</span>;i&lt;=<span class="number">100</span>;i+=<span class="number">2</span>))</span><br><span class="line"><span class="keyword">do</span></span><br><span class="line">	let sum=<span class="variable">$i</span>+<span class="variable">$sum</span></span><br><span class="line">done</span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;1-100的奇数和为:<span class="variable">$sum</span>&quot;</span></span><br><span class="line"></span><br><span class="line">方法<span class="number">3</span>：</span><br><span class="line"><span class="comment">#!/bin/bash</span></span><br><span class="line">sum=<span class="number">0</span></span><br><span class="line"><span class="keyword">for</span> ((i=<span class="number">1</span>;i&lt;=<span class="number">100</span>;i++))</span><br><span class="line"><span class="keyword">do</span></span><br><span class="line">	<span class="keyword">if</span> [ <span class="variable">$</span>[<span class="variable">$i</span>%<span class="number">2</span>] -<span class="type">ne</span> <span class="number">0</span> ];then</span><br><span class="line">	let sum=<span class="variable">$sum</span>+<span class="variable">$i</span></span><br><span class="line">	fi</span><br><span class="line">或者</span><br><span class="line">test <span class="variable">$</span>[<span class="variable">$i</span>%<span class="number">2</span>] <span class="operator">-ne</span> <span class="number">0</span> &amp;&amp; let sum=<span class="variable">$sum</span>+<span class="variable">$i</span></span><br><span class="line"></span><br><span class="line">done</span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;1-100的奇数和为:<span class="variable">$sum</span>&quot;</span></span><br><span class="line"></span><br><span class="line">方法<span class="number">4</span>：</span><br><span class="line">sum=<span class="number">0</span></span><br><span class="line"><span class="keyword">for</span> ((i=<span class="number">1</span>;i&lt;=<span class="number">100</span>;i++))</span><br><span class="line"><span class="keyword">do</span></span><br><span class="line">	<span class="keyword">if</span> [ <span class="variable">$</span>[<span class="variable">$i</span>%<span class="number">2</span>] -<span class="type">eq</span> <span class="number">0</span> ];then</span><br><span class="line">	<span class="keyword">continue</span></span><br><span class="line">	<span class="keyword">else</span></span><br><span class="line">	let sum=<span class="variable">$sum</span>+<span class="variable">$i</span></span><br><span class="line">	fi</span><br><span class="line">done</span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;1-100的奇数和为:<span class="variable">$sum</span>&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#!/bin/bash</span></span><br><span class="line">sum=<span class="number">0</span></span><br><span class="line"><span class="keyword">for</span> ((i=<span class="number">1</span>;i&lt;=<span class="number">100</span>;i++))</span><br><span class="line"><span class="keyword">do</span></span><br><span class="line">	test <span class="variable">$</span>[<span class="variable">$i</span>%<span class="number">2</span>] <span class="operator">-eq</span> <span class="number">0</span> &amp;&amp; <span class="keyword">continue</span> || let sum=sum+<span class="variable">$i</span></span><br><span class="line">done</span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;1-100的奇数和是:<span class="variable">$sum</span>&quot;</span></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h4 id="③-循环控制语句"><a href="#③-循环控制语句" class="headerlink" title="③ 循环控制语句"></a>③ 循环控制语句</h4><p><strong>循环体：</strong> ==do….done==之间的内容</p>
+<ul>
+<li>continue：继续；表示==循环体==内下面的代码不执行，重新开始下一次循环</li>
+<li>break：打断；马上停止执行本次循环，执行==循环体==后面的代码</li>
+<li>exit：表示直接跳出程序</li>
+</ul>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">[root@server ~]# cat for5.sh </span><br><span class="line"><span class="meta">#</span><span class="bash">!/bin/bash</span></span><br><span class="line">for i in &#123;1..5&#125;</span><br><span class="line">do</span><br><span class="line">	test $i -eq 2 &amp;&amp; break || touch /tmp/file$i</span><br><span class="line">done</span><br><span class="line">echo hello hahahah</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<h3 id="㈡-判断所输整数是否为质数"><a href="#㈡-判断所输整数是否为质数" class="headerlink" title="㈡ 判断所输整数是否为质数"></a>㈡ 判断所输整数是否为质数</h3><p><strong>质数(素数)：</strong>==只能==被1和它本身==整除==的数叫质数。<br>2 3 5 7 11 13 17 19 23 29 31 37 41 43 47 53 59 61 67 71 73 79 83 89 97</p>
+<h4 id="①-思路-1"><a href="#①-思路-1" class="headerlink" title="① 思路"></a>① 思路</h4><ol>
+<li>让用户输入一个数，保存到一个变量里   <code>read -p &quot;请输入一个正整数:&quot; num</code></li>
+<li>如果能被其他数整除就不是质数——&gt;<code>$num%$i </code>是否等于0    <code>$i=2到$num-1</code></li>
+<li>如果输入的数是1或者2取模根据上面判断又不符合，所以先排除1和2</li>
+<li>测试序列从2开始，输入的数是4——&gt;得出结果<code>$num</code>不能和<code>$i</code>相等，并且<code>$num</code>不能小于<code>$i</code></li>
+</ol>
+<h4 id="②-落地实现"><a href="#②-落地实现" class="headerlink" title="② 落地实现"></a>② 落地实现</h4><figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#!/bin/env bash</span></span><br><span class="line"><span class="comment">#定义变量来保存用户所输入数字</span></span><br><span class="line">read <span class="literal">-p</span> <span class="string">&quot;请输入一个正整数字:&quot;</span> number</span><br><span class="line"></span><br><span class="line"><span class="comment">#先排除用户输入的数字1和2</span></span><br><span class="line">[ <span class="variable">$number</span> -<span class="type">eq</span> <span class="number">1</span> ] &amp;&amp; <span class="built_in">echo</span> <span class="string">&quot;<span class="variable">$number</span>不是质数&quot;</span> &amp;&amp; <span class="keyword">exit</span></span><br><span class="line">[ <span class="variable">$number</span> -<span class="type">eq</span> <span class="number">2</span> ] &amp;&amp; <span class="built_in">echo</span> <span class="string">&quot;<span class="variable">$number</span>是质数&quot;</span> &amp;&amp; <span class="keyword">exit</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#循环判断用户所输入的数字是否质数</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> i <span class="keyword">in</span> `seq <span class="number">2</span> <span class="variable">$</span>[<span class="variable">$number</span>-<span class="number">1</span>]`</span><br><span class="line">	<span class="keyword">do</span></span><br><span class="line">	 [ <span class="variable">$</span>[<span class="variable">$number</span>%<span class="variable">$i</span>] -<span class="type">eq</span> <span class="number">0</span> ] &amp;&amp; <span class="built_in">echo</span> <span class="string">&quot;<span class="variable">$number</span>不是质数&quot;</span> &amp;&amp; <span class="keyword">exit</span></span><br><span class="line">	done</span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;<span class="variable">$number</span>是质数&quot;</span></span><br><span class="line"></span><br><span class="line">优化思路：没有必要全部产生<span class="number">2</span>~<span class="variable">$</span>[<span class="variable">$number</span>-<span class="number">1</span>]序列，只需要产生一半即可。</span><br><span class="line"></span><br><span class="line">更好解决办法：类C风格完美避开了生成序列的坑</span><br><span class="line"><span class="keyword">for</span> (( i=<span class="number">2</span>;i&lt;=<span class="variable">$</span>[<span class="variable">$number</span>-<span class="number">1</span>];i++))</span><br><span class="line"><span class="keyword">do</span></span><br><span class="line">        [ <span class="variable">$</span>[<span class="variable">$number</span>%<span class="variable">$i</span>] -<span class="type">eq</span> <span class="number">0</span> ] &amp;&amp; <span class="built_in">echo</span> <span class="string">&quot;<span class="variable">$number</span>不是质数&quot;</span> &amp;&amp; <span class="keyword">exit</span></span><br><span class="line"></span><br><span class="line">done</span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;<span class="variable">$number</span>是质数&quot;</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="㈢-批量创建用户"><a href="#㈢-批量创建用户" class="headerlink" title="㈢ 批量创建用户"></a>㈢ 批量创建用户</h3><p><strong>需求：</strong>批量加5个新用户，以u1到u5命名，并统一加一个新组，组名为class,统一改密码为123</p>
+<h4 id="①-思路-2"><a href="#①-思路-2" class="headerlink" title="① 思路"></a>① 思路</h4><ol>
+<li>添加用户的命令    <code>useradd -G class</code></li>
+<li>判断class组是否存在  <code>grep -w ^class /etc/group</code> 或者<code>groupadd class</code></li>
+<li>根据题意，判断该脚本循环5次来添加用户  <code>for</code></li>
+<li>给用户设置密码，应该放到循环体里面</li>
+</ol>
+<h4 id="②-落地实现-1"><a href="#②-落地实现-1" class="headerlink" title="② 落地实现"></a>② 落地实现</h4><figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#!/bin/env bash</span></span><br><span class="line"><span class="comment">#判断class组是否存在</span></span><br><span class="line">grep <span class="literal">-w</span> ^<span class="class"><span class="keyword">class</span> /<span class="title">etc</span>/<span class="title">group</span> &amp;&gt;/<span class="title">dev</span>/<span class="title">null</span></span></span><br><span class="line"><span class="class"><span class="title">test</span> $? -<span class="title">ne</span> 0 &amp;&amp; <span class="title">groupadd</span> <span class="title">class</span></span></span><br><span class="line"><span class="class"></span></span><br><span class="line"><span class="class">#循环创建用户</span></span><br><span class="line"><span class="class"><span class="title">for</span> ((<span class="title">i</span>=1;<span class="title">i</span>&lt;=5;<span class="title">i</span>++))</span></span><br><span class="line"><span class="class"><span class="title">do</span></span></span><br><span class="line"><span class="class">	<span class="title">useradd</span> -<span class="title">G</span> <span class="title">class</span> <span class="title">u</span>$<span class="title">i</span></span></span><br><span class="line"><span class="class">	<span class="title">echo</span> 123|<span class="title">passwd</span> --<span class="title">stdin</span> <span class="title">u</span>$<span class="title">i</span></span></span><br><span class="line"><span class="class"><span class="title">done</span></span></span><br><span class="line"><span class="class">#用户创建信息保存日志文件</span></span><br><span class="line"><span class="class"></span></span><br><span class="line"><span class="class"></span></span><br><span class="line"><span class="class"></span></span><br><span class="line"><span class="class"></span></span><br><span class="line"><span class="class"></span></span><br><span class="line"><span class="class"></span></span><br><span class="line"><span class="class"></span></span><br><span class="line"><span class="class"></span></span><br><span class="line"><span class="class"></span></span><br><span class="line"><span class="class"></span></span><br><span class="line"><span class="class"></span></span><br><span class="line"><span class="class"></span></span><br><span class="line"><span class="class">方法一：</span></span><br><span class="line"><span class="class">#!/<span class="title">bin</span>/<span class="title">bash</span></span></span><br><span class="line"><span class="class">#判断<span class="title">class</span>组是否存在</span></span><br><span class="line"><span class="class"><span class="title">grep</span> -<span class="title">w</span> <span class="title">class</span> /<span class="title">etc</span>/<span class="title">group</span> &amp;&gt;/<span class="title">dev</span>/<span class="title">null</span></span></span><br><span class="line"><span class="class">[ $? -<span class="title">ne</span> 0 ] &amp;&amp; <span class="title">groupadd</span> <span class="title">class</span></span></span><br><span class="line"><span class="class">#批量创建5个用户</span></span><br><span class="line"><span class="class"><span class="title">for</span> <span class="title">i</span> <span class="title">in</span></span> &#123;<span class="number">1</span>..<span class="number">5</span>&#125;</span><br><span class="line"><span class="keyword">do</span></span><br><span class="line">	useradd <span class="literal">-G</span> <span class="class"><span class="keyword">class</span> <span class="title">u</span>$<span class="title">i</span></span></span><br><span class="line"><span class="class">	<span class="title">echo</span> 123|<span class="title">passwd</span> --<span class="title">stdin</span> <span class="title">u</span>$<span class="title">i</span></span></span><br><span class="line"><span class="class"><span class="title">done</span></span></span><br><span class="line"><span class="class"></span></span><br><span class="line"><span class="class">方法二：</span></span><br><span class="line"><span class="class">#!/<span class="title">bin</span>/<span class="title">bash</span></span></span><br><span class="line"><span class="class">#判断<span class="title">class</span>组是否存在</span></span><br><span class="line"><span class="class"><span class="title">cut</span> -<span class="title">d</span>: -<span class="title">f1</span> /<span class="title">etc</span>/<span class="title">group</span>|<span class="title">grep</span> -<span class="title">w</span> <span class="title">class</span> &amp;&gt;/<span class="title">dev</span>/<span class="title">null</span></span></span><br><span class="line"><span class="class">[ $? -<span class="title">ne</span> 0 ] &amp;&amp; <span class="title">groupadd</span> <span class="title">class</span></span></span><br><span class="line"><span class="class"></span></span><br><span class="line"><span class="class">#循环增加用户，循环次数5次，<span class="title">for</span>循环,给用户设定密码</span></span><br><span class="line"><span class="class"><span class="title">for</span> ((<span class="title">i</span>=1;<span class="title">i</span>&lt;=5;<span class="title">i</span>++))</span></span><br><span class="line"><span class="class"><span class="title">do</span></span></span><br><span class="line"><span class="class">	<span class="title">useradd</span> <span class="title">u</span>$<span class="title">i</span> -<span class="title">G</span> <span class="title">class</span></span></span><br><span class="line"><span class="class">	<span class="title">echo</span> 123|<span class="title">passwd</span> --<span class="title">stdin</span> <span class="title">u</span>$<span class="title">i</span></span></span><br><span class="line"><span class="class"><span class="title">done</span></span></span><br><span class="line"><span class="class"></span></span><br><span class="line"><span class="class"></span></span><br><span class="line"><span class="class">方法三：</span></span><br><span class="line"><span class="class">#!/<span class="title">bin</span>/<span class="title">bash</span></span></span><br><span class="line"><span class="class"><span class="title">grep</span> -<span class="title">w</span> <span class="title">class</span> /<span class="title">etc</span>/<span class="title">group</span> &amp;&gt;/<span class="title">dev</span>/<span class="title">null</span></span></span><br><span class="line"><span class="class"><span class="title">test</span> $? -<span class="title">ne</span> 0 &amp;&amp; <span class="title">groupadd</span> <span class="title">class</span></span></span><br><span class="line"><span class="class">或者</span></span><br><span class="line"><span class="class"><span class="title">groupadd</span> <span class="title">class</span> &amp;&gt;/<span class="title">dev</span>/<span class="title">null</span></span></span><br><span class="line"><span class="class"></span></span><br><span class="line"><span class="class"><span class="title">for</span> ((<span class="title">i</span>=1;<span class="title">i</span>&lt;=5;<span class="title">i</span>++))</span></span><br><span class="line"><span class="class"><span class="title">do</span></span></span><br><span class="line"><span class="class"><span class="title">useradd</span> -<span class="title">G</span> <span class="title">class</span> <span class="title">u</span>$<span class="title">i</span> &amp;&amp; <span class="title">echo</span> 123|<span class="title">passwd</span> --<span class="title">stdin</span> <span class="title">u</span>$<span class="title">i</span></span></span><br><span class="line"><span class="class"><span class="title">done</span></span></span><br><span class="line"><span class="class"></span></span><br></pre></td></tr></table></figure>
+
+<h2 id="3-课堂练习"><a href="#3-课堂练习" class="headerlink" title="3. 课堂练习"></a>3. 课堂练习</h2><h3 id="㈠-批量创建用户"><a href="#㈠-批量创建用户" class="headerlink" title="㈠ 批量创建用户"></a>㈠ 批量创建用户</h3><p>**需求1:**批量新建5个用户stu1~stu5，要求这几个用户的家目录都在/rhome.</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#!/bin/bash</span></span><br><span class="line"><span class="comment">#判断/rhome是否存在</span></span><br><span class="line">[ -<span class="type">f</span> /<span class="type">rhome</span> ] &amp;&amp; <span class="built_in">mv</span> /rhome /rhome.bak</span><br><span class="line">test ! <span class="literal">-d</span> /rhome &amp;&amp; mkdir /rhome</span><br><span class="line">或者</span><br><span class="line">[ -<span class="type">f</span> /<span class="type">rhome</span> ] &amp;&amp; <span class="built_in">mv</span> /rhome /rhome.bak || [ ! -<span class="type">d</span> /<span class="type">rhome</span> ] &amp;&amp; mkdir /rhome </span><br><span class="line"></span><br><span class="line"><span class="comment">#创建用户，循环5次</span></span><br><span class="line"><span class="keyword">for</span> ((i=<span class="number">1</span>;i&lt;=<span class="number">5</span>;i++))</span><br><span class="line"><span class="keyword">do</span></span><br><span class="line">	useradd <span class="literal">-d</span> /rhome/stu<span class="variable">$i</span> stu<span class="variable">$i</span></span><br><span class="line">	<span class="built_in">echo</span> <span class="number">123</span>|passwd -<span class="literal">-stdin</span> stu<span class="variable">$i</span></span><br><span class="line">done</span><br></pre></td></tr></table></figure>
+
+<h3 id="㈡-局域网内脚本检查主机网络通讯"><a href="#㈡-局域网内脚本检查主机网络通讯" class="headerlink" title="㈡ 局域网内脚本检查主机网络通讯"></a>㈡ 局域网内脚本检查主机网络通讯</h3><p><strong>需求2：</strong></p>
+<p>写一个脚本，局域网内，把能ping通的IP和不能ping通的IP分类，并保存到两个文本文件里</p>
+<p>以10.1.1.1~10.1.1.10为例</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="number">10.1</span>.<span class="number">1.1</span>~<span class="number">10.1</span>.<span class="number">1.254</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#!/bin/bash</span></span><br><span class="line"><span class="comment">#定义变量</span></span><br><span class="line">ip=<span class="number">10.1</span>.<span class="number">1</span></span><br><span class="line"><span class="comment">#循环去ping主机的IP</span></span><br><span class="line"><span class="keyword">for</span> ((i=<span class="number">1</span>;i&lt;=<span class="number">10</span>;i++))</span><br><span class="line"><span class="keyword">do</span></span><br><span class="line">	ping <span class="literal">-c1</span> <span class="variable">$ip</span>.<span class="variable">$i</span> &amp;&gt;/dev/null</span><br><span class="line">	<span class="keyword">if</span> [ <span class="variable">$</span>? -<span class="type">eq</span> <span class="number">0</span> ];then</span><br><span class="line">		<span class="built_in">echo</span> <span class="string">&quot;<span class="variable">$ip</span>.<span class="variable">$i</span> is ok&quot;</span> &gt;&gt; /tmp/ip_up.txt</span><br><span class="line">	<span class="keyword">else</span></span><br><span class="line">		<span class="built_in">echo</span> <span class="string">&quot;<span class="variable">$ip</span>.<span class="variable">$i</span> is down&quot;</span> &gt;&gt; /tmp/ip_down.txt</span><br><span class="line">	fi</span><br><span class="line">	或者</span><br><span class="line">	[ <span class="variable">$</span>? -<span class="type">eq</span> <span class="number">0</span> ] &amp;&amp; <span class="built_in">echo</span> <span class="string">&quot;<span class="variable">$ip</span>.<span class="variable">$i</span> is ok&quot;</span> &gt;&gt; /tmp/ip_up.txt || <span class="built_in">echo</span> <span class="string">&quot;<span class="variable">$ip</span>.<span class="variable">$i</span> is down&quot;</span> &gt;&gt; /tmp/ip_down.txt</span><br><span class="line">done</span><br><span class="line"></span><br><span class="line">[<span class="type">root</span>@<span class="type">server</span> <span class="type">shell03</span>]<span class="comment"># time ./ping.sh         </span></span><br><span class="line"></span><br><span class="line">real    <span class="number">0</span>m24.<span class="number">129</span>s</span><br><span class="line">user    <span class="number">0</span>m0.<span class="number">006</span>s</span><br><span class="line">sys     <span class="number">0</span>m0.<span class="number">005</span>s</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p><strong>延伸扩展：shell脚本并发</strong></p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line">并行执行：</span><br><span class="line">&#123;程序&#125;&amp;表示将程序放到后台并行执行，如果需要等待程序执行完毕再进行下面内容，需要加wait</span><br><span class="line"></span><br><span class="line"><span class="comment">#!/bin/bash</span></span><br><span class="line"><span class="comment">#定义变量</span></span><br><span class="line">ip=<span class="number">10.1</span>.<span class="number">1</span></span><br><span class="line"><span class="comment">#循环去ping主机的IP</span></span><br><span class="line"><span class="keyword">for</span> ((i=<span class="number">1</span>;i&lt;=<span class="number">10</span>;i++))</span><br><span class="line"><span class="keyword">do</span></span><br><span class="line">&#123;</span><br><span class="line"></span><br><span class="line">        ping <span class="literal">-c1</span> <span class="variable">$ip</span>.<span class="variable">$i</span> &amp;&gt;/dev/null</span><br><span class="line">        <span class="keyword">if</span> [ <span class="variable">$</span>? -<span class="type">eq</span> <span class="number">0</span> ];then</span><br><span class="line">                <span class="built_in">echo</span> <span class="string">&quot;<span class="variable">$ip</span>.<span class="variable">$i</span> is ok&quot;</span> &gt;&gt; /tmp/ip_up.txt</span><br><span class="line">        <span class="keyword">else</span></span><br><span class="line">                <span class="built_in">echo</span> <span class="string">&quot;<span class="variable">$ip</span>.<span class="variable">$i</span> is down&quot;</span> &gt;&gt; /tmp/ip_down.txt</span><br><span class="line">        fi</span><br><span class="line">&#125;&amp;</span><br><span class="line">done</span><br><span class="line">wait</span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;ip is ok....&quot;</span></span><br><span class="line"></span><br><span class="line">[<span class="type">root</span>@<span class="type">server</span> ~]<span class="comment"># time ./ping.sh </span></span><br><span class="line">ip is ok...</span><br><span class="line"></span><br><span class="line">real    <span class="number">0</span>m3.<span class="number">091</span>s</span><br><span class="line">user    <span class="number">0</span>m0.<span class="number">001</span>s</span><br><span class="line">sys     <span class="number">0</span>m0.<span class="number">008</span>s</span><br></pre></td></tr></table></figure>
+
+<h3 id="㈢-判断闰年"><a href="#㈢-判断闰年" class="headerlink" title="㈢ 判断闰年"></a>㈢ 判断闰年</h3><p><strong>需求3：</strong></p>
+<p>输入一个年份，判断是否是润年（能被4整除但不能被100整除，或能被400整除的年份即为闰年）</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#!/bin/bash</span></span><br><span class="line">read <span class="literal">-p</span> <span class="string">&quot;Please input year:(2017)&quot;</span> year</span><br><span class="line"><span class="keyword">if</span> [ <span class="variable">$</span>[<span class="variable">$year</span>%<span class="number">4</span>] -<span class="type">eq</span> <span class="number">0</span> -<span class="type">a</span> <span class="variable">$</span>[<span class="variable">$year</span>%<span class="number">100</span>] -<span class="type">ne</span> <span class="number">0</span> ];then</span><br><span class="line">	<span class="built_in">echo</span> <span class="string">&quot;<span class="variable">$year</span> is leap year&quot;</span></span><br><span class="line">elif [ <span class="variable">$</span>[<span class="variable">$year</span>%<span class="number">400</span>] -<span class="type">eq</span> <span class="number">0</span> ];then</span><br><span class="line">	<span class="built_in">echo</span> <span class="string">&quot;<span class="variable">$year</span> is leap year&quot;</span></span><br><span class="line"><span class="keyword">else</span></span><br><span class="line">	<span class="built_in">echo</span> <span class="string">&quot;<span class="variable">$year</span> is not leap year&quot;</span></span><br><span class="line">fi</span><br></pre></td></tr></table></figure>
+
+<p>##4. 总结</p>
+<ul>
+<li>FOR循环语法结构</li>
+<li>FOR循环可以结合==条件判断和流程控制语句==<ul>
+<li>do ……done  循环体</li>
+<li>循环体里可以是命令集合，再加上条件判断以及流程控制</li>
+</ul>
+</li>
+<li>控制循环语句<ul>
+<li>continue  继续，跳过本次循环，继续下一次循环</li>
+<li>break       打断，跳出循环，==执行==循环体外的代码</li>
+<li>exit          退出，直接退出程序</li>
+</ul>
+</li>
+</ul>
+<p>#二、**==while循环语句==**</p>
+<p><strong>特点：</strong>==条件为真就进入循环；条件为假就退出循环==</p>
+<p>##1. while循环语法结构</p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">while</span> 表达式</span><br><span class="line">	<span class="keyword">do</span></span><br><span class="line">		command...</span><br><span class="line">	done</span><br><span class="line">	</span><br><span class="line"><span class="keyword">while</span>  [ <span class="number">1</span> -<span class="type">eq</span> <span class="number">1</span> ] 或者 (( <span class="number">1</span> &gt; <span class="number">2</span> ))</span><br><span class="line">  <span class="keyword">do</span></span><br><span class="line">     command</span><br><span class="line">     command</span><br><span class="line">     ...</span><br><span class="line"> done</span><br></pre></td></tr></table></figure>
+
+<p><strong>循环打印1-5数字</strong></p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">FOR</span>循环打印：</span><br><span class="line"><span class="keyword">for</span> ((i=<span class="number">1</span>;i&lt;=<span class="number">5</span>;i++))</span><br><span class="line"><span class="keyword">do</span></span><br><span class="line">	<span class="built_in">echo</span> <span class="variable">$i</span></span><br><span class="line">done</span><br><span class="line"></span><br><span class="line"><span class="keyword">while</span>循环打印：</span><br><span class="line">i=<span class="number">1</span></span><br><span class="line"><span class="keyword">while</span> [ <span class="variable">$i</span> -<span class="type">le</span> <span class="number">5</span> ]</span><br><span class="line"><span class="keyword">do</span></span><br><span class="line">	<span class="built_in">echo</span> <span class="variable">$i</span></span><br><span class="line">	let i++</span><br><span class="line">done</span><br></pre></td></tr></table></figure>
+
+<h2 id="2-应用案例-1"><a href="#2-应用案例-1" class="headerlink" title="2. 应用案例"></a>2. 应用案例</h2><h3 id="㈠-脚本计算1-50偶数和"><a href="#㈠-脚本计算1-50偶数和" class="headerlink" title="㈠ 脚本计算1-50偶数和"></a>㈠ 脚本计算1-50偶数和</h3><figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#!/bin/env bash</span></span><br><span class="line">sum=<span class="number">0</span></span><br><span class="line"><span class="keyword">for</span> ((i=<span class="number">0</span>;i&lt;=<span class="number">50</span>;i+=<span class="number">2</span>))</span><br><span class="line"><span class="keyword">do</span></span><br><span class="line">	let sum=<span class="variable">$sum</span>+<span class="variable">$i</span>  (let sum=sum+i)</span><br><span class="line">done</span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;1-50的偶数和为:<span class="variable">$sum</span>&quot;</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">#!/bin/bash</span></span><br><span class="line"><span class="comment">#定义变量</span></span><br><span class="line">sum=<span class="number">0</span></span><br><span class="line">i=<span class="number">2</span></span><br><span class="line"><span class="comment">#循环打印1-50的偶数和并且计算后重新赋值给sum</span></span><br><span class="line"><span class="keyword">while</span> [ <span class="variable">$i</span> -<span class="type">le</span> <span class="number">50</span> ]</span><br><span class="line"><span class="keyword">do</span></span><br><span class="line">	let sum=<span class="variable">$sum</span>+<span class="variable">$i</span></span><br><span class="line">	let i+=<span class="number">2</span>  或者 <span class="variable">$</span>[<span class="variable">$i</span>+<span class="number">2</span>]</span><br><span class="line">done</span><br><span class="line"><span class="comment">#打印sum的值</span></span><br><span class="line"><span class="built_in">echo</span> <span class="string">&quot;1-50的偶数和为:<span class="variable">$sum</span>&quot;</span></span><br></pre></td></tr></table></figure>
+
+<h3 id="㈡-脚本同步系统时间"><a href="#㈡-脚本同步系统时间" class="headerlink" title="㈡ 脚本同步系统时间"></a>㈡ 脚本同步系统时间</h3><h4 id="①-具体需求"><a href="#①-具体需求" class="headerlink" title="① 具体需求"></a>① 具体需求</h4><ol>
+<li>写一个脚本，==30秒==同步一次系统时间，时间同步服务器10.1.1.1</li>
+<li>如果同步失败，则进行邮件报警,每次失败都报警</li>
+<li>如果同步成功,也进行邮件通知,但是==成功100次==才通知一次</li>
+</ol>
+<h4 id="②-思路"><a href="#②-思路" class="headerlink" title="② 思路"></a>② 思路</h4><ol>
+<li><p>每隔30s同步一次时间，该脚本是一个死循环   while 循环</p>
+</li>
+<li><p>同步失败发送邮件   1) ntpdate 10.1.1.1  2) rdate -s 10.1.1.1</p>
+</li>
+<li><p>同步成功100次发送邮件   定义变量保存成功次数 </p>
+</li>
+</ol>
+<h4 id="③-落地实现"><a href="#③-落地实现" class="headerlink" title="③ 落地实现"></a>③ 落地实现</h4><figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#!/bin/env bash</span></span><br><span class="line"><span class="comment"># 该脚本用于时间同步</span></span><br><span class="line">NTP=<span class="number">10.1</span>.<span class="number">1.1</span></span><br><span class="line">count=<span class="number">0</span></span><br><span class="line"><span class="keyword">while</span> true</span><br><span class="line"><span class="keyword">do</span></span><br><span class="line">	ntpdate <span class="variable">$NTP</span> &amp;&gt;/dev/null</span><br><span class="line">	<span class="keyword">if</span> [ <span class="variable">$</span>? -<span class="type">ne</span> <span class="number">0</span> ];then</span><br><span class="line">		<span class="built_in">echo</span> <span class="string">&quot;system date failed&quot;</span> |mail <span class="literal">-s</span> <span class="string">&quot;check system date&quot;</span>  root@localhost</span><br><span class="line">	<span class="keyword">else</span></span><br><span class="line">		let count++</span><br><span class="line">		<span class="keyword">if</span> [ <span class="variable">$count</span> -<span class="type">eq</span> <span class="number">100</span> ];then</span><br><span class="line">		<span class="built_in">echo</span> <span class="string">&quot;systemc date success&quot;</span> |mail <span class="literal">-s</span> <span class="string">&quot;check system date&quot;</span>  root@localhost &amp;&amp; count=<span class="number">0</span></span><br><span class="line">		fi</span><br><span class="line">	fi</span><br><span class="line"><span class="built_in">sleep</span> <span class="number">30</span></span><br><span class="line">done</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">#!/bin/bash</span></span><br><span class="line"><span class="comment">#定义变量</span></span><br><span class="line">count=<span class="number">0</span></span><br><span class="line">ntp_server=<span class="number">10.1</span>.<span class="number">1.1</span></span><br><span class="line"><span class="keyword">while</span> true</span><br><span class="line"><span class="keyword">do</span></span><br><span class="line">	rdate <span class="literal">-s</span> <span class="variable">$ntp</span><span class="literal">-server</span> &amp;&gt;/dev/null</span><br><span class="line">	<span class="keyword">if</span> [ <span class="variable">$</span>? -<span class="type">ne</span> <span class="number">0</span> ];then</span><br><span class="line">		<span class="built_in">echo</span> <span class="string">&quot;system date failed&quot;</span> |mail <span class="literal">-s</span> <span class="string">&#x27;check system date&#x27;</span>  root@localhost	</span><br><span class="line">	<span class="keyword">else</span></span><br><span class="line">		let count++</span><br><span class="line">		<span class="keyword">if</span> [ <span class="variable">$</span>[<span class="variable">$count</span>%<span class="number">100</span>] -<span class="type">eq</span> <span class="number">0</span> ];then</span><br><span class="line">		<span class="built_in">echo</span> <span class="string">&quot;system date successfull&quot;</span> |mail <span class="literal">-s</span> <span class="string">&#x27;check system date&#x27;</span>  root@localhost &amp;&amp; count=<span class="number">0</span></span><br><span class="line">		fi</span><br><span class="line">	fi</span><br><span class="line"><span class="built_in">sleep</span> <span class="number">3</span></span><br><span class="line">done</span><br><span class="line"></span><br><span class="line">以上脚本还有更多的写法，课后自己完成</span><br></pre></td></tr></table></figure>
+
+<p>#三、until循环</p>
+<p><strong>特点</strong>：==条件为假就进入循环；条件为真就退出循环==</p>
+<h2 id="1-until语法结构"><a href="#1-until语法结构" class="headerlink" title="1. until语法结构"></a>1. until语法结构</h2><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">until expression   [ 1 -eq 1 ]  (( 1 &gt;= 1 ))</span><br><span class="line">	do</span><br><span class="line">		command</span><br><span class="line">		command</span><br><span class="line">		...</span><br><span class="line">	done</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+
+<p><strong>打印1-5数字</strong></p>
+<figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">i=<span class="number">1</span></span><br><span class="line"><span class="keyword">while</span> [ <span class="variable">$i</span> -<span class="type">le</span> <span class="number">5</span> ]</span><br><span class="line"><span class="keyword">do</span></span><br><span class="line">	<span class="built_in">echo</span> <span class="variable">$i</span></span><br><span class="line">	let i++</span><br><span class="line">done</span><br><span class="line"></span><br><span class="line">i=<span class="number">1</span></span><br><span class="line"><span class="keyword">until</span> [ <span class="variable">$i</span> -<span class="type">gt</span> <span class="number">5</span> ]</span><br><span class="line"><span class="keyword">do</span></span><br><span class="line">	<span class="built_in">echo</span> <span class="variable">$i</span></span><br><span class="line">	let i++</span><br><span class="line">done</span><br></pre></td></tr></table></figure>
+
+<h2 id="2-应用案例-2"><a href="#2-应用案例-2" class="headerlink" title="2. 应用案例"></a>2. 应用案例</h2><p>###㈠ 具体需求</p>
+<ol>
+<li>使用until语句批量创建10个用户，要求stu1—stu5用户的UID分别为1001—1005；</li>
+<li>stu6~stu10用户的家目录分别在/rhome/stu6—/rhome/stu10</li>
+</ol>
+<h3 id="㈡-思路"><a href="#㈡-思路" class="headerlink" title="㈡ 思路"></a>㈡ 思路</h3><ol>
+<li>创建用户语句  <code>useradd -u|useradd -d</code></li>
+<li>使用循环语句(until)批量创建用户  <code>until循环语句结构</code></li>
+<li>判断用户前5个和后5个  <code>条件判断语句</code></li>
+</ol>
+<h3 id="㈢-落地实现"><a href="#㈢-落地实现" class="headerlink" title="㈢ 落地实现"></a>㈢ 落地实现</h3><figure class="highlight powershell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#！/bin/env bash</span></span><br><span class="line"><span class="keyword">if</span> [ -<span class="type">d</span> /<span class="type">rhome</span> ];then</span><br><span class="line">    <span class="built_in">echo</span> <span class="string">&quot;/rhome目录已存在&quot;</span></span><br><span class="line"><span class="keyword">else</span></span><br><span class="line">    mkdir /rhome</span><br><span class="line">    <span class="built_in">echo</span> <span class="string">&quot;/rhome不存在，已完成创建&quot;</span></span><br><span class="line">fi</span><br><span class="line"></span><br><span class="line">i=<span class="number">1</span></span><br><span class="line"><span class="keyword">until</span> [ <span class="variable">$i</span> -<span class="type">gt</span> <span class="number">10</span> ]</span><br><span class="line"><span class="keyword">do</span></span><br><span class="line">        <span class="keyword">if</span> [ <span class="variable">$i</span> -<span class="type">le</span> <span class="number">5</span> ];then</span><br><span class="line">                useradd <span class="literal">-u</span> <span class="variable">$</span>[<span class="number">1000</span>+<span class="variable">$i</span>] stu<span class="variable">$i</span></span><br><span class="line">                <span class="built_in">echo</span> <span class="number">123</span>|passwd -<span class="literal">-stdin</span> stu<span class="variable">$i</span></span><br><span class="line"></span><br><span class="line">        <span class="keyword">else</span></span><br><span class="line">                useradd <span class="literal">-d</span> /rhome/stu<span class="variable">$i</span> stu<span class="variable">$i</span></span><br><span class="line">                <span class="built_in">echo</span> <span class="number">123</span>|passwd -<span class="literal">-stdin</span> stu<span class="variable">$i</span></span><br><span class="line">        fi</span><br><span class="line">let i++</span><br><span class="line">done</span><br><span class="line"></span><br><span class="line">==================================================</span><br><span class="line"></span><br><span class="line"><span class="comment">#!/bin/bash</span></span><br><span class="line">i=<span class="number">1</span></span><br><span class="line"><span class="keyword">until</span> [ <span class="variable">$i</span> -<span class="type">gt</span> <span class="number">10</span> ]</span><br><span class="line"><span class="keyword">do</span></span><br><span class="line">	<span class="keyword">if</span> [ <span class="variable">$i</span> -<span class="type">le</span> <span class="number">5</span> ];then</span><br><span class="line">		useradd <span class="literal">-u</span> <span class="variable">$</span>[<span class="number">1000</span>+<span class="variable">$i</span>] stu<span class="variable">$i</span> &amp;&amp; <span class="built_in">echo</span> <span class="number">123</span>|passwd -<span class="literal">-stdin</span> stu<span class="variable">$i</span></span><br><span class="line">	<span class="keyword">else</span></span><br><span class="line">		[ ! -<span class="type">d</span> /<span class="type">rhome</span> ] &amp;&amp; mkdir /rhome</span><br><span class="line">		useradd <span class="literal">-d</span> /rhome/stu<span class="variable">$i</span> stu<span class="variable">$i</span> &amp;&amp; <span class="built_in">echo</span> <span class="number">123</span>|passwd -<span class="literal">-stdin</span> stu<span class="variable">$i</span>		</span><br><span class="line">	fi</span><br><span class="line">let i++</span><br><span class="line">done</span><br></pre></td></tr></table></figure>
+
+<h1 id="四、课后作业"><a href="#四、课后作业" class="headerlink" title="四、课后作业"></a>四、课后作业</h1><ol>
+<li>判断/tmp/run目录是否存在，如果不存在就建立，如果存在就删除目录里所有文件</li>
+<li> 输入一个路径，判断路径是否存在，而且输出是文件还是目录，如果是链接文件，还得输出是  有效的连接还是无效的连接 </li>
+<li>交互模式要求输入一个ip，然后脚本判断这个IP 对应的主机是否 能ping 通，输出结果类似于：<br>Server  10.1.1.20 is Down! 最后要求把结果邮件到本地管理员root@localhost mail01@localhost</li>
+<li>写一个脚本/home/program，要求当给脚本输入参数hello时，脚本返回world,给脚本输入参数world时，脚本返回hello。而脚本没有参数或者参数错误时，屏幕上输出“usage:/home/program hello or world”</li>
+<li>写一个脚本自动搭建nfs服务</li>
+</ol>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/linux/" rel="tag"># linux</a>
+          
+            <a href="/tags/shell/" rel="tag"># shell</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2021/01/03/linux/03_SHELL%E7%BC%96%E7%A8%8B%E4%B9%8B%E6%9D%A1%E4%BB%B6%E5%88%A4%E6%96%AD%E5%92%8C%E6%B5%81%E7%A8%8B%E6%8E%A7%E5%88%B6/" rel="next" title="03_SHELL编程之条件判断和流程控制">
+                <i class="fa fa-chevron-left"></i> 03_SHELL编程之条件判断和流程控制
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2021/01/04/%E6%95%B0%E6%8D%AE%E5%BA%93/ElasticSearch%E6%96%87%E6%A1%A3/" rel="prev" title="ElasticSearch 使用">
+                ElasticSearch 使用 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+      <div id="sidebar-dimmer"></div>
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/i.jpeg"
+                alt="" />
+            
+              <p class="site-author-name" itemprop="name"></p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/%7C%7C%20archive">
+              
+                  <span class="site-state-item-count">61</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">9</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">23</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/wangzengming" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:wangzengming@aliyun.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%B8%80%E3%80%81-for%E5%BE%AA%E7%8E%AF%E8%AF%AD%E5%8F%A5"><span class="nav-number">1.</span> <span class="nav-text">一、&#x3D;&#x3D;for循环语句&#x3D;&#x3D;</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#1-for%E5%BE%AA%E7%8E%AF%E8%AF%AD%E6%B3%95%E7%BB%93%E6%9E%84"><span class="nav-number">1.1.</span> <span class="nav-text">1. for循环语法结构</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E3%88%A0-%E5%88%97%E8%A1%A8-%E5%BE%AA%E7%8E%AF"><span class="nav-number">1.1.1.</span> <span class="nav-text">㈠ &#x3D;&#x3D;列表&#x3D;&#x3D;循环</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E3%88%A1-%E4%B8%8D%E5%B8%A6%E5%88%97%E8%A1%A8%E5%BE%AA%E7%8E%AF"><span class="nav-number">1.1.2.</span> <span class="nav-text">㈡ 不带列表循环</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E3%88%A2-%E7%B1%BBC%E9%A3%8E%E6%A0%BC%E7%9A%84for%E5%BE%AA%E7%8E%AF"><span class="nav-number">1.1.3.</span> <span class="nav-text">㈢ 类C风格的for循环</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E5%BA%94%E7%94%A8%E6%A1%88%E4%BE%8B"><span class="nav-number">1.2.</span> <span class="nav-text">2. 应用案例</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E3%88%A0-%E8%84%9A%E6%9C%AC-%E8%AE%A1%E7%AE%97-1-100%E5%A5%87%E6%95%B0%E5%92%8C"><span class="nav-number">1.2.1.</span> <span class="nav-text">㈠ 脚本&#x3D;&#x3D;计算&#x3D;&#x3D;1-100奇数和</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E2%91%A0-%E6%80%9D%E8%B7%AF"><span class="nav-number">1.2.1.1.</span> <span class="nav-text">① 思路</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E2%91%A1-%E8%90%BD%E5%9C%B0%E5%AE%9E%E7%8E%B0%EF%BC%88%E6%9D%A1%E6%9D%A1%E5%A4%A7%E8%B7%AF%E9%80%9A%E7%BD%97%E9%A9%AC%EF%BC%89"><span class="nav-number">1.2.1.2.</span> <span class="nav-text">② 落地实现（条条大路通罗马）</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E2%91%A2-%E5%BE%AA%E7%8E%AF%E6%8E%A7%E5%88%B6%E8%AF%AD%E5%8F%A5"><span class="nav-number">1.2.1.3.</span> <span class="nav-text">③ 循环控制语句</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E3%88%A1-%E5%88%A4%E6%96%AD%E6%89%80%E8%BE%93%E6%95%B4%E6%95%B0%E6%98%AF%E5%90%A6%E4%B8%BA%E8%B4%A8%E6%95%B0"><span class="nav-number">1.2.2.</span> <span class="nav-text">㈡ 判断所输整数是否为质数</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E2%91%A0-%E6%80%9D%E8%B7%AF-1"><span class="nav-number">1.2.2.1.</span> <span class="nav-text">① 思路</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E2%91%A1-%E8%90%BD%E5%9C%B0%E5%AE%9E%E7%8E%B0"><span class="nav-number">1.2.2.2.</span> <span class="nav-text">② 落地实现</span></a></li></ol></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E3%88%A2-%E6%89%B9%E9%87%8F%E5%88%9B%E5%BB%BA%E7%94%A8%E6%88%B7"><span class="nav-number">1.2.3.</span> <span class="nav-text">㈢ 批量创建用户</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E2%91%A0-%E6%80%9D%E8%B7%AF-2"><span class="nav-number">1.2.3.1.</span> <span class="nav-text">① 思路</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E2%91%A1-%E8%90%BD%E5%9C%B0%E5%AE%9E%E7%8E%B0-1"><span class="nav-number">1.2.3.2.</span> <span class="nav-text">② 落地实现</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-%E8%AF%BE%E5%A0%82%E7%BB%83%E4%B9%A0"><span class="nav-number">1.3.</span> <span class="nav-text">3. 课堂练习</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E3%88%A0-%E6%89%B9%E9%87%8F%E5%88%9B%E5%BB%BA%E7%94%A8%E6%88%B7"><span class="nav-number">1.3.1.</span> <span class="nav-text">㈠ 批量创建用户</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E3%88%A1-%E5%B1%80%E5%9F%9F%E7%BD%91%E5%86%85%E8%84%9A%E6%9C%AC%E6%A3%80%E6%9F%A5%E4%B8%BB%E6%9C%BA%E7%BD%91%E7%BB%9C%E9%80%9A%E8%AE%AF"><span class="nav-number">1.3.2.</span> <span class="nav-text">㈡ 局域网内脚本检查主机网络通讯</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E3%88%A2-%E5%88%A4%E6%96%AD%E9%97%B0%E5%B9%B4"><span class="nav-number">1.3.3.</span> <span class="nav-text">㈢ 判断闰年</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E5%BA%94%E7%94%A8%E6%A1%88%E4%BE%8B-1"><span class="nav-number">1.4.</span> <span class="nav-text">2. 应用案例</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E3%88%A0-%E8%84%9A%E6%9C%AC%E8%AE%A1%E7%AE%971-50%E5%81%B6%E6%95%B0%E5%92%8C"><span class="nav-number">1.4.1.</span> <span class="nav-text">㈠ 脚本计算1-50偶数和</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E3%88%A1-%E8%84%9A%E6%9C%AC%E5%90%8C%E6%AD%A5%E7%B3%BB%E7%BB%9F%E6%97%B6%E9%97%B4"><span class="nav-number">1.4.2.</span> <span class="nav-text">㈡ 脚本同步系统时间</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#%E2%91%A0-%E5%85%B7%E4%BD%93%E9%9C%80%E6%B1%82"><span class="nav-number">1.4.2.1.</span> <span class="nav-text">① 具体需求</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E2%91%A1-%E6%80%9D%E8%B7%AF"><span class="nav-number">1.4.2.2.</span> <span class="nav-text">② 思路</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#%E2%91%A2-%E8%90%BD%E5%9C%B0%E5%AE%9E%E7%8E%B0"><span class="nav-number">1.4.2.3.</span> <span class="nav-text">③ 落地实现</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#1-until%E8%AF%AD%E6%B3%95%E7%BB%93%E6%9E%84"><span class="nav-number">1.5.</span> <span class="nav-text">1. until语法结构</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#2-%E5%BA%94%E7%94%A8%E6%A1%88%E4%BE%8B-2"><span class="nav-number">1.6.</span> <span class="nav-text">2. 应用案例</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E3%88%A1-%E6%80%9D%E8%B7%AF"><span class="nav-number">1.6.1.</span> <span class="nav-text">㈡ 思路</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E3%88%A2-%E8%90%BD%E5%9C%B0%E5%AE%9E%E7%8E%B0"><span class="nav-number">1.6.2.</span> <span class="nav-text">㈢ 落地实现</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E5%9B%9B%E3%80%81%E8%AF%BE%E5%90%8E%E4%BD%9C%E4%B8%9A"><span class="nav-number">2.</span> <span class="nav-text">四、课后作业</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+        <div class="back-to-top">
+          <i class="fa fa-arrow-up"></i>
+          
+            <span id="scrollpercent"><span>0</span>%</span>
+          
+        </div>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">王增明</span>
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+  
+  
+
+
+
+
+
+  
+  
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/three/three.min.js"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/three/three-waves.min.js"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/three/canvas_sphere.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

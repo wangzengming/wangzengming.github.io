@@ -1,0 +1,874 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+  
+  
+    
+    
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+  <link href="/lib/pace/pace-theme-minimal.min.css?v=1.0.2" rel="stylesheet">
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="以太坊," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="我们已经实现了合约的编译和部署的自动化，这将大大提升我们开发的效率。 但流程的自动化并不能保证我们的代码质量。质量意识是靠谱工程师的基本职业 素养，在智能合约领域也不例外：任何代码如果不做充分的测试，问题发现时通 常都已为时太晚；如果代码不做自动化测试，问题发现的成本就会越来越高。  在编写合约时，我们可以利用 remix 部署后的页面调用合约函数，进行单元 测试；还可以将合约部署到私链，用 ge">
+<meta property="og:type" content="article">
+<meta property="og:title" content="7.3 编写合约的测试脚本">
+<meta property="og:url" content="http://example.com/2020/03/03/golang/%E4%BB%A5%E5%A4%AA%E5%9D%8A/7.3%E7%BC%96%E5%86%99%E5%90%88%E7%BA%A6%E6%B5%8B%E8%AF%95%E8%84%9A%E6%9C%AC/index.html">
+<meta property="og:site_name" content="极风键客">
+<meta property="og:description" content="我们已经实现了合约的编译和部署的自动化，这将大大提升我们开发的效率。 但流程的自动化并不能保证我们的代码质量。质量意识是靠谱工程师的基本职业 素养，在智能合约领域也不例外：任何代码如果不做充分的测试，问题发现时通 常都已为时太晚；如果代码不做自动化测试，问题发现的成本就会越来越高。  在编写合约时，我们可以利用 remix 部署后的页面调用合约函数，进行单元 测试；还可以将合约部署到私链，用 ge">
+<meta property="og:locale">
+<meta property="article:published_time" content="2020-03-03T12:46:25.000Z">
+<meta property="article:modified_time" content="2021-07-15T09:59:16.093Z">
+<meta property="article:author" content="王增明">
+<meta property="article:tag" content="以太坊">
+<meta name="twitter:card" content="summary">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":true,"scrollpercent":true,"onmobile":true},
+    fancybox: true,
+    tabs: false,
+    motion: {"enable":true,"async":true,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://example.com/2020/03/03/golang/以太坊/7.3编写合约测试脚本/"/>
+
+
+
+
+
+  <title>7.3 编写合约的测试脚本 | 极风键客</title>
+  
+
+
+
+
+
+
+
+
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">极风键客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-schedule">
+          <a href="/schedule/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-calendar"></i> <br />
+            
+            日程表
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2020/03/03/golang/%E4%BB%A5%E5%A4%AA%E5%9D%8A/7.3%E7%BC%96%E5%86%99%E5%90%88%E7%BA%A6%E6%B5%8B%E8%AF%95%E8%84%9A%E6%9C%AC/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/i.jpeg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="极风键客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">7.3 编写合约的测试脚本</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-03-03T20:46:25+08:00">
+                2020-03-03
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/golang/" itemprop="url" rel="index">
+                    <span itemprop="name">golang</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <p>我们已经实现了合约的编译和部署的自动化，这将大大提升我们开发的效率。 但流程的自动化并不能保证我们的代码质量。质量意识是靠谱工程师的基本职业 素养，在智能合约领域也不例外：任何代码如果不做充分的测试，问题发现时通 常都已为时太晚；如果代码不做自动化测试，问题发现的成本就会越来越高。 </p>
+<p>在编写合约时，我们可以利用 remix 部署后的页面调用合约函数，进行单元 测试；还可以将合约部署到私链，用 geth 控制台或者 node 命令行进行交互测 试。但这有很大的随意性，并不能形成标准化测试流程；而且手动一步步操作， 比较繁琐，不易保证重复一致。 </p>
+<p>于是我们想到，是否可以利用现成的前端技术栈实现合约的自动化测试呢？ 当然是可以的，mocha 就是这样一个 JavaScript 测试框架。</p>
+<h2 id="安装依赖"><a href="#安装依赖" class="headerlink" title="安装依赖"></a>安装依赖</h2><p>开始编写测试脚本之前，我们首先需要安装依赖：测试框架 mocha。当然， 作为对合约的测试，模拟节点 ganache 和 web3 都是不可缺少的；不过我们在 上节课编写部署脚本时，已经安装了这些依赖（我们的 web3 依然是 1.0.0 版本）。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install mocha –save-dev</span><br></pre></td></tr></table></figure>
+
+<p>进行单元测试，比较重要的一点是保证测试的独立性和隔离性，所以我们并 不需要测试网络这种有复杂交互的环境，甚至不需要本地私链保存测试历史。而 ganache 基于内存模拟以太坊节点行为，每次启动都是一个干净的空白环境，所 以非常适合我们做开发时的单元测试。还记得 ganache 的前身叫什么吗？就是 大名鼎鼎的 testRPC。</p>
+<h2 id="mocha-简介"><a href="#mocha-简介" class="headerlink" title="mocha 简介"></a>mocha 简介</h2><p>mocha 是 JavaScript 的一个单元测试框架，既可以在浏览器环境中运行， 也可以在 node.js 环境下运行。我们只需要编写测试用例，mocha 会将测试自动 运行并给出测试结果。 </p>
+<p>mocha 的主要特点有：</p>
+<ul>
+<li>既可以测试简单的 JavaScript 函数，又可以测试异步代码；</li>
+<li> 可以自动运行所有测试，也可以只运行特定的测试；</li>
+<li>可以支持 before、after、beforeEach 和 afterEach 来编写初始化代码。</li>
+</ul>
+<h2 id="测试脚本示例"><a href="#测试脚本示例" class="headerlink" title="测试脚本示例"></a>测试脚本示例</h2><p>假设我们编写了一个 sum.js，并且输出一个简单的求和函数：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="built_in">module</span>.exports = <span class="function"><span class="keyword">function</span> (<span class="params">...rest</span>) </span>&#123;</span><br><span class="line"> <span class="keyword">var</span> sum = <span class="number">0</span>;</span><br><span class="line"> <span class="keyword">for</span> (<span class="keyword">let</span> n <span class="keyword">of</span> rest) &#123;</span><br><span class="line"> sum += n;</span><br><span class="line"> &#125;</span><br><span class="line"> <span class="keyword">return</span> sum;</span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+<p>这个函数非常简单，就是对输入的任意参数求和并返回结果。 </p>
+<p>如果我们想对这个函数进行测试，可以写一个 test.js，然后使用 Node.js 提 供的 assert 模块进行断言：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> assert = <span class="built_in">require</span>(<span class="string">&#x27;assert&#x27;</span>);</span><br><span class="line"><span class="keyword">const</span> sum = <span class="built_in">require</span>(<span class="string">&#x27;./sum&#x27;</span>);</span><br><span class="line">assert.strictEqual(sum(), <span class="number">0</span>);</span><br><span class="line">assert.strictEqual(sum(<span class="number">1</span>), <span class="number">1</span>);</span><br><span class="line">assert.strictEqual(sum(<span class="number">1</span>, <span class="number">2</span>), <span class="number">3</span>);</span><br><span class="line">assert.strictEqual(sum(<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>), <span class="number">6</span>);</span><br></pre></td></tr></table></figure>
+
+<p>assert 模块非常简单，它断言一个表达式为 true。如果断言失败，就抛出 Error。</p>
+<p>单独写一个 test.js 的缺点是没法自动运行测试，而且，如果第一个 assert 报错，后面的测试也执行不了了。 </p>
+<p>如果有很多测试需要运行，就必须把这些测试全部组织起来，然后统一执行， 并且得到执行结果。这就是我们为什么要用 mocha 来编写并运行测试。</p>
+<p> 我们利用 mocha 修改后的测试脚本如下：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> assert = <span class="built_in">require</span>(<span class="string">&#x27;assert&#x27;</span>);</span><br><span class="line"><span class="keyword">const</span> sum = <span class="built_in">require</span>(<span class="string">&#x27;../sum&#x27;</span>);</span><br><span class="line">describe(<span class="string">&#x27;#sum.js&#x27;</span>, <span class="function">() =&gt;</span> &#123;</span><br><span class="line"> 		describe(<span class="string">&#x27;#sum()&#x27;</span>, <span class="function">() =&gt;</span> &#123;</span><br><span class="line"> 			it(<span class="string">&#x27;sum() should return 0&#x27;</span>, <span class="function">() =&gt;</span> &#123;</span><br><span class="line"> 				assert.strictEqual(sum(), <span class="number">0</span>);</span><br><span class="line"> 			&#125;);</span><br><span class="line"> 			it(<span class="string">&#x27;sum(1) should return 1&#x27;</span>, <span class="function">() =&gt;</span> &#123;</span><br><span class="line"> 				assert.strictEqual(sum(<span class="number">1</span>), <span class="number">1</span>);</span><br><span class="line"> 			&#125;);</span><br><span class="line"> 			it(<span class="string">&#x27;sum(1, 2) should return 3&#x27;</span>, <span class="function">() =&gt;</span> &#123;</span><br><span class="line"> 				assert.strictEqual(sum(<span class="number">1</span>, <span class="number">2</span>), <span class="number">3</span>);</span><br><span class="line"> 			&#125;);</span><br><span class="line"> 			it(<span class="string">&#x27;sum(1, 2, 3) should return 6&#x27;</span>, <span class="function">() =&gt;</span> &#123;</span><br><span class="line"> 				assert.strictEqual(sum(<span class="number">1</span>, <span class="number">2</span>, <span class="number">3</span>), <span class="number">6</span>);</span><br><span class="line"> 			&#125;);</span><br><span class="line"> 	&#125;);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<p>这里我们使用 mocha 默认的 BDD-style 的测试。describe 可以任意嵌套， 以便把相关测试看成一组测试。</p>
+<p>describe 可以任意嵌套，以便把相关测试看成一组测试；而其中的每个 it 就代表一个测试。 </p>
+<p>每个 it(“name”, function() {…})就代表一个测试。例如，为了测试 sum(1, 2)， 我们这样写：</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">it(<span class="string">&#x27;sum(1, 2) should return 3&#x27;</span>, <span class="function">() =&gt;</span> &#123;</span><br><span class="line"> assert.strictEqual(sum(<span class="number">1</span>, <span class="number">2</span>), <span class="number">3</span>);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<p>编写测试的原则是，一次只测一种情况，且测试代码要非常简单。我们编写 多个测试来分别测试不同的输入，并使用 assert 判断输出是否是我们所期望的。</p>
+<h2 id="运行测试脚本"><a href="#运行测试脚本" class="headerlink" title="运行测试脚本"></a>运行测试脚本</h2><p>下一步，我们就可以用 mocha 运行测试了。打开命令提示符，切换到项目 目录，然后创建文件夹 test，将 test.js 放入 test 文件夹下，执行命令：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./node_modules/mocha/bin/mocha</span><br></pre></td></tr></table></figure>
+
+<p>mocha 就会自动执行 test 文件夹下所有测试，然后输出如下：</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">#sum.js</span><br><span class="line"> #sum()</span><br><span class="line"> ✓ sum() should return 0</span><br><span class="line"> ✓ sum(1) should return 1</span><br><span class="line"> ✓ sum(1, 2) should return 3</span><br><span class="line"> ✓ sum(1, 2, 3) should return 6</span><br><span class="line"> 4 passing (7ms)</span><br></pre></td></tr></table></figure>
+
+<p>这说明我们编写的 4 个测试全部通过。如果没有通过，要么修改测试代码， 要么修改 hello.js，直到测试全部通过为止。</p>
+<h2 id="编写合约测试脚本"><a href="#编写合约测试脚本" class="headerlink" title="编写合约测试脚本"></a>编写合约测试脚本</h2><p>测试时我们通常会把每次测试运行的环境隔离开，以保证互不影响。对应到 合约测试，我们每次测试都需要部署新的合约实例，然后针对新的实例做功能测 试。 Car 合约的功能比较简单，我们只要设计 2 个测试用例： </p>
+<ul>
+<li>合约部署时传入的 brand 属性被正确存储；</li>
+<li>调用 setBrand 之后合约的 brand 属性被正确更新；</li>
+</ul>
+<p> 新建测试文件 tests/car.spec.js，完整的测试代码如下。</p>
+<figure class="highlight js"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> path = <span class="built_in">require</span>(<span class="string">&#x27;path&#x27;</span>);</span><br><span class="line"><span class="keyword">const</span> assert = <span class="built_in">require</span>(<span class="string">&#x27;assert&#x27;</span>);</span><br><span class="line"><span class="keyword">const</span> ganache = <span class="built_in">require</span>(<span class="string">&#x27;ganache-cli&#x27;</span>);</span><br><span class="line"><span class="keyword">const</span> Web3 = <span class="built_in">require</span>(<span class="string">&#x27;web3&#x27;</span>);</span><br><span class="line"><span class="comment">// 1. 配置 provider</span></span><br><span class="line"><span class="keyword">const</span> web3 = <span class="keyword">new</span> Web3(ganache.provider());</span><br><span class="line"><span class="comment">// 2. 拿到 abi 和 bytecode</span></span><br><span class="line"><span class="keyword">const</span> contractPath = path.resolve(__dirname,</span><br><span class="line"><span class="string">&#x27;../compiled/Car.json&#x27;</span>);</span><br><span class="line"><span class="keyword">const</span> &#123; interface, bytecode &#125; = <span class="built_in">require</span>(contractPath);</span><br><span class="line"><span class="keyword">let</span> accounts;</span><br><span class="line"><span class="keyword">let</span> contract;</span><br><span class="line"><span class="keyword">const</span> initialBrand = <span class="string">&#x27;BMW&#x27;</span>; </span><br><span class="line">describe(<span class="string">&#x27;contract&#x27;</span>, <span class="function">() =&gt;</span> &#123;</span><br><span class="line"><span class="comment">// 3. 每次跑单测时需要部署全新的合约实例，起到隔离的作用</span></span><br><span class="line">beforeEach(<span class="keyword">async</span> () =&gt; &#123;</span><br><span class="line">accounts = <span class="keyword">await</span> web3.eth.getAccounts();</span><br><span class="line"><span class="built_in">console</span>.log(<span class="string">&#x27;合约部署账户：&#x27;</span>, accounts[<span class="number">0</span>]);</span><br><span class="line">contract = <span class="keyword">await</span> <span class="keyword">new</span></span><br><span class="line">web3.eth.Contract(<span class="built_in">JSON</span>.parse(interface))</span><br><span class="line">.deploy(&#123; <span class="attr">data</span>: bytecode, <span class="attr">arguments</span>: [initialBrand] &#125;)</span><br><span class="line">.send(&#123; <span class="attr">from</span>: accounts[<span class="number">0</span>], <span class="attr">gas</span>: <span class="string">&#x27;1000000&#x27;</span> &#125;);</span><br><span class="line"><span class="built_in">console</span>.log(<span class="string">&#x27;合约部署成功：&#x27;</span>,</span><br><span class="line">contract.options.address); &#125;);</span><br><span class="line"><span class="comment">// 4. 编写单元测试</span></span><br><span class="line">it(<span class="string">&#x27;deployed contract&#x27;</span>, <span class="function">() =&gt;</span> &#123;</span><br><span class="line">assert.ok(contract.options.address);</span><br><span class="line">&#125;);</span><br><span class="line">it(<span class="string">&#x27;should has initial brand&#x27;</span>, <span class="keyword">async</span> () =&gt; &#123;</span><br><span class="line"><span class="keyword">const</span> brand = <span class="keyword">await</span> contract.methods.brand().call();</span><br><span class="line">assert.equal(brand, initialBrand);</span><br><span class="line">&#125;);</span><br><span class="line">it(<span class="string">&#x27;can change the brand&#x27;</span>, <span class="keyword">async</span> ()=&gt;&#123;</span><br><span class="line"> <span class="keyword">const</span> newBrand = <span class="string">&#x27;Benz&#x27;</span>;</span><br><span class="line"> <span class="keyword">await</span> contract.methods.setBrand(newBrand)</span><br><span class="line">.send(&#123;<span class="attr">from</span>: accounts[<span class="number">0</span>]&#125;);</span><br><span class="line"> <span class="keyword">const</span> brand = <span class="keyword">await</span> contract.methods.brand().call();</span><br><span class="line"> assert.equal(brand, newBrand);</span><br><span class="line">&#125;);</span><br><span class="line">&#125;);</span><br></pre></td></tr></table></figure>
+
+<p>整个测试代码使用的断言库是 Node.js 内置的 assert 模块，assert.ok() 用于判断表达式真值，等同于 assert()，如果为 false 则抛出 error；assert.equal() 用于判断实际值和期望值是否相等（==），如果不相等则抛出 error。 </p>
+<p>beforeEach 是 mocha 里提供的声明周期方法，表示每次运行时每个 test 执行前都要做的准备操作。因为我们知道，在测试前初始化资源，测试后释放资 源是非常常见的，所以 mocha 提供了 before、after、beforeEach 和 afterEach 来实现这些功能。</p>
+<p> 测试的关键步骤也用编号的数字做了注释，其中步骤 1、2、3 在合约部署 脚本中已经比较熟悉，需要注意的是 ganache-cli provider 的创建方式。我们在 脚本中引入 ganache，将模拟以太坊节点嵌入测试中，就不会影响我们外部运行 的节点环境了。 </p>
+<p>测试中我们用到了 web3.js 中两个与合约实例交互的方法，之前我们已经接 触过，以后在 DApp 开发时会大量使用：</p>
+<ul>
+<li>contract.methods.brand().call()，调用合约上的方法，通常是取数据， 立即返回，与 v0.20.1 版本中的 .call() 相同； </li>
+<li> contract.methods.setBrand(‘xxx’).send()，对合约发起交易，通常是修 改数据，返回的是交易 Hash，相当于 v0.20.1 中的 sendTransaction() ；</li>
+</ul>
+<p> send 必须指定发起的账户地址，而 call 可以直接调用。 </p>
+<p>注意在 v1.0.0 中，contract 后面要加上.methods 然后才能跟合约函数名， 这与 v0.20.1 不同；类似，v1.0.0 中事件的监听也要 contract 后面加.events。</p>
+<h2 id="运行测试脚本-1"><a href="#运行测试脚本-1" class="headerlink" title="运行测试脚本"></a>运行测试脚本</h2><p>有了测试代码，就可以运行并观察结果。mocha 默认会执行 test 目录下的 所有脚本，但我们也可以传入脚本路径，指定执行目录。如果你环境中全局安装 了 mocha，可以使用如下命令运行测试：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">mocha tests </span><br><span class="line">./node_modules/.bin/mocha tests</span><br></pre></td></tr></table></figure>
+
+<p>如果一切正常，我们可以看到 输出结果：</p>
+<h2 id="完整的工作流"><a href="#完整的工作流" class="headerlink" title="完整的工作流"></a>完整的工作流</h2><p>到目前为止，我们已经熟悉了智能合约的开发、编译、部署、测试，而在实 际工作中，把这些过程串起来才能算作是真正意义上的工作流。比如修改了合约 代码需要重新运行测试，但是重新运行测试之前需要重新编译，而部署的过程也 是类似的，每次部署的都要是最新的合约代码。</p>
+<p> 通过 npm script 机制，我们可以把智能合约的工作流串起来，让能自动化 的尽可能自动化，在 package.json 中作如下修改：</p>
+<figure class="highlight json"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">&quot;scripts&quot;</span>: &#123;</span><br><span class="line"><span class="attr">&quot;compile&quot;</span>: <span class="string">&quot;node scripts/compile.js&quot;</span>,</span><br><span class="line"><span class="attr">&quot;pretest&quot;</span>: <span class="string">&quot;npm run compile&quot;</span>,</span><br><span class="line"><span class="attr">&quot;test&quot;</span>: <span class="string">&quot;mocha tests/&quot;</span>,</span><br><span class="line"><span class="attr">&quot;predeploy&quot;</span>: <span class="string">&quot;npm run compile&quot;</span>,</span><br><span class="line"><span class="attr">&quot;deploy&quot;</span>: <span class="string">&quot;node scripts/deploy.js&quot;</span></span><br><span class="line">&#125;,</span><br></pre></td></tr></table></figure>
+
+<p>上面的改动中，我们为项目增加了 3 条命令：compile、test、deploy，其 中 pretest、predeploy 是利用了 npm script 的生命周期机制，把我们的 compile、test、deploy 串起来。 </p>
+<p>接下来我们可以使用 npm run test 运行测试，结果如下：</p>
+<p>同理我们可以使用 npm run deploy 部署合约，结果如下：</p>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/%E4%BB%A5%E5%A4%AA%E5%9D%8A/" rel="tag"># 以太坊</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/03/03/golang/go/" rel="next" title="在Mac上编译go">
+                <i class="fa fa-chevron-left"></i> 在Mac上编译go
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2020/03/03/golang/%E4%BB%A5%E5%A4%AA%E5%9D%8A/7.2%E7%BC%96%E5%86%99%E5%90%88%E7%BA%A6%E7%9A%84%E9%83%A8%E7%BD%B2%E8%84%9A%E6%9C%AC/" rel="prev" title="7.2 编写合约的部署脚本">
+                7.2 编写合约的部署脚本 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+      <div id="sidebar-dimmer"></div>
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/i.jpeg"
+                alt="" />
+            
+              <p class="site-author-name" itemprop="name"></p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/%7C%7C%20archive">
+              
+                  <span class="site-state-item-count">61</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">9</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">23</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/wangzengming" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:wangzengming@aliyun.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%89%E8%A3%85%E4%BE%9D%E8%B5%96"><span class="nav-number">1.</span> <span class="nav-text">安装依赖</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#mocha-%E7%AE%80%E4%BB%8B"><span class="nav-number">2.</span> <span class="nav-text">mocha 简介</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B5%8B%E8%AF%95%E8%84%9A%E6%9C%AC%E7%A4%BA%E4%BE%8B"><span class="nav-number">3.</span> <span class="nav-text">测试脚本示例</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%BF%90%E8%A1%8C%E6%B5%8B%E8%AF%95%E8%84%9A%E6%9C%AC"><span class="nav-number">4.</span> <span class="nav-text">运行测试脚本</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%BC%96%E5%86%99%E5%90%88%E7%BA%A6%E6%B5%8B%E8%AF%95%E8%84%9A%E6%9C%AC"><span class="nav-number">5.</span> <span class="nav-text">编写合约测试脚本</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%BF%90%E8%A1%8C%E6%B5%8B%E8%AF%95%E8%84%9A%E6%9C%AC-1"><span class="nav-number">6.</span> <span class="nav-text">运行测试脚本</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%8C%E6%95%B4%E7%9A%84%E5%B7%A5%E4%BD%9C%E6%B5%81"><span class="nav-number">7.</span> <span class="nav-text">完整的工作流</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+        <div class="back-to-top">
+          <i class="fa fa-arrow-up"></i>
+          
+            <span id="scrollpercent"><span>0</span>%</span>
+          
+        </div>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">王增明</span>
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+  
+  
+
+
+
+
+
+  
+  
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/three/three.min.js"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/three/three-waves.min.js"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/three/canvas_sphere.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

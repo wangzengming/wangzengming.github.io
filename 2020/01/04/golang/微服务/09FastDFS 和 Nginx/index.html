@@ -1,0 +1,920 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+  
+  
+    
+    
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+  <link href="/lib/pace/pace-theme-minimal.min.css?v=1.0.2" rel="stylesheet">
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="微服务," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="FastDFS 和 NginxFastDFS三端： 客户端：client 监听端（监听服务器）：tracker 存储端（存储服务器）：storage">
+<meta property="og:type" content="article">
+<meta property="og:title" content="微服务学习--09FastDFS 和 Nginx">
+<meta property="og:url" content="http://example.com/2020/01/04/golang/%E5%BE%AE%E6%9C%8D%E5%8A%A1/09FastDFS%20%E5%92%8C%20Nginx/index.html">
+<meta property="og:site_name" content="极风键客">
+<meta property="og:description" content="FastDFS 和 NginxFastDFS三端： 客户端：client 监听端（监听服务器）：tracker 存储端（存储服务器）：storage">
+<meta property="og:locale">
+<meta property="og:image" content="http://example.com/2020/01/04/golang/%E5%BE%AE%E6%9C%8D%E5%8A%A1/09FastDFS%20%E5%92%8C%20Nginx/%E8%AF%BE%E5%A0%82%E7%AC%94%E8%AE%B0-09.assets/1582680996644.png">
+<meta property="og:image" content="http://example.com/2020/01/04/golang/%E5%BE%AE%E6%9C%8D%E5%8A%A1/09FastDFS%20%E5%92%8C%20Nginx/%E8%AF%BE%E5%A0%82%E7%AC%94%E8%AE%B0-09.assets/1582682178020.png">
+<meta property="og:image" content="http://example.com/2020/01/04/golang/%E5%BE%AE%E6%9C%8D%E5%8A%A1/09FastDFS%20%E5%92%8C%20Nginx/%E8%AF%BE%E5%A0%82%E7%AC%94%E8%AE%B0-09.assets/1582683497645.png">
+<meta property="article:published_time" content="2020-01-04T12:46:25.000Z">
+<meta property="article:modified_time" content="2021-07-15T09:58:16.092Z">
+<meta property="article:author" content="王增明">
+<meta property="article:tag" content="微服务">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="http://example.com/2020/01/04/golang/%E5%BE%AE%E6%9C%8D%E5%8A%A1/09FastDFS%20%E5%92%8C%20Nginx/%E8%AF%BE%E5%A0%82%E7%AC%94%E8%AE%B0-09.assets/1582680996644.png">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":true,"scrollpercent":true,"onmobile":true},
+    fancybox: true,
+    tabs: false,
+    motion: {"enable":true,"async":true,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://example.com/2020/01/04/golang/微服务/09FastDFS 和 Nginx/"/>
+
+
+
+
+
+  <title>微服务学习--09FastDFS 和 Nginx | 极风键客</title>
+  
+
+
+
+
+
+
+
+
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">极风键客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-schedule">
+          <a href="/schedule/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-calendar"></i> <br />
+            
+            日程表
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2020/01/04/golang/%E5%BE%AE%E6%9C%8D%E5%8A%A1/09FastDFS%20%E5%92%8C%20Nginx/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/i.jpeg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="极风键客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">微服务学习--09FastDFS 和 Nginx</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-01-04T20:46:25+08:00">
+                2020-01-04
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/golang/" itemprop="url" rel="index">
+                    <span itemprop="name">golang</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="FastDFS-和-Nginx"><a href="#FastDFS-和-Nginx" class="headerlink" title="FastDFS 和 Nginx"></a>FastDFS 和 Nginx</h1><h2 id="FastDFS"><a href="#FastDFS" class="headerlink" title="FastDFS"></a>FastDFS</h2><h3 id="三端："><a href="#三端：" class="headerlink" title="三端："></a>三端：</h3><ul>
+<li>客户端：client</li>
+<li>监听端（监听服务器）：tracker</li>
+<li>存储端（存储服务器）：storage</li>
+</ul>
+<span id="more"></span>
+
+<p><img src="%E8%AF%BE%E5%A0%82%E7%AC%94%E8%AE%B0-09.assets/1582680996644.png" alt="1582680996644"></p>
+<h3 id="使用步骤："><a href="#使用步骤：" class="headerlink" title="使用步骤："></a>使用步骤：</h3><ol>
+<li>监听服务器定时查看存储服务器的状态。</li>
+<li>client 访问监听服务器， 获取到可用的 存储服务器地址。</li>
+<li>客户端根据返回的地址，访问存储服务器。</li>
+<li>存储服务器存储文件，并返回凭证。如：“组名/M00/00/00/xxxxxx” </li>
+</ol>
+<h3 id="与以往的区别"><a href="#与以往的区别" class="headerlink" title="与以往的区别"></a>与以往的区别</h3><ul>
+<li>图片需要上传！但是不需要下载。 直接按 “凭证” 展示到 浏览器即可。</li>
+<li>fastDFS 不提供 “展示图片” 功能。 —— Nginx。</li>
+</ul>
+<h3 id="fastDFS-安装和配置"><a href="#fastDFS-安装和配置" class="headerlink" title="fastDFS 安装和配置"></a>fastDFS 安装和配置</h3><ul>
+<li><p>安装 ： 参照 《fastdfs.pdf》实施</p>
+</li>
+<li><p>配置：</p>
+<ul>
+<li>修改sudo vim /etc/fdfs/storage.conf。    —— tracker_server=你自己的IP:22122</li>
+<li>修改sudo vim /etc/fdfs/tracker.conf        —— 不需要。</li>
+<li>修改sudo vim /etc/fdfs/client.conf          —— tracker_server=你自己的IP:22122</li>
+</ul>
+</li>
+<li><p>启动 fastDFS：</p>
+<ol>
+<li><p> 启动 存储服务器 storage：   sudo fdfs_storaged /etc/fdfs/storage.conf</p>
+</li>
+<li><p>  启动 监听服务器 tracker： sudo fdfs_trackerd /etc/fdfs/tracker.conf</p>
+</li>
+<li><p>ps aux | grep fdfs</p>
+<p> <img src="%E8%AF%BE%E5%A0%82%E7%AC%94%E8%AE%B0-09.assets/1582682178020.png" alt="1582682178020"></p>
+</li>
+</ol>
+</li>
+</ul>
+<h2 id="Nginx"><a href="#Nginx" class="headerlink" title="Nginx"></a>Nginx</h2><ul>
+<li><p>安装： fastDFS 的 Nginx 插件。</p>
+<ul>
+<li>参照 《fastdfs.pdf》 3.2.5.7安装fastdfs-nginx-module</li>
+</ul>
+</li>
+<li><p>拷贝：</p>
+<ul>
+<li>将 解压缩的 fastdfs-master目录中 mod_fastdfs.conf 拷贝， 放到 /etc/fdfs/ 目录下。</li>
+<li>将 解压缩的 fastdfs-master目录中 http.conf  拷贝， 放到 /etc/fdfs/ 目录下。 — 不需要修改</li>
+<li>将 解压缩的 fastdfs-master目录中 mime.types 拷贝， 放到 /etc/fdfs/ 目录下。 — 不需要修改</li>
+</ul>
+</li>
+<li><p>修改 mod_fastdfs.conf</p>
+<ul>
+<li>sudo  vim mod_fastdfs.conf 文件， 修改： tracker_server=你自己的IP地址:22122</li>
+</ul>
+</li>
+<li><p>修改 Nginx：</p>
+<ul>
+<li>sudo vim /usr/local/nginx/conf/nginx.conf </li>
+<li>参考 《fastdfs.pdf》 3.2.5.7 安装fastdfs-nginx-module 第 9 条。修改：</li>
+</ul>
+</li>
+</ul>
+<p><img src="%E8%AF%BE%E5%A0%82%E7%AC%94%E8%AE%B0-09.assets/1582683497645.png" alt="1582683497645"></p>
+<ul>
+<li>启动nginx<ul>
+<li>启动命令：<code>sudo /usr/local/nginx/sbin/nginx</code></li>
+<li>提示：类似于：<code>ngx_http_fastdfs_set pid=78481</code></li>
+<li>查看：<ul>
+<li>ps aux | grep nginx</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h1 id="Go语言-使用-FastDFS和Nginx"><a href="#Go语言-使用-FastDFS和Nginx" class="headerlink" title="Go语言 使用 FastDFS和Nginx"></a>Go语言 使用 FastDFS和Nginx</h1><ul>
+<li><p>《fastdfs.pdf》中， 3.2.6 小结中的 方法， 已经过时！不要使用！</p>
+</li>
+<li><p> 去 github 搜索 “fastdfs”  — <a target="_blank" rel="noopener" href="https://github.com/tedcy/fdfs_client">https://github.com/tedcy/fdfs_client</a></p>
+</li>
+<li><p>使用开源包，必须确认在  /etc/fdfs/client.conf 中 添加了 配置</p>
+  <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">maxConns=10		# 设置最大连接数。</span><br></pre></td></tr></table></figure></li>
+<li><p>查看 demo：client_test.go ，确认，我们使用的方法：</p>
+  <figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">client, err := NewClientWithConfig(<span class="string">&quot;fdfs.conf&quot;</span>)</span><br><span class="line">	参数： /etc/fdfs/client.conf</span><br><span class="line"></span><br><span class="line">client.UploadByBuffer([]<span class="keyword">byte</span>(<span class="string">&quot;hello world&quot;</span>), <span class="string">&quot;go&quot;</span>); </span><br><span class="line">	参<span class="number">1</span>： []<span class="keyword">byte</span> 的图片数据。</span><br><span class="line">	参<span class="number">2</span>： 去除 “.” 文件后缀名。</span><br></pre></td></tr></table></figure>
+
+</li>
+</ul>
+<h3 id="测试"><a href="#测试" class="headerlink" title="测试"></a>测试</h3><figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> main</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">&quot;github.com/tedcy/fdfs_client&quot;</span></span><br><span class="line">	<span class="string">&quot;fmt&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span>  &#123;</span><br><span class="line">	<span class="comment">// 初始化客户端 --- 配置文件</span></span><br><span class="line">	clt, err := fdfs_client.NewClientWithConfig(<span class="string">&quot;/etc/fdfs/client.conf&quot;</span>)</span><br><span class="line">	<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">		fmt.Println(<span class="string">&quot;初始化客户端错误, err:&quot;</span>, err)</span><br><span class="line">		<span class="keyword">return</span></span><br><span class="line">	&#125;</span><br><span class="line"></span><br><span class="line">	<span class="comment">// 上传文件 -- 尝试文件名上传! 传入到 storage</span></span><br><span class="line">	resp, err := clt.UploadByFilename(<span class="string">&quot;头像1.jpg&quot;</span>)</span><br><span class="line"></span><br><span class="line">	fmt.Println(resp, err)</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">-- 运行成功后 去 ~/fastdfs/storage/data/<span class="number">00</span>/<span class="number">00</span>/ 中查看！   ls | grep  xxx</span><br></pre></td></tr></table></figure>
+
+
+
+<h1 id="用户头像上传"><a href="#用户头像上传" class="headerlink" title="用户头像上传"></a>用户头像上传</h1><ol>
+<li><p>获取图片文件, 静态文件对象</p>
+ <figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">file, _ := ctx.FormFile(<span class="string">&quot;avatar&quot;</span>)</span><br></pre></td></tr></table></figure></li>
+<li><p>上传头像到fastdfs 中, 按字节流。</p>
+ <figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line">clt, _ := fdfs_client.NewClientWithConfig(<span class="string">&quot;/etc/fdfs/client.conf&quot;</span>)</span><br><span class="line"></span><br><span class="line"><span class="comment">// 打开文件,读取文件内容</span></span><br><span class="line">f, _ := file.Open()			<span class="comment">// 只读打开.</span></span><br><span class="line"></span><br><span class="line">buf := <span class="built_in">make</span>([]<span class="keyword">byte</span>, file.Size)	<span class="comment">// 按文件实际大小,创建切片.</span></span><br><span class="line"></span><br><span class="line">f.Read(buf)		<span class="comment">// 读取文件内容, 保存至buf缓冲区.</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// go语言根据文件名获取文件后缀</span></span><br><span class="line">fileExt := path.Ext(file.Filename)		<span class="comment">// 传文件名, 获取文件后缀---- 带有&quot;.&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 按字节流上传图片内容</span></span><br><span class="line">remoteId, _ := clt.UploadByBuffer(buf, fileExt[<span class="number">1</span>:])</span><br><span class="line"></span><br></pre></td></tr></table></figure></li>
+<li><p>获取session , 得到当前用户</p>
+ <figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">userName := sessions.Default(ctx).Get(<span class="string">&quot;userName&quot;</span>)</span><br></pre></td></tr></table></figure></li>
+<li><p>web/model/modelFunc.go 中添加函数， 更新用户头像到数据中。 将 图片 凭证写入 avatar_url</p>
+ <figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">UpdateAvatar</span><span class="params">(userName, avatar <span class="keyword">string</span>)</span> <span class="title">error</span></span> &#123;</span><br><span class="line">	<span class="comment">// update user set avatar_url = avatar, where name = username</span></span><br><span class="line">	<span class="keyword">return</span> GlobalConn.Model(<span class="built_in">new</span>(User)).Where(<span class="string">&quot;name = ?&quot;</span>, userName).</span><br><span class="line">		Update(<span class="string">&quot;avatar_url&quot;</span>, avatar).Error</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+</li>
+<li><p>根据用户名, 更新用户头像  — MySQL数据库</p>
+ <figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">model.UpdateAvatar(userName.(<span class="keyword">string</span>), remoteId)</span><br></pre></td></tr></table></figure></li>
+<li><p>这里 不在 remoteId 前，拼接 Nginx 使用的 IP:port。 这样写，会写死到 数据库。在 web/controller/user.go 中 修改 GetUserInfo() 函数， 在获取用户信息时， 添加  Nginx 使用的 IP:port。</p>
+ <figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">GetUserInfo</span><span class="params">(ctx *gin.Context)</span></span> &#123;</span><br><span class="line">    ......</span><br><span class="line">    temp[<span class="string">&quot;name&quot;</span>] = user.Name</span><br><span class="line">	temp[<span class="string">&quot;mobile&quot;</span>] = user.Mobile</span><br><span class="line">	temp[<span class="string">&quot;real_name&quot;</span>] = user.Real_name</span><br><span class="line">	temp[<span class="string">&quot;id_card&quot;</span>] = user.Id_card</span><br><span class="line">    <span class="comment">// 修改 avatar_url 写入的值。</span></span><br><span class="line">	temp[<span class="string">&quot;avatar_url&quot;</span>] = <span class="string">&quot;http://192.168.6.108:8888/&quot;</span> + user.Avatar_url</span><br><span class="line"></span><br><span class="line">	resp[<span class="string">&quot;data&quot;</span>] = temp</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+<li><p>成功，写出返回值给前端</p>
+ <figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line">resp := <span class="built_in">make</span>(<span class="keyword">map</span>[<span class="keyword">string</span>]<span class="keyword">interface</span>&#123;&#125;)</span><br><span class="line"></span><br><span class="line">resp[<span class="string">&quot;errno&quot;</span>] = utils.RECODE_OK</span><br><span class="line">resp[<span class="string">&quot;errmsg&quot;</span>] = utils.RecodeText(utils.RECODE_OK)</span><br><span class="line"></span><br><span class="line">temp := <span class="built_in">make</span>(<span class="keyword">map</span>[<span class="keyword">string</span>]<span class="keyword">interface</span>&#123;&#125;)</span><br><span class="line">temp[<span class="string">&quot;avatar_url&quot;</span>] = <span class="string">&quot;http://192.168.6.108:8888/&quot;</span> + remoteId</span><br><span class="line">resp[<span class="string">&quot;data&quot;</span>] = temp</span><br><span class="line"></span><br><span class="line">ctx.JSON(http.StatusOK, resp)</span><br></pre></td></tr></table></figure></li>
+</ol>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/%E5%BE%AE%E6%9C%8D%E5%8A%A1/" rel="tag"># 微服务</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/01/04/golang/%E5%BE%AE%E6%9C%8D%E5%8A%A1/07%E5%BE%AE%E6%9C%8D%E5%8A%A1%E5%AE%9E%E7%8E%B0%20%E6%B3%A8%E5%86%8C%E7%99%BB%E5%BD%95/" rel="next" title="微服务学习--07微服务实现 注册登录">
+                <i class="fa fa-chevron-left"></i> 微服务学习--07微服务实现 注册登录
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2020/01/04/golang/%E5%BE%AE%E6%9C%8D%E5%8A%A1/08%E7%99%BB%E5%BD%95/" rel="prev" title="微服务学习--08登录">
+                微服务学习--08登录 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+      <div id="sidebar-dimmer"></div>
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/i.jpeg"
+                alt="" />
+            
+              <p class="site-author-name" itemprop="name"></p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/%7C%7C%20archive">
+              
+                  <span class="site-state-item-count">61</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">9</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">23</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/wangzengming" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:wangzengming@aliyun.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#FastDFS-%E5%92%8C-Nginx"><span class="nav-number">1.</span> <span class="nav-text">FastDFS 和 Nginx</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#FastDFS"><span class="nav-number">1.1.</span> <span class="nav-text">FastDFS</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%89%E7%AB%AF%EF%BC%9A"><span class="nav-number">1.1.1.</span> <span class="nav-text">三端：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%BD%BF%E7%94%A8%E6%AD%A5%E9%AA%A4%EF%BC%9A"><span class="nav-number">1.1.2.</span> <span class="nav-text">使用步骤：</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#%E4%B8%8E%E4%BB%A5%E5%BE%80%E7%9A%84%E5%8C%BA%E5%88%AB"><span class="nav-number">1.1.3.</span> <span class="nav-text">与以往的区别</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#fastDFS-%E5%AE%89%E8%A3%85%E5%92%8C%E9%85%8D%E7%BD%AE"><span class="nav-number">1.1.4.</span> <span class="nav-text">fastDFS 安装和配置</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Nginx"><span class="nav-number">1.2.</span> <span class="nav-text">Nginx</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#Go%E8%AF%AD%E8%A8%80-%E4%BD%BF%E7%94%A8-FastDFS%E5%92%8CNginx"><span class="nav-number">2.</span> <span class="nav-text">Go语言 使用 FastDFS和Nginx</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#%E6%B5%8B%E8%AF%95"><span class="nav-number">2.0.1.</span> <span class="nav-text">测试</span></a></li></ol></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%94%A8%E6%88%B7%E5%A4%B4%E5%83%8F%E4%B8%8A%E4%BC%A0"><span class="nav-number">3.</span> <span class="nav-text">用户头像上传</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+        <div class="back-to-top">
+          <i class="fa fa-arrow-up"></i>
+          
+            <span id="scrollpercent"><span>0</span>%</span>
+          
+        </div>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">王增明</span>
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+  
+  
+
+
+
+
+
+  
+  
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/three/three.min.js"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/three/three-waves.min.js"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/three/canvas_sphere.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

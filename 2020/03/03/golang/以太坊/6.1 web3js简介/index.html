@@ -1,0 +1,1106 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+  
+  
+    
+    
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+  <link href="/lib/pace/pace-theme-minimal.min.css?v=1.0.2" rel="stylesheet">
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="以太坊," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="web3.js 简介web3.js Web3 JavaScript app API  web3.js 是一个JavaScript API库。要使DApp在以太坊上运行， 我们可以使用web3.js库提供的web3对象   web3.js 通过RPC调用与本地节点通信，它可以用于任何暴露 了RPC层的以太坊节点    web3 包含 eth 对象 - web3.eth(专门与以太坊区块链交互) 和">
+<meta property="og:type" content="article">
+<meta property="og:title" content="6.1 web3.js简介">
+<meta property="og:url" content="http://example.com/2020/03/03/golang/%E4%BB%A5%E5%A4%AA%E5%9D%8A/6.1%20web3js%E7%AE%80%E4%BB%8B/index.html">
+<meta property="og:site_name" content="极风键客">
+<meta property="og:description" content="web3.js 简介web3.js Web3 JavaScript app API  web3.js 是一个JavaScript API库。要使DApp在以太坊上运行， 我们可以使用web3.js库提供的web3对象   web3.js 通过RPC调用与本地节点通信，它可以用于任何暴露 了RPC层的以太坊节点    web3 包含 eth 对象 - web3.eth(专门与以太坊区块链交互) 和">
+<meta property="og:locale">
+<meta property="article:published_time" content="2020-03-03T12:46:25.000Z">
+<meta property="article:modified_time" content="2021-04-21T23:54:35.535Z">
+<meta property="article:author" content="王增明">
+<meta property="article:tag" content="以太坊">
+<meta name="twitter:card" content="summary">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":true,"scrollpercent":true,"onmobile":true},
+    fancybox: true,
+    tabs: false,
+    motion: {"enable":true,"async":true,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://example.com/2020/03/03/golang/以太坊/6.1 web3js简介/"/>
+
+
+
+
+
+  <title>6.1 web3.js简介 | 极风键客</title>
+  
+
+
+
+
+
+
+
+
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">极风键客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-schedule">
+          <a href="/schedule/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-calendar"></i> <br />
+            
+            日程表
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2020/03/03/golang/%E4%BB%A5%E5%A4%AA%E5%9D%8A/6.1%20web3js%E7%AE%80%E4%BB%8B/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/i.jpeg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="极风键客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">6.1 web3.js简介</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-03-03T20:46:25+08:00">
+                2020-03-03
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/golang/" itemprop="url" rel="index">
+                    <span itemprop="name">golang</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="web3-js-简介"><a href="#web3-js-简介" class="headerlink" title="web3.js 简介"></a>web3.js 简介</h1><h2 id="web3-js"><a href="#web3-js" class="headerlink" title="web3.js"></a>web3.js</h2><ul>
+<li>Web3 JavaScript app API </li>
+<li>web3.js 是一个JavaScript API库。要使DApp在以太坊上运行，<ul>
+<li>我们可以使用web3.js库提供的web3对象</li>
+</ul>
+</li>
+<li>web3.js 通过RPC调用与本地节点通信，它可以用于任何暴露<ul>
+<li>了RPC层的以太坊节点</li>
+</ul>
+</li>
+<li> web3 包含 eth 对象 - web3.eth(专门与以太坊区块链交互) 和 shh 对象 - web3.shh(用于与 Whisper 交互)</li>
+</ul>
+<span id="more"></span>
+
+<h2 id="web3-模块加载"><a href="#web3-模块加载" class="headerlink" title="web3 模块加载"></a>web3 模块加载</h2><ul>
+<li><p>首先需要将web3模块安装在项目中: </p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">npm install web3@0.20.1</span><br></pre></td></tr></table></figure></li>
+<li><p> 然后创建一个web3实例，设置一个“provider”</p>
+</li>
+<li><p> 为了保证我们的MetaMask设置好的provider不被覆盖掉，在引入web3之前</p>
+</li>
+<li><p>我们一般要做当前环境检查(以v0.20.1为例):</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (<span class="keyword">typeof</span> web3 !== <span class="string">&#x27;undefined&#x27;</span>) &#123;</span><br><span class="line">	web3 = <span class="keyword">new</span> Web3(web3.currentProvider); </span><br><span class="line">&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">	web3 = <span class="keyword">new</span> Web3(<span class="keyword">new</span> Web3.providers .HttpProvider(<span class="string">&quot;http://localhost:8545&quot;</span>));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h2 id="异步回调-callback"><a href="#异步回调-callback" class="headerlink" title="异步回调(callback)"></a>异步回调(callback)</h2><ul>
+<li><p>web3js API 设计的最初目的，主要是为了和本地 RPC 节点共同使用，所 以默认情况下发送的是同步 HTTP 请求</p>
+</li>
+<li><p>如果要发送异步请求，可以在函数的最后一个参数位置上，传入一个回调 函数。回调函数是可选(optioanl)的</p>
+</li>
+<li><p>我们一般采用的回调风格是所谓的“错误优先”，例如:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">web3.eth.getBlock(<span class="number">48</span>, <span class="function"><span class="keyword">function</span>(<span class="params">error, result</span>)</span>&#123;</span><br><span class="line">	<span class="keyword">if</span>(!error)&#123;</span><br><span class="line">		<span class="built_in">console</span>.log(<span class="built_in">JSON</span>.stringify(result));</span><br><span class="line">  &#125;<span class="keyword">else</span>&#123;</span><br><span class="line">		<span class="built_in">console</span>.error(error);</span><br><span class="line">	&#125;</span><br><span class="line"> );</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h2 id="回调-Promise-事件-v1-0-0"><a href="#回调-Promise-事件-v1-0-0" class="headerlink" title="回调 Promise 事件(v1.0.0)"></a>回调 Promise 事件(v1.0.0)</h2><ul>
+<li><p>为了帮助 web3 集成到不同标准的所有类型项目中，1.0.0 版本提供了多种方式来处理异步函数。 大多数的 web3 对象允许将一个回调函数作为最后一个函数参数传入，同时会返回一个<br> promise 用于链式函数调用。</p>
+</li>
+<li><p>以太坊作为一个区块链系统，一次请求具有不同的结束阶段。为了满足这样的要求，1.0.0 版本 将这类函数调用的返回值包成一个“承诺事件”(promiEvent)，这是一个 promise 和 EventEmitter 的结合体。</p>
+</li>
+<li><p>PromiEvent 的用法就像 promise 一样，另外还加入了.on，.once 和.off方法 </p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">web3.eth.sendTransaction(&#123;<span class="attr">from</span>: <span class="string">&#x27;0x123...&#x27;</span>, <span class="attr">data</span>: <span class="string">&#x27;0x432...&#x27;</span>&#125;) 			</span><br><span class="line">  .once(<span class="string">&#x27;transactionHash&#x27;</span>, <span class="function"><span class="keyword">function</span>(<span class="params">hash</span>)</span>&#123; ... &#125;)</span><br><span class="line">	.once(<span class="string">&#x27;receipt&#x27;</span>, <span class="function"><span class="keyword">function</span>(<span class="params">receipt</span>)</span>&#123; ... &#125;)</span><br><span class="line">	.on(<span class="string">&#x27;confirmation&#x27;</span>, <span class="function"><span class="keyword">function</span>(<span class="params">confNumber, receipt</span>)</span>&#123; ... &#125;)</span><br><span class="line">	.on(<span class="string">&#x27;error&#x27;</span>, <span class="function"><span class="keyword">function</span>(<span class="params">error</span>)</span>&#123; ... &#125;)</span><br><span class="line">	.then(<span class="function"><span class="keyword">function</span>(<span class="params">receipt</span>)</span>&#123; <span class="comment">// will be fired once the receipt is mined &#125;);</span></span><br></pre></td></tr></table></figure></li>
+</ul>
+<h2 id="应用二进制接口-ABI"><a href="#应用二进制接口-ABI" class="headerlink" title="应用二进制接口(ABI)"></a>应用二进制接口(ABI)</h2><ul>
+<li><p>web3.js 通过以太坊智能合约的 json 接口(Application Binary Interface，ABI)创建一个 JavaScript 对象，用来在 js 代码中描述</p>
+</li>
+<li><p>函数(functions)</p>
+<ul>
+<li>type:函数类型，默认“function”，也可能是“constructor”</li>
+<li>constant, payable, stateMutability:函数的状态可变性 </li>
+<li>inputs, outputs: 函数输入、输出参数描述列表</li>
+</ul>
+</li>
+<li><p>事件(events)</p>
+<ul>
+<li>type:类型，总是“event”</li>
+<li>inputs:输入对象列表，包括 name、type、indexed</li>
+</ul>
+</li>
+</ul>
+<h2 id="批处理请求-batch-requests"><a href="#批处理请求-batch-requests" class="headerlink" title="批处理请求(batch requests)"></a>批处理请求(batch requests)</h2><ul>
+<li><p>批处理请求允许我们将请求排序，然后一起处理它们。</p>
+</li>
+<li><p>注意:批量请求不会更快。实际上，在某些情况下，一次性地发出许多请求会更快，因为请求是异步处理的。</p>
+</li>
+<li><p>批处理请求主要用于确保请求的顺序，并串行处理。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> batch = web3.createBatch(); batch.add(web3.eth.getBalance.request(<span class="string">&#x27;0x0000000000000000000000000000000000000000&#x27;</span>, <span class="string">&#x27;latest&#x27;</span>, callback)); batch.add(web3.eth.contract(abi).at(address).balance.request(address, callback2)); batch.execute();</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h2 id="大数处理-big-numbers"><a href="#大数处理-big-numbers" class="headerlink" title="大数处理(big numbers)"></a>大数处理(big numbers)</h2><ul>
+<li><p>JavaScript中默认的数字精度较小，所以web3.js会自动添加一个依 赖库 BigNumber，专门用于大数处理</p>
+</li>
+<li><p>对于数值，我们应该习惯把它转换成BigNumber对象来处理 var balance = new</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">BigNumber(<span class="string">&#x27;131242344353464564564574574567456&#x27;</span>); <span class="comment">// or var balance = web3.eth.getBalance(someAddress); </span></span><br><span class="line">balance.plus(<span class="number">21</span>).toString(<span class="number">10</span>); <span class="comment">//&quot;131242344353464564564574574567477&quot;</span></span><br></pre></td></tr></table></figure></li>
+<li><p> BigNumber.toString(10)对小数只保留20位浮点精度。所以推荐的做 法是，我们内部总是用 wei 来表示余额(大整数)，只有在需要显示 给用户看的时候才转换为ether或其它单位</p>
+</li>
+</ul>
+<h2 id="常用-API-——-基本信息查询"><a href="#常用-API-——-基本信息查询" class="headerlink" title="常用 API —— 基本信息查询"></a>常用 API —— 基本信息查询</h2><p>查看 web3 版本</p>
+<ul>
+<li><p>v0.2x.x:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">web3.version.api</span><br></pre></td></tr></table></figure></li>
+<li><p>v1.0.0:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">web3.version</span><br></pre></td></tr></table></figure></li>
+</ul>
+<p>查看 web3 连接到的节点版本(clientVersion)</p>
+<ul>
+<li><p>同步:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">web3.version.node</span><br></pre></td></tr></table></figure></li>
+<li><p>异步: </p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">web3.version.getNode((error,result)=&gt;&#123;console.log(result)&#125;)</span><br></pre></td></tr></table></figure></li>
+<li><p>v1.0.0:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">web3.eth.getNodeInfo().then(<span class="built_in">console</span>.log)</span><br></pre></td></tr></table></figure></li>
+</ul>
+<p>基本信息查询</p>
+<ul>
+<li><p>获取 network id</p>
+<ul>
+<li><p>同步:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">web3.version.network</span><br></pre></td></tr></table></figure></li>
+<li><p>异步:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">web3.version.getNetwork(<span class="function">(<span class="params">err,res</span>)=&gt;</span>&#123;<span class="built_in">console</span>.log(res)&#125;)</span><br></pre></td></tr></table></figure></li>
+<li><p>v1.0.0:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">web3.eth.net.getId().then(<span class="built_in">console</span>.log)</span><br></pre></td></tr></table></figure></li>
+</ul>
+</li>
+<li><p>获取节点的以太坊协议版本</p>
+<ul>
+<li><p>同步:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">web3.version.ethereum</span><br></pre></td></tr></table></figure></li>
+<li><p>异步:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">web3.version.getEthereum((err,res)=&gt;&#123;console.log(res)&#125;)</span><br></pre></td></tr></table></figure></li>
+<li><p>v1.0.0:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">web3.eth.getProtocolVersion().then(<span class="built_in">console</span>.log)</span><br></pre></td></tr></table></figure></li>
+</ul>
+</li>
+<li><p>网络状态查询</p>
+<ul>
+<li><p>是否有节点连接/监听，返回true/false</p>
+<ul>
+<li><p>同步:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">web3.isConnect() </span><br></pre></td></tr></table></figure>
+
+<p>或者 </p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">web3.net.listening</span><br></pre></td></tr></table></figure></li>
+<li><p>异步:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">web3.net.getListening(<span class="function">(<span class="params">err,res</span>)=&gt;</span><span class="built_in">console</span>.log(res))</span><br></pre></td></tr></table></figure></li>
+<li><p>v1.0.0:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">web3.eth.net.isListening().then(<span class="built_in">console</span>.log)</span><br></pre></td></tr></table></figure></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>查看当前连接的 peer 节点</p>
+<ul>
+<li><p>同步:</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">web3.net.peerCount</span><br></pre></td></tr></table></figure></li>
+<li><p>异步:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">web3.net.getPeerCount(<span class="function">(<span class="params">err,res</span>)=&gt;</span><span class="built_in">console</span>.log(res))</span><br></pre></td></tr></table></figure></li>
+<li><p>v1.0.0:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">web3.eth.net.getPeerCount().then(<span class="built_in">console</span>.log)</span><br></pre></td></tr></table></figure></li>
+</ul>
+</li>
+</ul>
+<h2 id="Provider"><a href="#Provider" class="headerlink" title="Provider"></a>Provider</h2><ul>
+<li><p>查看当前设置的 web3 provider </p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">web3.currentProvider</span><br></pre></td></tr></table></figure></li>
+<li><p>查看浏览器环境设置的 web3 provider(v1.0.0) </p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">web3.givenProvider</span><br></pre></td></tr></table></figure></li>
+<li><p>设置 provider</p>
+<ul>
+<li>web3.setProvider(provider)</li>
+<li>web3.setProvider(new web3.providers.HttpProvider(‘<a href="http://localhost:8545&#39;">http://localhost:8545&#39;</a>))</li>
+</ul>
+</li>
+</ul>
+<h2 id="web3-通用工具方法"><a href="#web3-通用工具方法" class="headerlink" title="web3 通用工具方法"></a>web3 通用工具方法</h2><ul>
+<li><p>以太单位转换</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">web3.fromWei web3.toWei</span><br></pre></td></tr></table></figure></li>
+<li><p>数据类型转换</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">web3.toString web3.toDecimal web3.toBigNumber</span><br></pre></td></tr></table></figure></li>
+<li><p>字符编码转换</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">web3.toHex web3.toAscii web3.toUtf8 web3.fromUtf8</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h2 id="地址相关"><a href="#地址相关" class="headerlink" title="地址相关"></a>地址相关</h2><figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">web3.isAddress web3.toChecksumAddress</span><br></pre></td></tr></table></figure>
+
+<h2 id="web3-eth-–-账户相关"><a href="#web3-eth-–-账户相关" class="headerlink" title="web3.eth – 账户相关"></a>web3.eth – 账户相关</h2><ul>
+<li><p>coinbase 查询</p>
+<ul>
+<li><p>同步:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">web3.eth.coinbase</span><br></pre></td></tr></table></figure></li>
+<li><p>异步:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">web3.eth.getCoinbase( <span class="function">(<span class="params">err, res</span>)=&gt;</span><span class="built_in">console</span>.log(res) ) </span><br></pre></td></tr></table></figure></li>
+<li><p>v1.0.0:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">web3.eth.getCoinbase().then(<span class="built_in">console</span>.log)</span><br></pre></td></tr></table></figure></li>
+</ul>
+</li>
+<li><p>账户查询</p>
+<ul>
+<li><p>同步:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">web3.eth.accounts</span><br></pre></td></tr></table></figure></li>
+<li><p>异步:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">web3.eth.getAccounts( (err, res)=&gt;console.log(res) ) </span><br></pre></td></tr></table></figure></li>
+<li><p>v1.0.0:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">web3.eth.getAccounts().then(console.log)</span><br></pre></td></tr></table></figure></li>
+</ul>
+</li>
+</ul>
+<h2 id="区块相关"><a href="#区块相关" class="headerlink" title="区块相关"></a>区块相关</h2><ul>
+<li><p>区块高度查询</p>
+<ul>
+<li><p>同步:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">web3.eth. blockNumber</span><br></pre></td></tr></table></figure></li>
+<li><p>异步:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">web3.eth.getBlockNumber( callback )</span><br></pre></td></tr></table></figure></li>
+</ul>
+</li>
+<li><p>gasPrice 查询</p>
+<ul>
+<li><p>同步:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">web3.eth.gasPrice</span><br></pre></td></tr></table></figure></li>
+<li><p>异步:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">web3.eth.getGasPrice( callback )</span><br></pre></td></tr></table></figure></li>
+</ul>
+</li>
+</ul>
+<h2 id="区块相关-1"><a href="#区块相关-1" class="headerlink" title="区块相关"></a>区块相关</h2><ul>
+<li><p>区块查询</p>
+<ul>
+<li><p>同步:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">web3.eth.getBlockNumber(hashStringOrBlockNumber[ ,returnTransactionObjects] )</span><br></pre></td></tr></table></figure></li>
+<li><p>异步:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">web3.eth.getBlockNumber( hashStringOrBlockNumber, callback )</span><br></pre></td></tr></table></figure></li>
+</ul>
+</li>
+<li><p>块中交易数量查询</p>
+<ul>
+<li><p>同步:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">web3.eth.getBlockTransactionCount( hashStringOrBlockNumber )</span><br></pre></td></tr></table></figure></li>
+<li><p>异步:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">web3.eth.getBlockTransactionCount( hashStringOrBlockNumber, callback )</span><br></pre></td></tr></table></figure></li>
+</ul>
+</li>
+</ul>
+<h2 id="交易相关"><a href="#交易相关" class="headerlink" title="交易相关"></a>交易相关</h2><ul>
+<li><p>余额查询</p>
+<ul>
+<li><p>同步:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">web3.eth.getBalance(addressHexString [, defaultBlock]) </span><br></pre></td></tr></table></figure></li>
+<li><p>异步:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">web3.eth.getBalance(addressHexString [, defaultBlock][, callback])</span><br></pre></td></tr></table></figure></li>
+</ul>
+</li>
+<li><p>交易查询</p>
+<ul>
+<li><p>同步:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">web3.eth.getTransaction(transactionHash)</span><br></pre></td></tr></table></figure></li>
+<li><p>异步:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">web3.eth.getTransaction(transactionHash [, callback])</span><br></pre></td></tr></table></figure></li>
+</ul>
+</li>
+</ul>
+<h1 id="交易执行相关"><a href="#交易执行相关" class="headerlink" title="交易执行相关"></a>交易执行相关</h1><ul>
+<li><p>交易收据查询(已进块)</p>
+<ul>
+<li><p>同步:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">web3.eth.getTransactionReceipt(hashString)</span><br></pre></td></tr></table></figure></li>
+<li><p>异步:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">web3.eth.getTransactionReceipt(hashString [, callback])</span><br></pre></td></tr></table></figure></li>
+</ul>
+</li>
+<li><p>估计 gas 消耗量</p>
+<ul>
+<li><p>同步:</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">web3.eth.estimateGas(callObject)</span><br></pre></td></tr></table></figure></li>
+<li><p>异步:</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">web3.eth.estimateGas(callObject [, callback])</span><br></pre></td></tr></table></figure></li>
+</ul>
+</li>
+<li><p>发送交易</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">web3.eth.sendTransaction(transactionObject [, callback]) </span><br></pre></td></tr></table></figure>
+
+<ul>
+<li>交易对象: <ul>
+<li>from:发送地址</li>
+<li> to:接收地址，如果是创建合约交易，可不填 • value:交易金额，以wei为单位，可选</li>
+<li>gas:交易消耗 gas 上限，可选</li>
+<li>gasPrice:交易 gas 单价，可选</li>
+<li>data:交易携带的字串数据，可选 • nonce:整数 nonce 值，可选</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>消息调用</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">web3.eth.call(callObject[,defaultBlock][,callback])</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>参数:</p>
+<ul>
+<li><p>调用对象:与交易对象相同，只是from也是可选的</p>
+</li>
+<li><p>默认区块:默认“latest”，可以传入指定的区块高度 • 回调函数，如果没有则为同步调用</p>
+<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">var result = web3.eth.call(&#123; to:&quot;0xc4abd0339eb8d57087278718986382264244252f&quot;,data:&quot;0xc6888fa100000000000000000000000000000000000000000000000000 0 0000000000003&quot; &#125;);</span><br><span class="line"></span><br><span class="line">console.log(result);</span><br></pre></td></tr></table></figure></li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>日志过滤(事件监听)</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">web3.eth.filter( filterOptions [ , callback ] )</span><br><span class="line"></span><br><span class="line"><span class="comment">// filterString 可以是 &#x27;latest&#x27; or &#x27;pending&#x27; var filter = web3.eth.filter(filterString); </span></span><br><span class="line"><span class="comment">// 或者可以填入一个日志过滤 options var filter = web3.eth.filter(options);</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 监听日志变化</span></span><br><span class="line"> filter.watch(<span class="function"><span class="keyword">function</span>(<span class="params">error, result</span>)</span>&#123; <span class="keyword">if</span> (!error) <span class="built_in">console</span>.log(result); &#125;); <span class="comment">// 还可以用传入回调函数的方法，立刻开始监听日志 web3.eth.filter(options, function(error, result)&#123;</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">if</span> (!error) <span class="built_in">console</span>.log(result); &#125;);</span><br></pre></td></tr></table></figure></li>
+</ul>
+<h2 id="合约相关-——-创建合约"><a href="#合约相关-——-创建合约" class="headerlink" title="合约相关 —— 创建合约"></a>合约相关 —— 创建合约</h2><figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">web3.eth.contract</span><br><span class="line">var MyContract = web3.eth.contract(abiArray); // 通过地址初始化合约实例</span><br><span class="line">var contractInstance = MyContract.at(address); // 或者部署一个新合约</span><br><span class="line">var contractInstance = MyContract.new([constructorParam1][, constructorParam2], &#123;data: &#x27;0x12345...&#x27;, from: myAccount, gas: 1000000&#125;);</span><br></pre></td></tr></table></figure>
+
+<ul>
+<li><p>调用合约函数</p>
+<p>可以通过已创建的合约实例，直接调用合约函数</p>
+</li>
+</ul>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 直接调用，自动按函数类型决定用 sendTransaction 还是 call</span></span><br><span class="line">myContractInstance.myMethod(param1 [, param2, ...] [, transactionObject] [, defaultBlock] [, callback]);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 显式以消息调用形式 call 该函数 myContractInstance.myMethod.call(param1 [, param2, ...] [,</span></span><br><span class="line">transactionObject] [, defaultBlock] [, callback]);</span><br><span class="line"></span><br><span class="line"><span class="comment">// 显式以发送交易形式调用该函数</span></span><br><span class="line">myContractInstance.myMethod.sendTransaction(param1 [, param2, ...] [, transactionObject] [, callback]);</span><br></pre></td></tr></table></figure>
+
+
+
+<ul>
+<li><p>监听合约事件</p>
+<p> 合约的 event 类似于 filter，可以设置过滤选项来监听 </p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">var</span> event = myContractInstance.MyEvent(&#123;<span class="attr">valueA</span>: <span class="number">23</span>&#125; [, additionalFilterObject]) <span class="comment">// 监听事件</span></span><br><span class="line">event.watch(<span class="function"><span class="keyword">function</span>(<span class="params">error, result</span>)</span>&#123; <span class="keyword">if</span> (!error) <span class="built_in">console</span>.log(result); &#125;); <span class="comment">//还可以用传入回调函数的方法，立刻开始监听事件</span></span><br><span class="line"><span class="keyword">var</span> event = myContractInstance.MyEvent([&#123;<span class="attr">valueA</span>: <span class="number">23</span>&#125;][, additionalFilterObject] , <span class="function"><span class="keyword">function</span>(<span class="params">error, result</span>)</span>&#123; <span class="keyword">if</span> (!error) <span class="built_in">console</span>.log(result);</span><br><span class="line">&#125; );</span><br></pre></td></tr></table></figure></li>
+</ul>
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/%E4%BB%A5%E5%A4%AA%E5%9D%8A/" rel="tag"># 以太坊</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/03/03/golang/%E4%BB%A5%E5%A4%AA%E5%9D%8A/7.2%E7%BC%96%E5%86%99%E5%90%88%E7%BA%A6%E7%9A%84%E9%83%A8%E7%BD%B2%E8%84%9A%E6%9C%AC/" rel="next" title="7.2 编写合约的部署脚本">
+                <i class="fa fa-chevron-left"></i> 7.2 编写合约的部署脚本
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2020/03/03/golang/%E4%BB%A5%E5%A4%AA%E5%9D%8A/5.4_Ballot/" rel="prev" title="5.4 Ballot( 投票合约 )">
+                5.4 Ballot( 投票合约 ) <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+      <div id="sidebar-dimmer"></div>
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/i.jpeg"
+                alt="" />
+            
+              <p class="site-author-name" itemprop="name"></p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/%7C%7C%20archive">
+              
+                  <span class="site-state-item-count">61</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">9</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">23</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/wangzengming" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:wangzengming@aliyun.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#web3-js-%E7%AE%80%E4%BB%8B"><span class="nav-number">1.</span> <span class="nav-text">web3.js 简介</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#web3-js"><span class="nav-number">1.1.</span> <span class="nav-text">web3.js</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#web3-%E6%A8%A1%E5%9D%97%E5%8A%A0%E8%BD%BD"><span class="nav-number">1.2.</span> <span class="nav-text">web3 模块加载</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BC%82%E6%AD%A5%E5%9B%9E%E8%B0%83-callback"><span class="nav-number">1.3.</span> <span class="nav-text">异步回调(callback)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9B%9E%E8%B0%83-Promise-%E4%BA%8B%E4%BB%B6-v1-0-0"><span class="nav-number">1.4.</span> <span class="nav-text">回调 Promise 事件(v1.0.0)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%BA%94%E7%94%A8%E4%BA%8C%E8%BF%9B%E5%88%B6%E6%8E%A5%E5%8F%A3-ABI"><span class="nav-number">1.5.</span> <span class="nav-text">应用二进制接口(ABI)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%89%B9%E5%A4%84%E7%90%86%E8%AF%B7%E6%B1%82-batch-requests"><span class="nav-number">1.6.</span> <span class="nav-text">批处理请求(batch requests)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%A4%A7%E6%95%B0%E5%A4%84%E7%90%86-big-numbers"><span class="nav-number">1.7.</span> <span class="nav-text">大数处理(big numbers)</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B8%B8%E7%94%A8-API-%E2%80%94%E2%80%94-%E5%9F%BA%E6%9C%AC%E4%BF%A1%E6%81%AF%E6%9F%A5%E8%AF%A2"><span class="nav-number">1.8.</span> <span class="nav-text">常用 API —— 基本信息查询</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#Provider"><span class="nav-number">1.9.</span> <span class="nav-text">Provider</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#web3-%E9%80%9A%E7%94%A8%E5%B7%A5%E5%85%B7%E6%96%B9%E6%B3%95"><span class="nav-number">1.10.</span> <span class="nav-text">web3 通用工具方法</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9C%B0%E5%9D%80%E7%9B%B8%E5%85%B3"><span class="nav-number">1.11.</span> <span class="nav-text">地址相关</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#web3-eth-%E2%80%93-%E8%B4%A6%E6%88%B7%E7%9B%B8%E5%85%B3"><span class="nav-number">1.12.</span> <span class="nav-text">web3.eth – 账户相关</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8C%BA%E5%9D%97%E7%9B%B8%E5%85%B3"><span class="nav-number">1.13.</span> <span class="nav-text">区块相关</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%8C%BA%E5%9D%97%E7%9B%B8%E5%85%B3-1"><span class="nav-number">1.14.</span> <span class="nav-text">区块相关</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%A4%E6%98%93%E7%9B%B8%E5%85%B3"><span class="nav-number">1.15.</span> <span class="nav-text">交易相关</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E4%BA%A4%E6%98%93%E6%89%A7%E8%A1%8C%E7%9B%B8%E5%85%B3"><span class="nav-number">2.</span> <span class="nav-text">交易执行相关</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%90%88%E7%BA%A6%E7%9B%B8%E5%85%B3-%E2%80%94%E2%80%94-%E5%88%9B%E5%BB%BA%E5%90%88%E7%BA%A6"><span class="nav-number">2.1.</span> <span class="nav-text">合约相关 —— 创建合约</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+        <div class="back-to-top">
+          <i class="fa fa-arrow-up"></i>
+          
+            <span id="scrollpercent"><span>0</span>%</span>
+          
+        </div>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">王增明</span>
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+  
+  
+
+
+
+
+
+  
+  
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/three/three.min.js"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/three/three-waves.min.js"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/three/canvas_sphere.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

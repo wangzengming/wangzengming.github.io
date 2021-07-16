@@ -1,0 +1,962 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next gemini use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+<meta name="theme-color" content="#222">
+
+
+
+  
+  
+    
+    
+  <script src="/lib/pace/pace.min.js?v=1.0.2"></script>
+  <link href="/lib/pace/pace-theme-minimal.min.css?v=1.0.2" rel="stylesheet">
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.4" rel="stylesheet" type="text/css" />
+
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32-next.png?v=5.1.4">
+
+
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16-next.png?v=5.1.4">
+
+
+  <link rel="mask-icon" href="/images/logo.svg?v=5.1.4" color="#222">
+
+
+
+
+
+  <meta name="keywords" content="微服务," />
+
+
+
+
+
+
+
+
+
+
+<meta name="description" content="短信验证码测试短信验证码  申请 阿里云账号、开通短信验证码功能、申请签名、申请模板、申请 AccessKey   打开 OpenAPI  Explorer。   选择 左侧 SendSms   在中间位置依次填：华东1（杭州）、手机号、签名的名称、模板Code、{”code“:验证码}   在右侧自动生成代码。 拷贝至，测试.go 程序中   将 dysmsapi.NewClientWithAc">
+<meta property="og:type" content="article">
+<meta property="og:title" content="微服务学习--05验证码">
+<meta property="og:url" content="http://example.com/2020/01/04/golang/%E5%BE%AE%E6%9C%8D%E5%8A%A1/05%E9%AA%8C%E8%AF%81%E7%A0%81/index.html">
+<meta property="og:site_name" content="极风键客">
+<meta property="og:description" content="短信验证码测试短信验证码  申请 阿里云账号、开通短信验证码功能、申请签名、申请模板、申请 AccessKey   打开 OpenAPI  Explorer。   选择 左侧 SendSms   在中间位置依次填：华东1（杭州）、手机号、签名的名称、模板Code、{”code“:验证码}   在右侧自动生成代码。 拷贝至，测试.go 程序中   将 dysmsapi.NewClientWithAc">
+<meta property="og:locale">
+<meta property="article:published_time" content="2020-01-04T12:46:25.000Z">
+<meta property="article:modified_time" content="2021-04-21T23:54:35.550Z">
+<meta property="article:author" content="王增明">
+<meta property="article:tag" content="微服务">
+<meta name="twitter:card" content="summary">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '',
+    scheme: 'Gemini',
+    version: '5.1.4',
+    sidebar: {"position":"left","display":"post","offset":12,"b2t":true,"scrollpercent":true,"onmobile":true},
+    fancybox: true,
+    tabs: false,
+    motion: {"enable":true,"async":true,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://example.com/2020/01/04/golang/微服务/05验证码/"/>
+
+
+
+
+
+  <title>微服务学习--05验证码 | 极风键客</title>
+  
+
+
+
+
+
+
+
+
+<meta name="generator" content="Hexo 5.4.0"></head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">极风键客</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle"></p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-about">
+          <a href="/about/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-user"></i> <br />
+            
+            关于
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-schedule">
+          <a href="/schedule/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-calendar"></i> <br />
+            
+            日程表
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://example.com/2020/01/04/golang/%E5%BE%AE%E6%9C%8D%E5%8A%A1/05%E9%AA%8C%E8%AF%81%E7%A0%81/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/images/i.jpeg">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="极风键客">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">微服务学习--05验证码</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2020-01-04T20:46:25+08:00">
+                2020-01-04
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/golang/" itemprop="url" rel="index">
+                    <span itemprop="name">golang</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h1 id="短信验证码"><a href="#短信验证码" class="headerlink" title="短信验证码"></a>短信验证码</h1><h2 id="测试短信验证码"><a href="#测试短信验证码" class="headerlink" title="测试短信验证码"></a>测试短信验证码</h2><ol>
+<li><p> 申请 阿里云账号、开通短信验证码功能、申请签名、申请模板、申请 AccessKey</p>
+</li>
+<li><p> 打开 OpenAPI  Explorer。</p>
+</li>
+<li><p> 选择 左侧 SendSms</p>
+</li>
+<li><p> 在中间位置依次填：华东1（杭州）、手机号、签名的名称、模板Code、{”code“:验证码}</p>
+</li>
+<li><p> 在右侧自动生成代码。 拷贝至，测试.go 程序中</p>
+</li>
+<li><p> 将 dysmsapi.NewClientWithAccessKey(） 函数的 ：&lt;accessKeyId&gt; 和 &lt;accessSecret&gt; 替换为我们申请到的 AccessKey 对应值。</p>
+</li>
+<li><p>虚拟机安装的 SDK 版本，比从 OpenAPI  Explorer 工具拿到的代码版本低。需要添加一行代码：</p>
+<p> <code>request.Domain = &quot;dysmsapi.aliyuncs.com&quot; </code></p>
+</li>
+<li><p>运行 测试.go 程序。 —— 成功：在手机上收到 短信验证码。</p>
+</li>
+</ol>
+<span id="more"></span>
+
+<h2 id="将短信验证码集成到项目"><a href="#将短信验证码集成到项目" class="headerlink" title="将短信验证码集成到项目"></a>将短信验证码集成到项目</h2><ol>
+<li><p>修改 router 分组。</p>
+ <figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">--- 在 web/main.<span class="keyword">go</span> 中</span><br><span class="line"><span class="comment">// 添加路由分组</span></span><br><span class="line">r1 := router.Group(<span class="string">&quot;/api/v1.0&quot;</span>)</span><br><span class="line">&#123;</span><br><span class="line">    r1.GET(<span class="string">&quot;/session&quot;</span>, controller.GetSession)</span><br><span class="line">    r1.GET(<span class="string">&quot;/imagecode/:uuid&quot;</span>, controller.GetImageCd)</span><br><span class="line">    r1.GET(<span class="string">&quot;/smscode/:phone&quot;</span>, controller.GetSmscd)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+<li><p>提取Get请求中的数据</p>
+ <figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">--- 在 web/controller/user.<span class="keyword">go</span> 中</span><br><span class="line">GET 请求 URL 格式： http:<span class="comment">//IP:port/资源路径?key=value&amp;key=value&amp;key=value...</span></span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">GetSmscd</span><span class="params">(ctx *gin.Context)</span></span>  &#123;</span><br><span class="line">	<span class="comment">// 获取短信验证码</span></span><br><span class="line">	phone := ctx.Param(<span class="string">&quot;phone&quot;</span>)</span><br><span class="line">	<span class="comment">// 拆分 GET 请求中 的 URL === 格式: 资源路径?k=v&amp;k=v&amp;k=v</span></span><br><span class="line">	imgCode := ctx.Query(<span class="string">&quot;text&quot;</span>)</span><br><span class="line">	uuid := ctx.Query(<span class="string">&quot;id&quot;</span>)</span><br><span class="line"></span><br><span class="line">	fmt.Println(<span class="string">&quot;---out---:&quot;</span>, phone, imgCode, uuid)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+<li><p>封装实现 校验图片 验证码</p>
+ <figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line">--- 依据 MVC 代码架构。 创建 model/modelFunc.<span class="keyword">go</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 校验图片验证码</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">CheckImgCode</span><span class="params">(uuid, imgCode <span class="keyword">string</span>)</span> <span class="title">bool</span></span> &#123;</span><br><span class="line">	<span class="comment">// 链接 redis</span></span><br><span class="line">	conn, err := redis.Dial(<span class="string">&quot;tcp&quot;</span>, <span class="string">&quot;192.168.6.108:6379&quot;</span>)</span><br><span class="line">	<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">		fmt.Println(<span class="string">&quot;redis.Dial err:&quot;</span>, err)</span><br><span class="line">		<span class="keyword">return</span> <span class="literal">false</span></span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">defer</span> conn.Close()</span><br><span class="line"></span><br><span class="line">	<span class="comment">// 查询 redis 数据</span></span><br><span class="line">	code, err := redis.String(conn.Do(<span class="string">&quot;get&quot;</span>, uuid))</span><br><span class="line">	<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">		fmt.Println(<span class="string">&quot;查询错误 err:&quot;</span>, err)</span><br><span class="line">		<span class="keyword">return</span> <span class="literal">false</span></span><br><span class="line">	&#125;</span><br><span class="line">	</span><br><span class="line">	<span class="comment">// 返回校验结果</span></span><br><span class="line">	<span class="keyword">return</span> code == imgCode</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+<li><p>根据校验结果，发送短信验证码</p>
+ <figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">result := model.CheckImgCode(uuid, imgCode)</span><br><span class="line"><span class="keyword">if</span> result &#123;  <span class="comment">// 校验成功</span></span><br><span class="line">    <span class="comment">// 发送短信验证码</span></span><br><span class="line">    response, _ := client.SendSms(request)</span><br><span class="line">    <span class="keyword">if</span> response.IsSuccess() &#123;</span><br><span class="line">        <span class="comment">// 发送短信验证码 成功</span></span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="comment">// 发送端验证码 失败.</span></span><br><span class="line">    &#125;</span><br><span class="line">&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    <span class="comment">// 校验失败</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+<li><p>发送短信验证码实现</p>
+ <figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">client, _ := dysmsapi.NewClientWithAccessKey(<span class="string">&quot;cn-hangzhou&quot;</span>, <span class="string">&quot;LTAI4FgbQXjf117SX7E75Rmn&quot;</span>, <span class="string">&quot;6icOghQlhjevrTM5PxfiB8nDTxB9z6&quot;</span>)</span><br><span class="line"></span><br><span class="line">request := dysmsapi.CreateSendSmsRequest()</span><br><span class="line">request.Scheme = <span class="string">&quot;https&quot;</span></span><br><span class="line"></span><br><span class="line">request.Domain = <span class="string">&quot;dysmsapi.aliyuncs.com&quot;</span>  <span class="comment">//域名  ---参考讲义补充!</span></span><br><span class="line">request.PhoneNumbers = phone</span><br><span class="line">request.SignName = <span class="string">&quot;爱家租房网&quot;</span></span><br><span class="line">request.TemplateCode = <span class="string">&quot;SMS_183242785&quot;</span></span><br><span class="line"></span><br><span class="line"><span class="comment">// 生成一个随机 6 位数, 做验证码</span></span><br><span class="line">rand.Seed(time.Now().UnixNano())		<span class="comment">// 播种随机数种子.</span></span><br><span class="line"><span class="comment">// 生成6位随机数.</span></span><br><span class="line">smsCode := fmt.Sprintf(<span class="string">&quot;%06d&quot;</span>, rand.Int31n(<span class="number">1000000</span>))</span><br><span class="line"></span><br><span class="line">request.TemplateParam = <span class="string">`&#123;&quot;code&quot;:&quot;`</span> + smsCode + <span class="string">`&quot;&#125;`</span></span><br><span class="line"></span><br><span class="line">response, _ := client.SendSms(request)</span><br></pre></td></tr></table></figure>
+
+</li>
+<li><p>根据发送结果，给前端反馈消息</p>
+ <figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 校验图片验证码 是否正确</span></span><br><span class="line">result := model.CheckImgCode(uuid, imgCode)</span><br><span class="line"><span class="keyword">if</span> result &#123;</span><br><span class="line">    <span class="comment">// 发送短信</span></span><br><span class="line">    .....</span><br><span class="line">    response, _ := client.SendSms(request)</span><br><span class="line">    <span class="keyword">if</span> response.IsSuccess() &#123;</span><br><span class="line">        <span class="comment">// 发送短信验证码 成功</span></span><br><span class="line">        resp[<span class="string">&quot;errno&quot;</span>] = utils.RECODE_OK</span><br><span class="line">        resp[<span class="string">&quot;errmsg&quot;</span>] = utils.RecodeText(utils.RECODE_OK)</span><br><span class="line">    &#125; <span class="keyword">else</span> &#123;</span><br><span class="line">        <span class="comment">// 发送端验证码 失败.</span></span><br><span class="line">        resp[<span class="string">&quot;errno&quot;</span>] = utils.RECODE_SMSERR</span><br><span class="line">        resp[<span class="string">&quot;errmsg&quot;</span>] = utils.RecodeText(utils.RECODE_SMSERR)</span><br><span class="line">    &#125;</span><br><span class="line">&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    <span class="comment">// 校验失败, 发送错误信息</span></span><br><span class="line">    resp[<span class="string">&quot;errno&quot;</span>] = utils.RECODE_DATAERR</span><br><span class="line">    resp[<span class="string">&quot;errmsg&quot;</span>] = utils.RecodeText(utils.RECODE_DATAERR)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+<li><p>测试：</p>
+<ol>
+<li>启动 consul、启动微服务、启动 web 服务</li>
+<li>浏览器 输入 手机号、图片验证码、短信验证码</li>
+<li>成功：<ol>
+<li>手机会收到短信验证码。 </li>
+<li>浏览器的 Network – Response 中 会有 “成功”数据。</li>
+<li>redis 数据库中有  图片验证码 对应数据。</li>
+</ol>
+</li>
+</ol>
+</li>
+</ol>
+<h2 id="短信验证码存入-Redis"><a href="#短信验证码存入-Redis" class="headerlink" title="短信验证码存入 Redis"></a>短信验证码存入 Redis</h2><ul>
+<li><p>使用 Redis 连接池！</p>
+  <figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// redis.Pool ——  Ctrl-B 查看 redis库， 连接池属性</span></span><br><span class="line"><span class="keyword">type</span> Pool <span class="keyword">struct</span> &#123;</span><br><span class="line">	Dial <span class="function"><span class="keyword">func</span><span class="params">()</span> <span class="params">(Conn, error)</span>	// 连接数据库使用</span></span><br><span class="line">	。。。。</span><br><span class="line">	MaxIdle <span class="keyword">int</span>		<span class="comment">// 最大空闲数 == 初始化连接数</span></span><br><span class="line">	MaxActive <span class="keyword">int</span>	<span class="comment">// 最大存活数 &gt; MaxIdle</span></span><br><span class="line">	IdleTimeout time.Duration	<span class="comment">// 空闲超时时间。</span></span><br><span class="line">	。。。。</span><br><span class="line">	MaxConnLifetime time.Duration	<span class="comment">// 最大生命周期。</span></span><br><span class="line">	。。。。</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+<li><p>连接池代码实现：</p>
+  <figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">-- 在 model/modelFunc.<span class="keyword">go</span> 中 创建redis连接池的 初始化函数。</span><br><span class="line"></span><br><span class="line"><span class="comment">// 创建全局redis 连接池 句柄</span></span><br><span class="line"><span class="keyword">var</span> RedisPool redis.Pool</span><br><span class="line"></span><br><span class="line"><span class="comment">// 创建函数, 初始化Redis连接池</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">InitRedis</span><span class="params">()</span></span>  &#123;</span><br><span class="line">	RedisPool = redis.Pool&#123;</span><br><span class="line">		MaxIdle:<span class="number">20</span>,</span><br><span class="line">		MaxActive:<span class="number">50</span>,</span><br><span class="line">		MaxConnLifetime:<span class="number">60</span> * <span class="number">5</span>,</span><br><span class="line">		IdleTimeout:<span class="number">60</span>,</span><br><span class="line">		Dial: <span class="function"><span class="keyword">func</span><span class="params">()</span> <span class="params">(redis.Conn, error)</span></span> &#123;</span><br><span class="line">			<span class="keyword">return</span> redis.Dial(<span class="string">&quot;tcp&quot;</span>, <span class="string">&quot;192.168.6.108:6379&quot;</span>)</span><br><span class="line">		&#125;,</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">---在 web/main.<span class="keyword">go</span> 中，使用该 InitRedis() , 在项目启动时，自动初始化连接池！</span><br></pre></td></tr></table></figure></li>
+<li><p>修改了 CheckImgCode() , 使用连接池。</p>
+</li>
+<li><p>实现 SaveSmsCode() 函数，将数据存入 redis</p>
+  <figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 链接 Redis --- 从链接池中获取一条链接</span></span><br><span class="line">conn := RedisPool.Get()</span><br><span class="line"><span class="keyword">defer</span> conn.Close()</span><br><span class="line"></span><br><span class="line"><span class="comment">// 存储短信验证码到 redis 中</span></span><br><span class="line">_, err := conn.Do(<span class="string">&quot;setex&quot;</span>, phone+<span class="string">&quot;_code&quot;</span>, <span class="number">60</span> * <span class="number">3</span>, code)</span><br></pre></td></tr></table></figure>
+
+</li>
+<li><p>在 GetSmscd() 函数中，在 短信验证码发送成功之后：</p>
+  <figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line">response, _ := client.SendSms(request)</span><br><span class="line"><span class="keyword">if</span> response.IsSuccess() &#123;</span><br><span class="line">    <span class="comment">// 发送短信验证码 成功</span></span><br><span class="line">    resp[<span class="string">&quot;errno&quot;</span>] = utils.RECODE_OK</span><br><span class="line">    resp[<span class="string">&quot;errmsg&quot;</span>] = utils.RecodeText(utils.RECODE_OK)</span><br><span class="line"></span><br><span class="line">    <span class="comment">// 将 电话号:短信验证码 ,存入到 Redis 数据库</span></span><br><span class="line">    err := model.SaveSmsCode(phone, smsCode)</span><br><span class="line">    <span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">        fmt.Println(<span class="string">&quot;存储短信验证码到redis失败:&quot;</span>, err)</span><br><span class="line">        resp[<span class="string">&quot;errno&quot;</span>] = utils.RECODE_DBERR</span><br><span class="line">        resp[<span class="string">&quot;errmsg&quot;</span>] = utils.RecodeText(utils.RECODE_DBERR)</span><br><span class="line">    &#125;</span><br><span class="line"></span><br><span class="line">&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">    <span class="comment">// 发送端验证码 失败.</span></span><br><span class="line">    resp[<span class="string">&quot;errno&quot;</span>] = utils.RECODE_SMSERR</span><br><span class="line">    resp[<span class="string">&quot;errmsg&quot;</span>] = utils.RecodeText(utils.RECODE_SMSERR)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+<li><p>测试：</p>
+<ul>
+<li>保证 consul、service的 main.go  web的main.go 、redis服务  启动。</li>
+<li>浏览器 —— 注册 —— 获取短信验证码</li>
+<li>成功：<ul>
+<li>手机收到 验证码</li>
+<li>Network —— Respose —— “成功”</li>
+<li>打开 redis 数据库。 多 “手机号_code” 为 key 值的 一条数据。<ul>
+<li>get “手机号_code”  取值 == 手机收到 验证码</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="短信验证码-分离成微服务"><a href="#短信验证码-分离成微服务" class="headerlink" title="短信验证码 分离成微服务"></a>短信验证码 分离成微服务</h2><ol>
+<li><p>创建 微服务。 将 “登录”、“短信验证”、“注册” 使用 user 微服务 实现。</p>
+<p> <code>micro new --type srv bj38web/service/user</code></p>
+ <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line">Creating service go.micro.srv.user in /home/itcast/workspace/go/src/bj38web/service/user</span><br><span class="line">.</span><br><span class="line">├── main.go</span><br><span class="line">├── plugin.go</span><br><span class="line">├── handler</span><br><span class="line">│   └── user.go</span><br><span class="line">├── subscriber</span><br><span class="line">│   └── user.go</span><br><span class="line">├── proto/user</span><br><span class="line">│   └── user.proto</span><br><span class="line">├── Dockerfile</span><br><span class="line">├── Makefile</span><br><span class="line">├── README.md</span><br><span class="line">└── go.mod</span><br><span class="line"></span><br><span class="line">download protobuf for micro:</span><br><span class="line"></span><br><span class="line">brew install protobuf</span><br><span class="line">go get -u github.com/golang/protobuf/&#123;proto,protoc-gen-go&#125;</span><br><span class="line">go get -u github.com/micro/protoc-gen-micro</span><br><span class="line"></span><br><span class="line">compile the proto file user.proto:</span><br><span class="line"></span><br><span class="line">cd /home/itcast/workspace/go/src/bj38web/service/user</span><br><span class="line">protoc --proto_path=.:$GOPATH/src --go_out=. --micro_out=. proto/user/user.proto</span><br><span class="line"></span><br></pre></td></tr></table></figure>
+</li>
+<li><p>修改密码本 —— proto文件。</p>
+ <figure class="highlight protobuf"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// 修改 Call --- SendSms。  删除 Stream、PingPong 函数。</span></span><br><span class="line"><span class="comment">// 删除 除 Request、Response 之外的其他 message 消息体。</span></span><br><span class="line"><span class="comment">// 根据传入、传出修改 Request、Response </span></span><br><span class="line">syntax = <span class="string">&quot;proto3&quot;</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">package</span> go.micro.srv.user;</span><br><span class="line"></span><br><span class="line"><span class="class"><span class="keyword">service</span> <span class="title">User</span> </span>&#123;</span><br><span class="line">	<span class="function"><span class="keyword">rpc</span> SendSms(Request) <span class="keyword">returns</span> (Response) </span>&#123;&#125;</span><br><span class="line">&#125;</span><br><span class="line"><span class="class"><span class="keyword">message</span> <span class="title">Request</span> </span>&#123;</span><br><span class="line">	<span class="built_in">string</span> phone = <span class="number">1</span>;</span><br><span class="line">	<span class="built_in">string</span> imgCode = <span class="number">2</span>;</span><br><span class="line">	<span class="built_in">string</span> uuid = <span class="number">3</span>;</span><br><span class="line">&#125;</span><br><span class="line"><span class="class"><span class="keyword">message</span> <span class="title">Response</span> </span>&#123;</span><br><span class="line">	<span class="built_in">string</span> errno = <span class="number">1</span>;</span><br><span class="line">	<span class="built_in">string</span> errmsg = <span class="number">2</span>;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+<li><p>编译 proto文件，生成 2 个新文件 xxx.micro.go 和 xxx.pb.go ，用于 grpc 远程调用！</p>
+ <figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">make proto</span><br></pre></td></tr></table></figure></li>
+<li><p>修改 service/user/main.go</p>
+ <figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">&quot;github.com/micro/go-micro/util/log&quot;</span></span><br><span class="line">	<span class="string">&quot;github.com/micro/go-micro&quot;</span></span><br><span class="line">	<span class="string">&quot;bj38web/service/user/handler&quot;</span></span><br><span class="line">	user <span class="string">&quot;bj38web/service/user/proto/user&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">main</span><span class="params">()</span></span> &#123;</span><br><span class="line">	<span class="comment">// New Service</span></span><br><span class="line">	service := micro.NewService(</span><br><span class="line">		micro.Name(<span class="string">&quot;go.micro.srv.user&quot;</span>),</span><br><span class="line">		micro.Version(<span class="string">&quot;latest&quot;</span>),</span><br><span class="line">	)</span><br><span class="line"></span><br><span class="line">	<span class="comment">// Register Handler</span></span><br><span class="line">	user.RegisterUserHandler(service.Server(), <span class="built_in">new</span>(handler.User))</span><br><span class="line"></span><br><span class="line">	<span class="comment">// Run service</span></span><br><span class="line">	<span class="keyword">if</span> err := service.Run(); err != <span class="literal">nil</span> &#123;</span><br><span class="line">		log.Fatal(err)</span><br><span class="line">	&#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+</li>
+<li><p>修改 service/user/handler/user.go</p>
+ <figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> (</span><br><span class="line">	<span class="string">&quot;context&quot;</span></span><br><span class="line">	user <span class="string">&quot;bj38web/service/user/proto/user&quot;</span></span><br><span class="line">)</span><br><span class="line"></span><br><span class="line"><span class="keyword">type</span> User <span class="keyword">struct</span>&#123;&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// Call is a single request handler called via client.Call or the generated client code</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(e *User)</span> <span class="title">SendSms</span><span class="params">(ctx context.Context, req *user.Request, rsp *user.Response)</span> <span class="title">error</span></span> &#123;</span><br><span class="line"></span><br><span class="line">	<span class="keyword">return</span> <span class="literal">nil</span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+</li>
+<li><p>修改服务发现 mdns ——&gt; consul:</p>
+ <figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">--- 在 /service/user/main.<span class="keyword">go</span> 中</span><br><span class="line"></span><br><span class="line"><span class="comment">// 初始化 Consul</span></span><br><span class="line">consulReg := consul.NewRegistry()</span><br><span class="line"></span><br><span class="line"><span class="comment">// New Service  -- 指定 consul</span></span><br><span class="line">service := micro.NewService(</span><br><span class="line">    micro.Address(<span class="string">&quot;192.168.6.108:12342&quot;</span>),</span><br><span class="line">    micro.Name(<span class="string">&quot;go.micro.srv.user&quot;</span>),</span><br><span class="line">    micro.Registry(consulReg),</span><br><span class="line">    micro.Version(<span class="string">&quot;latest&quot;</span>),</span><br><span class="line">)</span><br></pre></td></tr></table></figure></li>
+<li><p>移植 web/controller/user.go 中 “发送短信验证码” 代码，到 service/user/handler/user.go 中，实现微服务版的 短信验证码功能。</p>
+ <figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br></pre></td><td class="code"><pre><span class="line">--- 修改对应的 <span class="keyword">import</span> 包。</span><br><span class="line">--- 从web/下 拷贝 model/ 和 utils/ 包  到  service/user/ 中。</span><br><span class="line">--- 修改代码，使用 SendSms() 的 req， rsp 进行传参！</span><br><span class="line"><span class="comment">// Call is a single request handler called via client.Call or the generated client code</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="params">(e *User)</span> <span class="title">SendSms</span><span class="params">(ctx context.Context, req *user.Request, rsp *user.Response)</span> <span class="title">error</span></span> &#123;</span><br><span class="line"></span><br><span class="line">	<span class="comment">// 校验图片验证码 是否正确</span></span><br><span class="line">	result := model.CheckImgCode(req.Uuid, req.ImgCode)</span><br><span class="line">	<span class="keyword">if</span> result &#123;</span><br><span class="line">		<span class="comment">// 发送短信</span></span><br><span class="line">		client, _ := dysmsapi.NewClientWithAccessKey(<span class="string">&quot;cn-hangzhou&quot;</span>, <span class="string">&quot;LTAI4FgbQXjf117SX7E75Rmn&quot;</span>, <span class="string">&quot;6icOghQlhjevrTM5PxfiB8nDTxB9z6&quot;</span>)</span><br><span class="line"></span><br><span class="line">		request := dysmsapi.CreateSendSmsRequest()</span><br><span class="line">		request.Scheme = <span class="string">&quot;https&quot;</span></span><br><span class="line"></span><br><span class="line">		request.Domain = <span class="string">&quot;dysmsapi.aliyuncs.com&quot;</span> <span class="comment">//域名  ---参考讲义补充!</span></span><br><span class="line">		request.PhoneNumbers = req.Phone</span><br><span class="line">		request.SignName = <span class="string">&quot;爱家租房网&quot;</span></span><br><span class="line">		request.TemplateCode = <span class="string">&quot;SMS_183242785&quot;</span></span><br><span class="line"></span><br><span class="line">		<span class="comment">// 生成一个随机 6 位数, 做验证码</span></span><br><span class="line">		rand.Seed(time.Now().UnixNano()) <span class="comment">// 播种随机数种子.</span></span><br><span class="line">		<span class="comment">// 生成6位随机数.</span></span><br><span class="line">		smsCode := fmt.Sprintf(<span class="string">&quot;%06d&quot;</span>, rand.Int31n(<span class="number">1000000</span>))</span><br><span class="line"></span><br><span class="line">		request.TemplateParam = <span class="string">`&#123;&quot;code&quot;:&quot;`</span> + smsCode + <span class="string">`&quot;&#125;`</span></span><br><span class="line"></span><br><span class="line">		response, _ := client.SendSms(request)</span><br><span class="line">		<span class="keyword">if</span> response.IsSuccess() &#123;</span><br><span class="line">			<span class="comment">// 发送短信验证码 成功</span></span><br><span class="line">			rsp.Errno = utils.RECODE_OK</span><br><span class="line">			rsp.Errmsg = utils.RecodeText(utils.RECODE_OK)</span><br><span class="line"></span><br><span class="line">			<span class="comment">// 将 电话号:短信验证码 ,存入到 Redis 数据库</span></span><br><span class="line">			err := model.SaveSmsCode(req.Phone, smsCode)</span><br><span class="line">			<span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">				fmt.Println(<span class="string">&quot;存储短信验证码到redis失败:&quot;</span>, err)</span><br><span class="line">				rsp.Errno = utils.RECODE_DBERR</span><br><span class="line">				rsp.Errmsg = utils.RecodeText(utils.RECODE_DBERR)</span><br><span class="line">			&#125;</span><br><span class="line"></span><br><span class="line">		&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">			<span class="comment">// 发送端验证码 失败.</span></span><br><span class="line">			rsp.Errno = utils.RECODE_SMSERR</span><br><span class="line">			rsp.Errmsg = utils.RecodeText(utils.RECODE_SMSERR)</span><br><span class="line">		&#125;</span><br><span class="line"></span><br><span class="line">	&#125; <span class="keyword">else</span> &#123;</span><br><span class="line">		<span class="comment">// 校验失败, 发送错误信息</span></span><br><span class="line">		rsp.Errno = utils.RECODE_DATAERR</span><br><span class="line">		rsp.Errmsg = utils.RecodeText(utils.RECODE_DATAERR)</span><br><span class="line">	&#125;</span><br><span class="line">	<span class="keyword">return</span> <span class="literal">nil</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br></pre></td></tr></table></figure></li>
+<li><p>在微服务项目中，初始化 Redis 连接池！service/user/main.go 中 调用 InitRedis() </p>
+</li>
+</ol>
+<h2 id="实现短信验证码-客户端调用"><a href="#实现短信验证码-客户端调用" class="headerlink" title="实现短信验证码 客户端调用"></a>实现短信验证码 客户端调用</h2><ol>
+<li>拷贝密码本。</li>
+</ol>
+<ul>
+<li>将 service/user/proto/user/  拷贝至  web/proto/   —— 与 getCaptcha 同级。</li>
+</ul>
+<ol start="2">
+<li><p>先导包，起别名。</p>
+<ul>
+<li><code>userMicro &quot;bj38web/web/proto/user&quot;   // 给包起别名</code></li>
+</ul>
+</li>
+<li><p>指定Consul服务发现。 mdns –&gt; consul</p>
+ <figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">consulReg := consul.NewRegistry()</span><br><span class="line">consulService := micro.NewService(</span><br><span class="line">    micro.Registry(consulReg),</span><br><span class="line">)</span><br></pre></td></tr></table></figure></li>
+<li><p>初始化客户端</p>
+ <figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">microClient := userMicro.NewUserService(<span class="string">&quot;go.micro.srv.user&quot;</span>, consulService.Client())</span><br><span class="line">参<span class="number">1</span>： service/user/main.<span class="keyword">go</span> 中 指定的 服务名。</span><br></pre></td></tr></table></figure></li>
+<li><p>调用远程函数, 封装调用结果程json 发送给浏览器</p>
+ <figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">resp, err := microClient.SendSms(context.TODO(), &amp;userMicro.Request&#123;Phone:phone, ImgCode:imgCode,Uuid:uuid&#125;)</span><br><span class="line"><span class="keyword">if</span> err != <span class="literal">nil</span> &#123;</span><br><span class="line">    fmt.Println(<span class="string">&quot;调用远程函数 SendSms 失败:&quot;</span>, err)</span><br><span class="line">    <span class="keyword">return</span></span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line"><span class="comment">// 发送校验结果 给 浏览器</span></span><br><span class="line">ctx.JSON(http.StatusOK, resp)</span><br></pre></td></tr></table></figure></li>
+<li><p>测试：</p>
+<ol>
+<li>启动 consul  。  consul agent -dev</li>
+<li>启动 service/getCaptcha/ 下的 main.go</li>
+<li>启动 service/user/ 下的 main.go</li>
+<li>启动 web/  下的 main.go</li>
+<li>浏览器 ：192.168.6.108:8080/home  – &gt; 注册流程<ul>
+<li>成功：<ol>
+<li>手机获取到短信验证码</li>
+<li>NetWork – Respose 收到 errno = 0  errmsg = 成功！</li>
+<li>打开 redis 数据库。 验证 图片验证码、短信验证码    码值。 </li>
+</ol>
+</li>
+</ul>
+</li>
+</ol>
+</li>
+</ol>
+<h1 id="获取数据-绑定数据"><a href="#获取数据-绑定数据" class="headerlink" title="获取数据 绑定数据"></a>获取数据 绑定数据</h1><ul>
+<li>前端传递数据种类：<ol>
+<li>form表单：数据为 form data</li>
+<li>ajax(阿贾克斯)： 数据为 json 格式。 体现成 —— Request Payload</li>
+</ol>
+</li>
+<li>默认 postForm() 方法 只能获取 form 表单传递的数据。</li>
+<li>针对 Request Payload 数据形式，需要 使用 “数据绑定“ 来获取传递的数据。<ul>
+<li><code>ctx.Bind()</code> 将 数据绑定到对象中。</li>
+</ul>
+</li>
+</ul>
+<h2 id="获取数据"><a href="#获取数据" class="headerlink" title="获取数据"></a>获取数据</h2><p>浏览器 ：注册流程， —— Network 中 Headers 中 获取</p>
+<ul>
+<li> http请求方法：Post</li>
+<li> Request Payload：  mobile、password、sms_code 作为 key </li>
+</ul>
+<figure class="highlight go"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">-- web/main.<span class="keyword">go</span> 中 添加</span><br><span class="line"></span><br><span class="line">r1.POST(<span class="string">&quot;/users&quot;</span>, controller.PostRet)</span><br><span class="line"></span><br><span class="line">-- web/controller/user.<span class="keyword">go</span> 中添加、实现 </span><br><span class="line"><span class="comment">// 发送注册信息</span></span><br><span class="line"><span class="function"><span class="keyword">func</span> <span class="title">PostRet</span><span class="params">(ctx *gin.Context)</span></span> &#123;</span><br><span class="line">	<span class="comment">/*	mobile := ctx.PostForm(&quot;mobile&quot;)</span></span><br><span class="line"><span class="comment">		pwd := ctx.PostForm(&quot;password&quot;)</span></span><br><span class="line"><span class="comment">		sms_code := ctx.PostForm(&quot;sms_code&quot;)</span></span><br><span class="line"><span class="comment">		fmt.Println(&quot;m = &quot;, mobile, &quot;pwd = &quot;, pwd, &quot;sms_code = &quot;,sms_code)</span></span><br><span class="line"><span class="comment">	*/</span></span><br><span class="line">	<span class="comment">// 获取数据</span></span><br><span class="line">	<span class="keyword">var</span> regData <span class="keyword">struct</span> &#123;</span><br><span class="line">		Mobile   <span class="keyword">string</span> <span class="string">`json:&quot;mobile&quot;`</span></span><br><span class="line">		PassWord <span class="keyword">string</span> <span class="string">`json:&quot;password&quot;`</span></span><br><span class="line">		SmsCode  <span class="keyword">string</span> <span class="string">`json:&quot;sms_code&quot;`</span></span><br><span class="line">	&#125;</span><br><span class="line">	ctx.Bind(&amp;regData)</span><br><span class="line">	fmt.Println(<span class="string">&quot;获取到的数据为:&quot;</span>, regData)</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/%E5%BE%AE%E6%9C%8D%E5%8A%A1/" rel="tag"># 微服务</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2020/01/04/golang/%E5%BE%AE%E6%9C%8D%E5%8A%A1/06ORM%20%E6%A1%86%E6%9E%B6%E4%B9%8Bgorm/" rel="next" title="微服务学习--06ORM 框架之gorm">
+                <i class="fa fa-chevron-left"></i> 微服务学习--06ORM 框架之gorm
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+              <a href="/2020/01/04/golang/%E5%BE%AE%E6%9C%8D%E5%8A%A1/03go-Micro%20%E6%A1%86%E6%9E%B6/" rel="prev" title="微服务学习--03go-Micro 框架">
+                微服务学习--03go-Micro 框架 <i class="fa fa-chevron-right"></i>
+              </a>
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+
+  
+
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+      <div id="sidebar-dimmer"></div>
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview-wrap sidebar-panel">
+        <div class="site-overview">
+          <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+            
+              <img class="site-author-image" itemprop="image"
+                src="/images/i.jpeg"
+                alt="" />
+            
+              <p class="site-author-name" itemprop="name"></p>
+              <p class="site-description motion-element" itemprop="description"></p>
+          </div>
+
+          <nav class="site-state motion-element">
+
+            
+              <div class="site-state-item site-state-posts">
+              
+                <a href="/archives/%7C%7C%20archive">
+              
+                  <span class="site-state-item-count">61</span>
+                  <span class="site-state-item-name">日志</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-categories">
+                <a href="/categories/index.html">
+                  <span class="site-state-item-count">9</span>
+                  <span class="site-state-item-name">分类</span>
+                </a>
+              </div>
+            
+
+            
+              
+              
+              <div class="site-state-item site-state-tags">
+                <a href="/tags/index.html">
+                  <span class="site-state-item-count">23</span>
+                  <span class="site-state-item-name">标签</span>
+                </a>
+              </div>
+            
+
+          </nav>
+
+          
+
+          
+            <div class="links-of-author motion-element">
+                
+                  <span class="links-of-author-item">
+                    <a href="https://github.com/wangzengming" target="_blank" title="GitHub">
+                      
+                        <i class="fa fa-fw fa-github"></i>GitHub</a>
+                  </span>
+                
+                  <span class="links-of-author-item">
+                    <a href="mailto:wangzengming@aliyun.com" target="_blank" title="E-Mail">
+                      
+                        <i class="fa fa-fw fa-envelope"></i>E-Mail</a>
+                  </span>
+                
+            </div>
+          
+
+          
+          
+
+          
+          
+
+          
+
+        </div>
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#%E7%9F%AD%E4%BF%A1%E9%AA%8C%E8%AF%81%E7%A0%81"><span class="nav-number">1.</span> <span class="nav-text">短信验证码</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E6%B5%8B%E8%AF%95%E7%9F%AD%E4%BF%A1%E9%AA%8C%E8%AF%81%E7%A0%81"><span class="nav-number">1.1.</span> <span class="nav-text">测试短信验证码</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%B0%86%E7%9F%AD%E4%BF%A1%E9%AA%8C%E8%AF%81%E7%A0%81%E9%9B%86%E6%88%90%E5%88%B0%E9%A1%B9%E7%9B%AE"><span class="nav-number">1.2.</span> <span class="nav-text">将短信验证码集成到项目</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%9F%AD%E4%BF%A1%E9%AA%8C%E8%AF%81%E7%A0%81%E5%AD%98%E5%85%A5-Redis"><span class="nav-number">1.3.</span> <span class="nav-text">短信验证码存入 Redis</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E7%9F%AD%E4%BF%A1%E9%AA%8C%E8%AF%81%E7%A0%81-%E5%88%86%E7%A6%BB%E6%88%90%E5%BE%AE%E6%9C%8D%E5%8A%A1"><span class="nav-number">1.4.</span> <span class="nav-text">短信验证码 分离成微服务</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%AE%9E%E7%8E%B0%E7%9F%AD%E4%BF%A1%E9%AA%8C%E8%AF%81%E7%A0%81-%E5%AE%A2%E6%88%B7%E7%AB%AF%E8%B0%83%E7%94%A8"><span class="nav-number">1.5.</span> <span class="nav-text">实现短信验证码 客户端调用</span></a></li></ol></li><li class="nav-item nav-level-1"><a class="nav-link" href="#%E8%8E%B7%E5%8F%96%E6%95%B0%E6%8D%AE-%E7%BB%91%E5%AE%9A%E6%95%B0%E6%8D%AE"><span class="nav-number">2.</span> <span class="nav-text">获取数据 绑定数据</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E8%8E%B7%E5%8F%96%E6%95%B0%E6%8D%AE"><span class="nav-number">2.1.</span> <span class="nav-text">获取数据</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+        <div class="back-to-top">
+          <i class="fa fa-arrow-up"></i>
+          
+            <span id="scrollpercent"><span>0</span>%</span>
+          
+        </div>
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright">&copy; <span itemprop="copyrightYear">2021</span>
+  <span class="with-love">
+    <i class="fa fa-user"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">王增明</span>
+
+  
+</div>
+
+
+
+
+
+
+
+
+
+        
+
+
+
+
+
+
+
+        
+      </div>
+    </footer>
+
+    
+
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+  
+
+
+
+  
+  
+
+
+
+
+
+  
+  
+
+
+
+
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/canvas-nest/canvas-nest.min.js"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/three/three.min.js"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/three/three-waves.min.js"></script>
+  
+
+  
+  
+    <script type="text/javascript" src="/lib/three/canvas_sphere.min.js"></script>
+  
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.4"></script>
+
+
+
+  
+  
+
+
+  <script type="text/javascript" src="/js/src/affix.js?v=5.1.4"></script>
+
+  <script type="text/javascript" src="/js/src/schemes/pisces.js?v=5.1.4"></script>
+
+
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.4"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
